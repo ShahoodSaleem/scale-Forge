@@ -81,7 +81,7 @@ const ComparisonSection = () => {
   ];
 
   return (
-    <section id="about" className="py-24 px-6 bg-black overflow-hidden">
+    <section className="py-24 px-6 bg-black overflow-hidden">
       <div className="max-w-[1440px] mx-auto">
         {/* Animated Heading */}
         <motion.h2

@@ -6,29 +6,29 @@ import { ExternalLink, ArrowUpRight } from 'lucide-react';
 const projects = [
   {
     id: 1,
-    title: 'AI Insights Platform',
-    description: 'Data-driven decision making powered by neural networks.',
+    title: 'Car Rental Website',
+    description: 'Car Rental Website For Malaysian Client.',
     image: '/Assets/Cards/1.jpg',
     link: 'https://example.com'
   },
   {
     id: 2,
-    title: 'Quantum Fintech Core',
-    description: 'Ultra-low latency transaction processing for modern finance.',
+    title: 'Dental Clinic Website',
+    description: 'Dental Website For Australian Client.',
     image: '/Assets/Cards/2.jpg',
     link: 'https://example.com'
   },
   {
     id: 3,
-    title: 'EcoSphere Dashboard',
-    description: 'Unified ecological monitoring and sustainability reporting.',
+    title: 'Supply Chain Dashboard',
+    description: 'Supply Chain Website Integerated Using Machine Learning.',
     image: '/Assets/Cards/3.jpg',
     link: 'https://example.com'
   },
   {
     id: 4,
-    title: 'Zenith CRM Suite',
-    description: 'High-conversion relationship management for scale.',
+    title: 'E-Commerce Website',
+    description: 'E commerce Website Mockup For Future Client Inspiration.',
     image: '/Assets/Cards/4.jpg',
     link: 'https://example.com'
   },

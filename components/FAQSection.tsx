@@ -28,7 +28,7 @@ const FAQItem = ({ question, answer, index }: { question: string, answer: string
         <span className="text-lg md:text-xl font-medium tracking-tight text-white/90">
           {question}
         </span>
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center border border-white/10 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-white text-black' : 'text-white/60'}`}>
+        <div className={`w-20 h-12 rounded-full flex items-center justify-center border border-white/10 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-white text-black' : 'text-white/60'}`}>
           {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
         </div>
       </button>
@@ -72,7 +72,7 @@ const FAQSection = () => {
   ];
 
   return (
-    <section id="faq" className="py-60 px-6 bg-black">
+    <section id="faq" className="py-40 px-6 bg-black">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

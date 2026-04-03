@@ -191,8 +191,8 @@ const FeaturesAccordion = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-black">
-      <div id="features" className="max-w-[1440px] mx-auto scroll-mt-24">
+    <section id="features" className="pt-8 pb-12 px-6 bg-black">
+      <div className="max-w-[1440px] mx-auto">
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6">
             <span className="relative inline-block mr-3">
@@ -207,7 +207,7 @@ const FeaturesAccordion = () => {
         </div>
 
         <div
-          className="flex flex-col md:flex-row gap-1 min-h-[700px]"
+          className="flex flex-col md:flex-row gap-1 min-h-[580px]"
         >
           {features.map((feature) => (
             <FeatureCard

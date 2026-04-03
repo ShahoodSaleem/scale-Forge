@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { sendEmail } from '../app/actions/sendEmail';
 
 const InstagramIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -20,6 +22,26 @@ const LinkedinIcon = () => (
 );
 
 const ContactSection = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setStatus(null);
+
+    const formData = new FormData(event.currentTarget);
+    const result = await sendEmail(formData);
+
+    if (result.error) {
+      setStatus({ type: 'error', message: result.error });
+    } else {
+      setStatus({ type: 'success', message: 'Message sent successfully!' });
+      (event.target as HTMLFormElement).reset();
+    }
+    setIsSubmitting(false);
+  };
+
   return (
     <section id="contact" className="relative py-24 pb-12 bg-black overflow-hidden">
       {/* Background Map Illustration (SVG Pattern) */}
@@ -58,7 +80,7 @@ const ContactSection = () => {
                 <h3 className="text-white/30 text-[11px] font-bold uppercase tracking-[0.3em] mb-6">Our Address</h3>
                 <address className="not-italic text-white/50 text-base leading-relaxed space-y-1">
                   <p>Noorabad Colony</p>
-                  <p>Gulshan E Iqbal Blocl 14/A</p>
+                  <p>Gulshan E Iqbal Block 14/A</p>
                   <p>Karachi, Pakistan</p>
                 </address>
               </div>
@@ -66,8 +88,8 @@ const ContactSection = () => {
               <div>
                 <h3 className="text-white/30 text-[11px] font-bold uppercase tracking-[0.3em] mb-6">Our Contacts</h3>
                 <div className="text-white/50 text-base leading-relaxed space-y-2">
-                  <a href="mailto:hello@scaleforge.pk" className="block hover:text-white transition-colors">scaleforge.sales@gmail.com</a>
-                  <a href="tel:+923000000000" className="block hover:text-white transition-colors">+92 336 3791 538</a>
+                  <a href="mailto:scaleforge.sales@gmail.com" className="block hover:text-white transition-colors">scaleforge.sales@gmail.com</a>
+                  <a href="tel:+923363791538" className="block hover:text-white transition-colors">+92 336 3791 538</a>
                 </div>
               </div>
             </div>
@@ -82,11 +104,13 @@ const ContactSection = () => {
           >
             <h3 className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-12">Feedback Form</h3>
 
-            <form className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
               <div className="relative border-b border-white/10 focus-within:border-orange-500 transition-colors py-2 group">
                 <label className="block text-white/40 text-[10px] font-bold uppercase tracking-wider mb-1">Name</label>
                 <input
+                  name="name"
                   type="text"
+                  required
                   className="w-full bg-transparent text-white text-lg outline-none py-1 placeholder:text-white/10"
                   placeholder="Your Name"
                 />
@@ -95,7 +119,9 @@ const ContactSection = () => {
               <div className="relative border-b border-white/10 focus-within:border-orange-500 transition-colors py-2 group">
                 <label className="block text-white/40 text-[10px] font-bold uppercase tracking-wider mb-1">E-mail</label>
                 <input
+                  name="email"
                   type="email"
+                  required
                   className="w-full bg-transparent text-white text-lg outline-none py-1 placeholder:text-white/10"
                   placeholder="hello@example.com"
                 />
@@ -104,6 +130,7 @@ const ContactSection = () => {
               <div className="relative border-b border-white/10 focus-within:border-orange-500 transition-colors py-2 group">
                 <label className="block text-white/40 text-[10px] font-bold uppercase tracking-wider mb-1">Phone</label>
                 <input
+                  name="phone"
                   type="tel"
                   className="w-full bg-transparent text-white text-lg outline-none py-1 placeholder:text-white/10"
                   placeholder="+....."
@@ -113,19 +140,35 @@ const ContactSection = () => {
               <div className="relative border-b border-white/10 focus-within:border-orange-500 transition-colors py-2 group">
                 <label className="block text-white/40 text-[10px] font-bold uppercase tracking-wider mb-1">Message</label>
                 <textarea
+                  name="message"
                   rows={2}
+                  required
                   className="w-full bg-transparent text-white text-lg outline-none py-1 resize-none placeholder:text-white/10"
                   placeholder="How can we help?"
                 />
               </div>
 
+              {status && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`p-4 flex items-center gap-3 text-sm ${
+                    status.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                  }`}
+                >
+                  {status.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+                  {status.message}
+                </motion.div>
+              )}
+
               <div className="pt-8">
                 <button
                   type="submit"
-                  className="bg-white text-black px-10 py-5 rounded-none flex items-center justify-between gap-4 hover:bg-white/90 transition-all uppercase text-[11px] font-bold tracking-widest group w-full"
+                  disabled={isSubmitting}
+                  className="bg-white text-black px-10 py-5 rounded-none flex items-center justify-between gap-4 hover:bg-white/90 disabled:bg-white/50 disabled:cursor-not-allowed transition-all uppercase text-[11px] font-bold tracking-widest group w-full"
                 >
-                  <span>Send Message</span>
-                  <div className="h-[1px] w-8 bg-black/40 group-hover:w-16 transition-all" />
+                  <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                  {!isSubmitting && <div className="h-[1px] w-8 bg-black/40 group-hover:w-16 transition-all" />}
                 </button>
               </div>
             </form>
