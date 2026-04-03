@@ -8,28 +8,28 @@ const projects = [
     id: 1,
     title: 'Car Rental Website',
     description: 'Car Rental Website For Malaysian Client.',
-    image: '/Assets/Cards/1.jpg',
+    image: '/Assets/car.jpg',
     link: 'https://example.com'
   },
   {
     id: 2,
     title: 'Dental Clinic Website',
     description: 'Dental Website For Australian Client.',
-    image: '/Assets/Cards/2.jpg',
+    image: '/Assets/teeth.jpg',
     link: 'https://example.com'
   },
   {
     id: 3,
-    title: 'Supply Chain Dashboard',
-    description: 'Supply Chain Website Integerated Using Machine Learning.',
-    image: '/Assets/Cards/3.jpg',
+    title: 'Jewellery Store Website',
+    description: 'Premium Jewellery E-commerce Store.',
+    image: '/Assets/Jewellery.jpg',
     link: 'https://example.com'
   },
   {
     id: 4,
     title: 'E-Commerce Website',
     description: 'E commerce Website Mockup For Future Client Inspiration.',
-    image: '/Assets/Cards/4.jpg',
+    image: '/Assets/Ecommerce.jpg',
     link: 'https://example.com'
   },
 ];
@@ -45,11 +45,11 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
-      className="group relative h-[420px] w-full block overflow-hidden rounded-3xl border border-orange-300/10 bg-white/5 backdrop-blur-sm"
+      className="group relative h-[550px] w-full block overflow-hidden rounded-3xl border border-orange-300/10 bg-white/5 backdrop-blur-sm"
     >
       {/* Background Image with Hover Zoom */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-115"
         style={{ backgroundImage: `url(${project.image})` }}
       />
 
@@ -91,7 +91,7 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
 const ProjectsSection = () => {
   return (
     <section id="projects" className="py-24 px-6 bg-black">
-      <div className="max-w-[1440px] mx-auto">
+      <div className="max-w-[1580px] mx-auto">
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-3">
           <div className="max-w-xl">
             <motion.span

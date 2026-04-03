@@ -44,7 +44,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
       layout
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => onHover(id)}
-      className={`relative h-[700px] cursor-pointer overflow-hidden rounded-none border border-white/10 ${isExpanded ? 'bg-white/10 flex-[5]' : 'bg-white/5 flex-1 hover:bg-white/10'
+      className={`relative h-[650px] cursor-pointer overflow-hidden rounded-none border border-white/10 ${isExpanded ? 'bg-white/10 flex-[5]' : 'bg-white/5 flex-1 hover:bg-white/10'
         }`}
     >
       {/* Background Image */}
@@ -146,44 +146,44 @@ const FeaturesAccordion = () => {
   const [hoveredId, setHoveredId] = useState<string | null>('7');
 
   const features = [
-    { 
-      id: '1', title: 'SEO Optimization', icon: Search, color: 'blue', bgImage: '/Assets/Cards/1.jpg', 
+    {
+      id: '1', title: 'SEO Optimization', icon: Search, color: 'blue', bgImage: '/Assets/Cards/1.jpg',
       description: 'Boost your search rankings with data-driven keyword strategies and technical audits.',
       details: ['Keyword Strategy', 'Technical Audits', 'Backlink Profile'],
       metric: '1.2M+ Reach'
     },
-    { 
-      id: '2', title: 'Web Design', icon: Layout, color: 'purple', bgImage: '/Assets/Cards/2.jpg', 
+    {
+      id: '2', title: 'Web Design', icon: Layout, color: 'purple', bgImage: '/Assets/Cards/2.jpg',
       description: 'High-conversion, premium interfaces designed to wow your customers and drive growth.',
       details: ['Custom UI/UX', 'Component Library', 'Interaction Design'],
       metric: '+65% Engagement'
     },
-    { 
-      id: '3', title: 'Branding', icon: Palette, color: 'emerald', bgImage: '/Assets/Cards/3.jpg', 
+    {
+      id: '3', title: 'Branding', icon: Palette, color: 'emerald', bgImage: '/Assets/Cards/3.jpg',
       description: 'Define your identity with unique visual systems and compelling brand storytelling.',
       details: ['Visual Identity', 'Brand Voice', 'Asset Guidelines'],
       metric: '100% Unique'
     },
-    { 
-      id: '4', title: 'Content Strategy', icon: FileText, color: 'amber', bgImage: '/Assets/Cards/4.jpg', 
+    {
+      id: '4', title: 'Content Strategy', icon: FileText, color: 'amber', bgImage: '/Assets/Cards/4.jpg',
       description: 'Engaging, high-quality content that resonates with your audience and builds authority.',
       details: ['Copywriting', 'Growth Roadmap', 'Media Planning'],
       metric: 'High Authority'
     },
-    { 
-      id: '5', title: 'Performance', icon: Zap, color: 'rose', bgImage: '/Assets/Cards/5.jpg', 
+    {
+      id: '5', title: 'Performance', icon: Zap, color: 'rose', bgImage: '/Assets/Cards/5.jpg',
       description: 'Lightning-fast page speeds and core web vitals optimization for better UX.',
       details: ['Core Web Vitals', '0.4s Fast Load', 'LCP Optimization'],
       metric: '99+ Score'
     },
-    { 
-      id: '6', title: 'Analytics', icon: BarChart3, color: 'indigo', bgImage: '/Assets/Cards/6.jpg', 
+    {
+      id: '6', title: 'Analytics', icon: BarChart3, color: 'indigo', bgImage: '/Assets/Cards/6.jpg',
       description: 'Deep-dive tracking and behavior analysis to optimize your conversion funnel.',
       details: ['Funnel Tracking', 'Behavior Analysis', 'ROI Reporting'],
       metric: 'Data-Driven'
     },
-    { 
-      id: '7', title: 'Digital Strategy', icon: Target, color: 'cyan', bgImage: '/Assets/Cards/7.jpg', 
+    {
+      id: '7', title: 'Digital Strategy', icon: Target, color: 'cyan', bgImage: '/Assets/Cards/7.jpg',
       description: 'Comprehensive roadmaps designed to scale your business in the modern digital landscape.',
       details: ['Market Analysis', 'Scalability Audits', 'Growth Maps'],
       metric: 'Scaled Growth'
@@ -191,7 +191,7 @@ const FeaturesAccordion = () => {
   ];
 
   return (
-    <section id="features" className="pt-8 pb-12 px-6 bg-black">
+    <section id="features" className="pt-50 pb-12 px-6 bg-black">
       <div className="max-w-[1440px] mx-auto">
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6">
