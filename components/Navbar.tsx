@@ -21,8 +21,8 @@ const Navbar = () => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     isManualScrolling.current = true;
     setActiveSection(href);
-    
-    // Release the lock after the smooth scroll finishes (approx 800ms)
+
+    // Release the lock after the smooth scroll finishes (approx 800ms)..
     setTimeout(() => {
       isManualScrolling.current = false;
     }, 800);
@@ -37,7 +37,7 @@ const Navbar = () => {
 
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       if (isManualScrolling.current) return;
-      
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(`#${entry.target.id}`);
@@ -58,7 +58,7 @@ const Navbar = () => {
 
       const scrollPosition = window.scrollY;
       const isAtBottom = window.innerHeight + scrollPosition >= document.documentElement.scrollHeight - 50;
-      
+
       if (isAtBottom) {
         setActiveSection('#contact');
       } else if (scrollPosition < 50) {
@@ -94,9 +94,8 @@ const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleClick(e, link.href)}
-                className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors duration-300 hover:text-white/80 z-10 ${
-                  isActive ? 'text-white' : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
-                }`}
+                className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors duration-300 hover:text-white/80 z-10 ${isActive ? 'text-white' : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
+                  }`}
               >
                 {isActive && (
                   <motion.div
@@ -115,7 +114,7 @@ const Navbar = () => {
         </div>
 
         <div className="pl-4 pr-1">
-          <PremiumButton 
+          <PremiumButton
             label="Book a Call"
             onClick={() => window.open('https://cal.com/scale-forge-guqonp/30min', '_blank')}
             className="scale-90"
