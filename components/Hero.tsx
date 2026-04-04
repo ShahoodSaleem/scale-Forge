@@ -50,7 +50,7 @@ const Hero = () => {
         className="relative z-10 flex flex-col items-center text-center max-w-4xl"
       >
         {/* Badges */}
-        <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-10 mb-10">
+        <motion.div variants={itemVariants} className="hidden md:flex flex-wrap items-center justify-center gap-10 mb-10">
           <Badge icon={Cpu} text="Core AI" />
           <Badge icon={Zap} text="Fast Deliverables" />
           <Badge icon={Globe} text="Global Reach" />

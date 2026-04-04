@@ -14,8 +14,14 @@ const PricingCard = ({ plan, planIdx, features, renderValue }: any) => {
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
 
   useEffect(() => {
+    // If mobile, set blob to middle
+    if (window.innerWidth <= 768) {
+       mouseX.set(200);
+       mouseY.set(200);
+    }
+    
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current) return;
+      if (!cardRef.current || window.innerWidth <= 768) return;
       const rect = cardRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -38,7 +44,7 @@ const PricingCard = ({ plan, planIdx, features, renderValue }: any) => {
     >
       <div className="blob-bg"></div>
       <motion.div 
-        className="blob-element transition-opacity duration-500 opacity-20 group-hover:opacity-80" 
+        className="blob-element transition-opacity duration-1000 opacity-30 md:opacity-20 group-hover:opacity-80" 
         style={{ 
           x: springX, 
           y: springY,
@@ -158,7 +164,7 @@ const PricingSection = () => {
       
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}

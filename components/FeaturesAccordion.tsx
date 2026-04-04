@@ -43,9 +43,13 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
     <motion.div
       layout
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => onHover(id)}
-      className={`relative h-[650px] cursor-pointer overflow-hidden rounded-none border border-white/10 ${isExpanded ? 'bg-white/10 flex-[5]' : 'bg-white/5 flex-1 hover:bg-white/10'
-        }`}
+      onMouseEnter={() => window.innerWidth > 768 ? onHover(id) : undefined}
+      onClick={() => onHover(id)}
+      className={`relative cursor-pointer overflow-hidden rounded-none border border-white/10 ${
+        isExpanded 
+          ? 'bg-white/10 h-[550px] md:h-[650px] md:flex-[5]' 
+          : 'bg-white/5 h-[80px] md:h-[650px] md:flex-1 hover:bg-white/10'
+      }`}
     >
       {/* Background Image */}
       <div
@@ -73,7 +77,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
         )}
       </AnimatePresence>
 
-      <div className="relative h-full flex flex-col p-8 items-center justify-between z-[50]">
+      <div className={`relative h-full flex z-[50] ${isExpanded ? 'flex-col p-6 md:p-8 items-start md:items-center justify-between' : 'flex-row md:flex-col p-6 md:p-8 items-center justify-between md:justify-between'}`}>
         {/* Collapsed Title (Rotated) */}
         <AnimatePresence mode="wait">
           {!isExpanded ? (
@@ -83,9 +87,9 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              className="absolute inset-0 flex items-center justify-start md:justify-center px-6 md:px-0 pointer-events-none"
             >
-              <span className="inline-block whitespace-nowrap text-lg font-semibold tracking-tighter text-white/20 uppercase rotate-[-90deg] origin-center">
+              <span className="inline-block whitespace-nowrap text-lg font-semibold tracking-tighter text-white/20 uppercase md:rotate-[-90deg] origin-center">
                 {title}
               </span>
             </motion.div>
@@ -94,24 +98,24 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full"
+              className="w-full mt-4 md:mt-0"
             >
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2 md:gap-4">
                 <span className={`text-xl font-medium tracking-tight uppercase italic ${textColorMap[color]}`}>
                   {title}
                 </span>
-                <p className="text-white/60 text-base leading-relaxed max-w-[280px]">
+                <p className="text-white/60 text-sm md:text-base leading-relaxed max-w-[280px]">
                   {description}
                 </p>
                 {/* Highlights List */}
-                <ul className="mt-8 space-y-4">
+                <ul className="mt-4 md:mt-8 space-y-3 md:space-y-4">
                   {details.map((detail, idx) => (
                     <motion.li
                       key={idx}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.4 + (idx * 0.1) }}
-                      className="flex items-center gap-3 text-white/80 text-sm font-medium"
+                      className="flex items-center gap-3 text-white/80 text-xs md:text-sm font-medium"
                     >
                       <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
                       {detail}
@@ -123,10 +127,10 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="mt-12 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 inline-block"
+                  className="mt-6 md:mt-12 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 inline-block w-fit"
                 >
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Impact Metric</p>
-                  <p className="text-2xl font-semibold text-white">{metric}</p>
+                  <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Impact Metric</p>
+                  <p className="text-xl md:text-2xl font-semibold text-white">{metric}</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -134,7 +138,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
         </AnimatePresence>
 
         {/* Bottom Icon */}
-        <div className="mt-auto">
+        <div className={`mt-auto transition-all duration-300 ${!isExpanded ? 'absolute right-6 top-1/2 -translate-y-1/2 md:relative md:top-auto md:translate-y-0 md:mb-0' : 'absolute right-6 top-6 md:relative md:top-auto md:right-auto md:mt-auto'}`}>
           <Icon className={`w-6 h-6 transition-colors ${isExpanded ? 'text-white' : 'text-white/30'}`} />
         </div>
       </div>
@@ -191,7 +195,7 @@ const FeaturesAccordion = () => {
   ];
 
   return (
-    <section id="features" className="pt-50 pb-12 px-6 bg-black">
+    <section id="features" className="pt-24 pb-12 px-6 bg-black">
       <div className="max-w-[1440px] mx-auto">
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6">
@@ -207,7 +211,7 @@ const FeaturesAccordion = () => {
         </div>
 
         <div
-          className="flex flex-col md:flex-row gap-1 min-h-[580px]"
+          className="flex flex-col md:flex-row gap-1"
         >
           {features.map((feature) => (
             <FeatureCard
