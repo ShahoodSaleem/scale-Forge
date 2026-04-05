@@ -82,7 +82,7 @@ const Hero = () => {
             Let's Get Started
           </button>
           <button
-            onClick={() => window.open('Blogs', '_blank')}
+            onClick={() => window.location.href = '/blogs'}
             className="backdrop-blur-xl bg-white/5 border border-white/10 text-white/90 px-8 py-4 rounded-full text-base font-medium hover:bg-white/10 transition-all w-full sm:w-auto"
           >
             View Our Blogs
