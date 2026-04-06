@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "../../components/ContactSection";
@@ -58,6 +58,102 @@ const blogs = [
 
 ];
 
+const BlogCard = ({ blog }: { blog: any }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(-1000);
+  const mouseY = useMotionValue(-1000);
+
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 40 });
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      mouseX.set(200);
+      mouseY.set(200);
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!cardRef.current || window.innerWidth <= 768) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
+      className="h-full blob-card group"
+    >
+      <div className="blob-bg"></div>
+      <motion.div
+        className="blob-element transition-opacity duration-1000 opacity-0 group-hover:opacity-60"
+        style={{
+          x: springX,
+          y: springY,
+          top: 0,
+          left: 0,
+          marginLeft: "-125px",
+          marginTop: "-125px"
+        }}
+      />
+
+      <Link href={`/blogs/${blog.slug}`} className="relative z-10 flex flex-col h-full cursor-pointer">
+        <div className="h-full flex flex-col">
+          {/* Image Container */}
+          <div className="relative h-[200px] w-full overflow-hidden shrink-0">
+            <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
+            />
+
+            {/* Category Tag */}
+            <div className="absolute top-4 left-4 z-20">
+              <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-white/20 text-white/80 text-[9px] font-bold uppercase tracking-wider">
+                {blog.category}
+              </span>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6 md:p-8 relative flex-1 flex flex-col">
+            <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-wider text-white/40 mb-4">
+              <span>{blog.date}</span>
+              <div className="w-1 h-1 rounded-full bg-orange-500" />
+              <span>5 Min Read</span>
+            </div>
+
+            <h3 className="text-xl font-medium mb-4 group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-white group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
+              {blog.title}
+            </h3>
+
+            <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+              {blog.description}
+            </p>
+
+            <div className="flex items-center pt-6 border-t border-white/10 gap-2 text-orange-500 text-[10px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300 mt-auto">
+              <span>Read Article</span>
+              <ArrowRight size={14} />
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+};
+
 
 export default function BlogsPage() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -72,6 +168,45 @@ export default function BlogsPage() {
 
   return (
     <main className="min-h-screen bg-black text-white selection:bg-orange-500/30">
+      <style>{`
+        .blob-card {
+          position: relative;
+          z-index: 10;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          background: #111111;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: border-color 0.5s;
+        }
+
+        .blob-card:hover {
+          border-color: rgba(249, 115, 22, 0.5);
+        }
+
+        .blob-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 2;
+          background: rgba(17, 17, 17, 0.95);
+          backdrop-filter: blur(24px);
+          pointer-events: none;
+        }
+
+        .blob-element {
+          position: absolute;
+          z-index: 1;
+          width: 250px;
+          height: 250px;
+          border-radius: 50%;
+          background-color: #ea580c;
+          filter: blur(40px);
+          pointer-events: none;
+        }
+      `}</style>
       {/* Custom Subpage Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-24 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="text-white text-xl font-bold tracking-widest uppercase">
@@ -135,58 +270,7 @@ export default function BlogsPage() {
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <AnimatePresence mode="popLayout">
               {filteredBlogs.map((blog, index) => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  key={blog.id}
-                  className="h-full"
-                >
-                  <Link href={`/blogs/${blog.slug}`} className="group h-full relative bg-[#111111] border border-white/10 rounded-none overflow-hidden hover:border-orange-500/50 transition-colors duration-500 cursor-pointer flex flex-col">
-                    <div className="h-full flex flex-col">
-                      {/* Image Container */}
-                      <div className="relative h-[200px] w-full overflow-hidden shrink-0">
-                        <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-
-                        {/* Category Tag */}
-                        <div className="absolute top-4 left-4 z-20">
-                          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-white/20 text-white/80 text-[9px] font-bold uppercase tracking-wider">
-                            {blog.category}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-6 md:p-8 relative flex-1 flex flex-col">
-                        <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-wider text-white/40 mb-4">
-                          <span>{blog.date}</span>
-                          <div className="w-1 h-1 rounded-full bg-orange-500" />
-                          <span>5 Min Read</span>
-                        </div>
-
-                        <h3 className="text-xl font-medium mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
-                          {blog.title}
-                        </h3>
-
-                        <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
-                          {blog.description}
-                        </p>
-
-                        <div className="flex items-center pt-6 border-t border-white/10 gap-2 text-orange-500 text-[10px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300 mt-auto">
-                          <span>Read Article</span>
-                          <ArrowRight size={14} />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
+                <BlogCard key={blog.id} blog={blog} />
               ))}
             </AnimatePresence>
           </motion.div>

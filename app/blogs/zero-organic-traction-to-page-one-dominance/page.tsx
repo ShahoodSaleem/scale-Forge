@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "../../../components/ContactSection";
@@ -14,9 +15,74 @@ export default function ArticlePage() {
     summary: "A mid-size residential real estate brokerage was haemorrhaging marketing budget on paid search with no sustainable SEO strategy in place. Organic search accounted for less than 8% of total website traffic, leaving the business entirely dependent on paid advertising for lead generation. Scale Forge deployed a full-funnel SEO campaign — encompassing technical SEO, local search optimisation, high-intent keyword targeting, conversion rate optimisation, and authoritative link building — that delivered a 300% increase in organic lead conversions within nine months, dramatically reduced cost-per-acquisition, and built a compounding digital asset that continues to drive revenue growth long after the initial engagement.",
   };
 
+  const pageRef = useRef<HTMLDivElement>(null);
+  const pMouseX = useMotionValue(-1000);
+  const pMouseY = useMotionValue(-1000);
+
+  const pSpringX = useSpring(pMouseX, { stiffness: 150, damping: 40 });
+  const pSpringY = useSpring(pMouseY, { stiffness: 150, damping: 40 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      pMouseX.set(e.clientX);
+      pMouseY.set(e.clientY);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [pMouseX, pMouseY]);
+
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-orange-500/30">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-24 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <main ref={pageRef} className="min-h-screen bg-black text-white selection:bg-orange-500/30 relative overflow-hidden">
+      <motion.div
+        className="fixed pointer-events-none z-10 opacity-40 blur-[120px]"
+        style={{
+          x: pSpringX,
+          y: pSpringY,
+          left: 0,
+          top: 0,
+          width: "400px",
+          height: "400px",
+          borderRadius: "50%",
+          backgroundColor: "#ea5a0c81",
+          marginLeft: "-200px",
+          marginTop: "-200px",
+        }}
+      />
+      <style>{`
+        .blob-card {
+          position: relative;
+          z-index: 20;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .blob-bg {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          right: 2px;
+          bottom: 2px;
+          z-index: 2;
+          background: rgba(10, 10, 10, 0.9);
+          backdrop-filter: blur(24px);
+          border-radius: 14px;
+        }
+
+        .blob-element {
+          position: absolute;
+          z-index: 1;
+          width: 300px;
+          height: 300px;
+          border-radius: 50%;
+          background-color: #ea580c;
+          opacity: 0.8;
+          filter: blur(40px);
+          pointer-events: none;
+        }
+      `}</style>
+      <nav className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-12 h-24 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="text-white text-xl font-bold tracking-widest uppercase">
           Scale Forge
         </div>
@@ -67,9 +133,9 @@ export default function ArticlePage() {
         </motion.div>
       </section>
 
-      <section className="py-12 bg-black relative">
+      <section className="py-12 relative z-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="prose prose-invert prose-orange max-w-none lg:prose-xl mx-auto text-white/70 leading-relaxed font-light space-y-12">
+          <div className="prose prose-invert prose-orange max-w-none lg:prose-xl mx-auto text-white/70 leading-relaxed font-light space-y-12 relative z-20">
 
             {/* 3. EXECUTIVE SUMMARY SECTION */}
             <div className="border-b border-white/10 pb-16 mb-16">
@@ -98,30 +164,7 @@ export default function ArticlePage() {
             </div>
 
             {/* 5. RESULTS SECTION */}
-            <div className="my-16 p-10 relative overflow-hidden bg-[#0a0a0a] border border-orange-500/20 rounded-2xl">
-              {/* Subtle background glow */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] pointer-events-none -translate-y-1/2 translate-x-1/3" />
-
-              <h3 className="text-orange-500 font-bold uppercase tracking-[0.2em] text-xs mb-8 relative z-10 flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-                Results & Impact
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 relative z-10">
-                <div className="border-l border-white/10 pl-6">
-                  <div className="text-5xl font-medium text-white mb-2 leading-none">+300%</div>
-                  <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Clicks On Website</div>
-                </div>
-                <div className="border-l border-white/10 pl-6">
-                  <div className="text-5xl font-medium text-white mb-2 leading-none">4x</div>
-                  <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Leads Generated</div>
-                </div>
-              </div>
-
-              <p className="text-white/80 relative z-10 leading-relaxed border-t border-white/10 pt-6 mt-6">
-                This breakdown shows the immediate impact of the deliverables upon launch, securing long-term growth and stability for the client's web presence.
-              </p>
-            </div>
+            <ResultsCard />
 
 
 
@@ -133,3 +176,70 @@ export default function ArticlePage() {
     </main>
   );
 }
+
+const ResultsCard = () => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(-1000);
+  const mouseY = useMotionValue(-1000);
+
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 40 });
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      mouseX.set(200);
+      mouseY.set(200);
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!cardRef.current || window.innerWidth <= 768) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <div ref={cardRef} className="my-16 p-10 blob-card border border-orange-500/20 rounded-2xl group">
+      <div className="blob-bg"></div>
+      <motion.div
+        className="blob-element transition-opacity duration-1000 opacity-20 group-hover:opacity-60"
+        style={{
+          x: springX,
+          y: springY,
+          top: 0,
+          left: 0,
+          marginLeft: "-150px",
+          marginTop: "-150px"
+        }}
+      />
+
+      <div className="relative z-10">
+        <h3 className="text-orange-500 font-bold uppercase tracking-[0.2em] text-xs mb-8 flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+          Results & Impact
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="border-l border-white/10 pl-6">
+            <div className="text-5xl font-medium text-white mb-2 leading-none">+300%</div>
+            <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Clicks On Website</div>
+          </div>
+          <div className="border-l border-white/10 pl-6">
+            <div className="text-5xl font-medium text-white mb-2 leading-none">4x</div>
+            <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Leads Generated</div>
+          </div>
+        </div>
+
+        <p className="text-white/80 leading-relaxed border-t border-white/10 pt-6 mt-6">
+          This breakdown shows the immediate impact of the deliverables upon launch, securing long-term growth and stability for the client's web presence.
+        </p>
+      </div>
+    </div>
+  );
+};
