@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import InitialLoader from "../components/InitialLoader";
+import Navbar from "../components/Navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
       >
         <InitialLoader />
+        <Navbar />
         {children}
       </body>
     </html>

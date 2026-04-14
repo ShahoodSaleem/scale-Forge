@@ -1,81 +1,26 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import PremiumButton from "./PremiumButton";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  const [activeSection, setActiveSection] = useState('#home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isManualScrolling = useRef(false);
+  const pathname = usePathname();
 
   const navLinks: { name: string; href: string; strikethrough?: boolean }[] = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Features', href: '/features' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Blogs', href: '/blogs' },
+    { name: 'Contact', href: '/contact' },
   ];
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    isManualScrolling.current = true;
-    setActiveSection(href);
-    setIsMobileMenuOpen(false);
-
-    // Release the lock after the smooth scroll finishes (approx 800ms)..
-    setTimeout(() => {
-      isManualScrolling.current = false;
-    }, 800);
-  };
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-40% 0px -40% 0px', // Detects section when it passes through the middle 20%
-      threshold: 0,
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      if (isManualScrolling.current) return;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(`#${entry.target.id}`);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
-    const sections = ['home', 'features', 'about', 'projects', 'faq', 'pricing', 'contact'];
-    sections.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    });
-
-    const handleScroll = () => {
-      if (isManualScrolling.current) return;
-
-      const scrollPosition = window.scrollY;
-      const isAtBottom = window.innerHeight + scrollPosition >= document.documentElement.scrollHeight - 50;
-
-      if (isAtBottom) {
-        setActiveSection('#contact');
-      } else if (scrollPosition < 50) {
-        setActiveSection('#home');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
     <>
@@ -83,37 +28,28 @@ const Navbar = () => {
         initial={{ y: -100, opacity: 0, x: "-50%" }}
         animate={{ y: 0, opacity: 1, x: "-50%" }}
         transition={{ duration: 1, delay: 3, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-6 left-1/2 z-50 flex items-center justify-between md:justify-start h-14 px-2 rounded-full border border-white/10 bg-black/80 backdrop-blur-md w-[90%] max-w-[400px] md:w-auto md:max-w-none"
+        className="fixed top-6 left-1/2 z-50 flex items-center justify-between md:justify-start h-14 px-8 rounded-full border border-white/10 bg-black/80 backdrop-blur-md w-[90%] max-w-[500px] md:w-auto md:max-w-none"
       >
         <div className="flex items-center gap-1 w-full md:w-auto justify-between md:justify-start">
-          <div className="pl-4 pr-0 md:pr-6 text-white text-sm font-bold tracking-widest uppercase md:border-r md:border-white/10">
+          <div className="pl-4 pr-0 md:pr-6 text-white text-sm font-bold tracking-widest uppercase md:border-r md:border-white/10 whitespace-nowrap">
             Scale Forge
           </div>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = activeSection === link.href;
+              const isActive = pathname === (link.href === '/' ? '/' : link.href.split('#')[0]) && !(link.href.includes('#') && pathname === '/');
+              // Home matches only if it's exact '/' and not a hash link
+              const isMatch = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/';
               return (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleClick(e, link.href)}
-                  className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors duration-300 hover:text-white/80 z-10 ${isActive ? 'text-white' : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
+                  className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:text-white/80 z-10 ${isMatch ? 'text-white [text-shadow:0_0_8px_#f97316,0_0_16px_#f97316,0_0_24px_#ea580c]' : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
                     }`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="active-indicator"
-                      className="absolute inset-0 z-[-1]"
-                      transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-                    >
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(249,115,22,0.3),transparent_70%)]" />
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-orange-500 shadow-[0_0_8px_#f97316] rounded-b-full" />
-                    </motion.div>
-                  )}
                   {link.name}
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -128,10 +64,10 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden pr-2 pl-2">
-            <button 
-               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-               className="text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors pointer-events-auto"
-               aria-label="Toggle Menu"
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors pointer-events-auto"
+              aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -150,21 +86,20 @@ const Navbar = () => {
             className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center pt-20"
           >
             <div className="flex flex-col items-center gap-8 w-full px-6 pointer-events-auto">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleClick(e, link.href)}
-                  className={`text-2xl font-bold tracking-[0.2em] relative uppercase transition-colors duration-300 ${
-                    activeSection === link.href ? 'text-white' : 'text-white/40'
-                  }`}
-                >
-                  {link.name}
-                  {activeSection === link.href && (
-                     <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-orange-600 to-orange-400 rounded-full" />
-                  )}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isMatch = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/';
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`text-2xl font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isMatch ? 'text-white [text-shadow:0_0_12px_#f97316,0_0_24px_#f97316,0_0_36px_#ea580c]' : 'text-white/40'
+                      }`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
               <div className="mt-8">
                 <PremiumButton
                   label="Book a Call"
