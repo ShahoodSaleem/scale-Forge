@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import ShahoodImg from "../assets/Shahood.png";
-import RuhanImg from "../assets/Ruhan.png";
+import RuhanImg from "../assets/Ruhan_2.png";
 
 const teamMembers = [
   {
@@ -24,7 +24,7 @@ const teamMembers = [
 export default function TeamSection() {
   return (
     <section className="bg-black py-24 px-55 md:px-12 w-full overflow-hidden">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
