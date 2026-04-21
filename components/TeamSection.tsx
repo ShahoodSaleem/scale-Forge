@@ -10,22 +10,22 @@ const teamMembers = [
   {
     role: "PARTNER",
     name: "Shahood Saleem",
-    description: "An engineer with 4 years of expertise in scalable web development and 2 years specializing in enterprise AI integration. Background spans operations management, custom automations, and immersive product design.",
+    description: "As Chief Executive Officer and Strategic Lead at Scale Forge, Shahood Saleem drives the company’s vision, client strategy, and digital growth initiatives. With a focus on web strategy, automation, and scalable systems, he helps businesses build strong digital foundations that improve performance, increase conversions, and support long-term growth.",
     image: ShahoodImg
   },
   {
     role: "PARTNER",
     name: "Ruhan Bhalesha",
-    description: "A forward-thinking BBA student bringing half a decade of hands-on expertise in SEO, Social Media Marketing, and data-driven website growth management.",
+    description: "Ruhan is the Chief Technology Officer at Scale Forge, leading the development of the systems and technologies that power the company’s digital solutions. With expertise in SEO systems, AI automation, and technical infrastructure, he builds scalable frameworks that improve efficiency, support growth, and ensure every strategy is backed by data-driven performance.",
     image: RuhanImg
   }
 ];
 
 export default function TeamSection() {
   return (
-    <section className="bg-black py-24 px-6 md:px-12 w-full overflow-hidden">
+    <section className="bg-black py-24 px-55 md:px-12 w-full overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -35,10 +35,10 @@ export default function TeamSection() {
           Meet the Team
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
           {teamMembers.map((member, index) => (
-            <motion.div 
-              key={index} 
+            <motion.div
+              key={index}
               initial={{ opacity: 0, y: 80 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -47,10 +47,10 @@ export default function TeamSection() {
             >
               {/* Image Container */}
               <div className="w-full aspect-[3/4] bg-[#0a0a0a] mb-8 relative overflow-hidden flex flex-col items-center justify-center border border-white/5 transition-colors duration-500 group-hover:border-white/10">
-                <Image 
-                  src={member.image} 
-                  alt={member.name} 
-                  fill 
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
                   className="object-cover object-center grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
@@ -58,7 +58,7 @@ export default function TeamSection() {
 
               {/* Content */}
               <div className="flex flex-col">
-                <motion.h4 
+                <motion.h4
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.4 + (index * 0.3) }}

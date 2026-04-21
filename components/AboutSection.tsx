@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-60 px-6 bg-black flex flex-col items-center">
+    <section id="about" className="mt-60 mb-30 px-6 bg-black flex flex-col items-center">
       <div className="max-w-4xl text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -40,12 +40,12 @@ const AboutSection = () => {
         </motion.p>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-white/10">
           {[
             { label: 'Happy Clients', value: '20+' },
             { label: 'Projects Done', value: '35+' },
-            { label: 'Expert Staff', value: '3' },
-            { label: 'Years', value: '2' },
+            { label: 'Expert Staff', value: '5' },
+            { label: 'Years', value: '5' },
           ].map((stat, idx) => (
             <motion.div
               key={idx}
