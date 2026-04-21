@@ -15,7 +15,7 @@ const teamMembers = [
   },
   {
     role: "PARTNER",
-    name: "Ruhan Bhalesha",
+    name: "Ruhan Bhaleshah",
     description: "Ruhan is the Chief Technology Officer at Scale Forge, leading the development of the systems and technologies that power the company’s digital solutions. With expertise in SEO systems, AI automation, and technical infrastructure, he builds scalable frameworks that improve efficiency, support growth, and ensure every strategy is backed by data-driven performance.",
     image: RuhanImg
   }
