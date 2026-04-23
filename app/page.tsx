@@ -3,7 +3,7 @@ import AboutSection from "../components/AboutSection";
 import ProjectsSection from "../components/ProjectsSection";
 import FeaturesAccordion from "../components/FeaturesAccordion";
 import ComparisonSection from "../components/ComparisonSection";
-import PricingSection from "../components/PricingSection";
+import HomePricingSection from "../components/HomePricingSection";
 import FAQSection from "../components/FAQSection";
 import ContactSection from "../components/ContactSection";
 
@@ -15,7 +15,7 @@ export default function Home() {
       <ProjectsSection />
       <FeaturesAccordion />
       <ComparisonSection />
-      <PricingSection />
+      <HomePricingSection />
       <FAQSection />
       <ContactSection />
     </main>

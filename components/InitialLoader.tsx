@@ -11,7 +11,7 @@ const InitialLoader = () => {
     // Hide loader after a delay or when the page is fully loaded
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -21,23 +21,37 @@ const InitialLoader = () => {
       {loading && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
             transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
           }}
           className="loader-container"
         >
-          <div className="spinner">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+          <div className="loader-wrapper">
+            <div className="loader">
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+            </div>
+            <div className="loader loader--reflect">
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+              <div className="bar" />
+            </div>
           </div>
         </motion.div>
       )}

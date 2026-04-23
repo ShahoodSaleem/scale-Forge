@@ -8,88 +8,126 @@
   z-index: 9999;
 }
 
-/* From Uiverse.io by PriyanshuGupta28 */ 
-.spinner {
+.loader-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* The loader container */
+.loader {
   position: absolute;
-  width: 9px;
-  height: 9px;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 100px;
+  margin-top: -100px;
+  margin-left: -100px;
+  perspective: 1000px;
+  transform-style: preserve3d;
 }
 
-.spinner div {
+.loader--reflect {
+  margin-top: 0;
+}
+
+.loader--reflect:after {
+  content: '';
   position: absolute;
-  width: 50%;
-  height: 150%;
-  background: #FFFFFF;
-  transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
-  animation: spinner-fzua35 1s calc(var(--delay) * 1s) infinite ease;
+  top: 0;
+  left: -25%;
+  width: 150%;
+  height: 110%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0.3));
 }
 
-.spinner div:nth-child(1) {
-  --delay: 0.1;
-  --rotation: 36;
-  --translation: 150;
+/* The bar */
+.bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  height: 100px;
+  background-color: #8B3A00;
+  transform: scaleY(0);
+  transform-style: preserve3d;
+  animation: bar 3s cubic-bezier(.81,.04,.4,.7) infinite;
 }
 
-.spinner div:nth-child(2) {
-  --delay: 0.2;
-  --rotation: 72;
-  --translation: 150;
+.bar:nth-child(2) {
+  left: 20px;
+  background-color: #9E4500;
+  animation-delay: 50ms;
 }
 
-.spinner div:nth-child(3) {
-  --delay: 0.3;
-  --rotation: 108;
-  --translation: 150;
+.bar:nth-child(3) {
+  left: 40px;
+  background-color: #B05000;
+  animation-delay: 100ms;
 }
 
-.spinner div:nth-child(4) {
-  --delay: 0.4;
-  --rotation: 144;
-  --translation: 150;
+.bar:nth-child(4) {
+  left: 60px;
+  background-color: #C35A00;
+  animation-delay: 150ms;
 }
 
-.spinner div:nth-child(5) {
-  --delay: 0.5;
-  --rotation: 180;
-  --translation: 150;
+.bar:nth-child(5) {
+  left: 80px;
+  background-color: #D66500;
+  animation-delay: 200ms;
 }
 
-.spinner div:nth-child(6) {
-  --delay: 0.6;
-  --rotation: 216;
-  --translation: 150;
+.bar:nth-child(6) {
+  left: 100px;
+  background-color: #E87000;
+  animation-delay: 250ms;
 }
 
-.spinner div:nth-child(7) {
-  --delay: 0.7;
-  --rotation: 252;
-  --translation: 150;
+.bar:nth-child(7) {
+  left: 120px;
+  background-color: #FB7B00;
+  animation-delay: 300ms;
 }
 
-.spinner div:nth-child(8) {
-  --delay: 0.8;
-  --rotation: 288;
-  --translation: 150;
+.bar:nth-child(8) {
+  left: 140px;
+  background-color: #FF8A1A;
+  animation-delay: 350ms;
 }
 
-.spinner div:nth-child(9) {
-  --delay: 0.9;
-  --rotation: 324;
-  --translation: 150;
+.bar:nth-child(9) {
+  left: 160px;
+  background-color: #FF9933;
+  animation-delay: 400ms;
 }
 
-.spinner div:nth-child(10) {
-  --delay: 1;
-  --rotation: 360;
-  --translation: 150;
+.bar:nth-child(10) {
+  left: 180px;
+  background-color: #FFA84D;
+  animation-delay: 450ms;
 }
 
-@keyframes spinner-fzua35 {
-  0%, 10%, 20%, 30%, 50%, 60%, 70%, 80%, 90%, 100% {
-    transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
+.loader--reflect .bar {
+  animation-name: bar-reflect;
+}
+
+@keyframes bar {
+  0% {
+    transform: rotateZ(-180deg) rotateX(-360deg);
   }
 
-  50% {
-    transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1.5%));
+  75%,100% {
+    transform: rotateZ(0) rotateX(0);
+  }
+}
+
+@keyframes bar-reflect {
+  0% {
+    transform: rotateZ(180deg) rotateX(360deg);
+  }
+
+  75%,100% {
+    transform: rotateZ(0) rotateX(0);
   }
 }
