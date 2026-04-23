@@ -61,7 +61,7 @@ const Hero = () => {
           variants={itemVariants}
           className="text-7xl md:text-[100px] font-medium tracking-tight text-white mb-8 leading-[1.05]"
         >
-          Where Goals <br /> Meets Reality
+          Where Goals <br /> Meet Reality
         </motion.h1>
 
         {/* Subtext */}
