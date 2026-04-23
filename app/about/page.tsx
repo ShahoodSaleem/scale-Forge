@@ -1,6 +1,7 @@
 import AboutSection from "../../components/AboutSection";
 import TeamSection from "../../components/TeamSection";
 import HowWeWorkSection from "../../components/HowWeWorkSection";
+import PerfectShot from "../../components/PerfectShot";
 
 export default function AboutPage() {
   return (
@@ -8,6 +9,7 @@ export default function AboutPage() {
       <AboutSection />
       <TeamSection />
       <HowWeWorkSection />
+      <PerfectShot />
     </main>
   );
 }

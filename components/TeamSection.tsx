@@ -23,7 +23,7 @@ const teamMembers = [
 
 export default function TeamSection() {
   return (
-    <section className="bg-black py-24 px-55 md:px-12 w-full overflow-hidden">
+    <section className="bg-black py-24 px-6 md:px-12 w-full overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, x: -50 }}
