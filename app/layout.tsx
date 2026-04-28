@@ -4,6 +4,7 @@ import "./globals.css";
 import InitialLoader from "../components/InitialLoader";
 import Navbar from "../components/Navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   variable: "--font-sans",
@@ -33,6 +34,8 @@ export default function RootLayout({
         <InitialLoader />
         <Navbar />
         {children}
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
