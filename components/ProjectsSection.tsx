@@ -45,7 +45,7 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
-      className="group relative h-[550px] w-full block overflow-hidden rounded-3xl border border-orange-300/10 bg-white/5 backdrop-blur-sm"
+      className="group relative h-[550px] w-full block overflow-hidden rounded-3xl border border-orange-300/10 bg-[#ffffff]/5 backdrop-blur-sm"
     >
       {/* Background Image with Hover Zoom */}
       <div
@@ -54,10 +54,10 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       />
 
       {/* Dynamic Overlay - Color Burn/Multiply Effect */}
-      <div className="absolute inset-0 bg-[#0a0a0a]/70 transition-colors duration-500 group-hover:bg-[#0a0a0a]/50" />
+      <div className="absolute inset-0 bg-[#000000]/20 dark:bg-[#000000]/70 transition-colors duration-500 group-hover:bg-[#000000]/10 dark:group-hover:bg-[#000000]/50" />
 
       {/* Gradient Glow */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-transparent opacity-80" />
 
       {/* Content */}
       <div className="absolute inset-0 p-8 flex flex-col justify-end">
@@ -67,15 +67,15 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
             <div className="h-[1px] w-8 bg-orange-500" />
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-orange-500 transition-colors duration-500">
+          <h3 className="text-2xl md:text-3xl font-bold text-[#ffffff] mb-3 group-hover:text-orange-500 transition-colors duration-500">
             {project.title}
           </h3>
 
-          <p className="text-white/60 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <p className="text-[#ffffff]/60 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             {project.description}
           </p>
 
-          <div className="flex items-center gap-2 text-white font-medium text-sm group/btn">
+          <div className="flex items-center gap-2 text-[#ffffff] font-medium text-sm group/btn">
             <span>Learn More</span>
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:rotate-45" />
           </div>
@@ -83,7 +83,7 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       </div>
 
       {/* Subtle Border Glow */}
-      <div className="absolute inset-0 border border-white/0 transition-colors duration-500 group-hover:border-white/10 rounded-3xl pointer-events-none" />
+      <div className="absolute inset-0 border border-[#ffffff]/0 transition-colors duration-500 group-hover:border-[#ffffff]/10 rounded-3xl pointer-events-none" />
     </motion.a>
   );
 };

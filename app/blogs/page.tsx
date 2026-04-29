@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "../../components/ContactSection";
 
@@ -129,21 +129,21 @@ const BlogCard = ({ blog }: { blog: any }) => {
 
           {/* Content */}
           <div className="p-6 md:p-8 relative flex-1 flex flex-col">
-            <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-wider text-white/40 mb-4">
+            <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40 mb-4">
               <span>{blog.date}</span>
               <div className="w-1 h-1 rounded-full bg-orange-500" />
               <span>5 Min Read</span>
             </div>
 
-            <h3 className="text-xl font-medium mb-4 group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-white group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
+            <h3 className="text-xl font-medium mb-4 text-black dark:text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-black to-black dark:from-white dark:to-white group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
               {blog.title}
             </h3>
 
-            <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+            <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
               {blog.description}
             </p>
 
-            <div className="flex items-center pt-6 border-t border-white/10 gap-2 text-orange-500 text-[10px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300 mt-auto">
+            <div className="flex items-center pt-6 border-t border-black/10 dark:border-white/10 gap-2 text-orange-500 text-[10px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300 mt-auto">
               <span>Read Article</span>
               <ArrowRight size={14} />
             </div>
@@ -167,7 +167,7 @@ export default function BlogsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-orange-500/30">
+    <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-orange-500/30">
       <style>{`
         .blob-card {
           position: relative;
@@ -175,12 +175,16 @@ export default function BlogsPage() {
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          background: #111111;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: #f5f5f5;
+          border: 1px solid rgba(0, 0, 0, 0.08);
           transition: border-color 0.5s;
         }
 
         .blob-card:hover {
+          border-color: rgba(59, 130, 246, 0.6);
+        }
+
+        :is(.dark) .blob-card:hover {
           border-color: rgba(249, 115, 22, 0.5);
         }
 
@@ -191,7 +195,7 @@ export default function BlogsPage() {
           right: 0;
           bottom: 0;
           z-index: 2;
-          background: rgba(17, 17, 17, 0.95);
+          background: rgba(245, 245, 245, 0.97);
           backdrop-filter: blur(24px);
           pointer-events: none;
         }
@@ -206,23 +210,19 @@ export default function BlogsPage() {
           filter: blur(40px);
           pointer-events: none;
         }
+
+        :is(.dark) .blob-card {
+          background: #111111;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        :is(.dark) .blob-bg {
+          background: rgba(17, 17, 17, 0.95);
+        }
       `}</style>
-      {/* Custom Subpage Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-24 bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="text-white text-xl font-bold tracking-widest uppercase">
-          Scale Forge
-        </div>
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-white/60 hover:text-orange-500 transition-colors uppercase tracking-[0.2em] text-[10px] font-bold bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-orange-500/50"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
-        </Link>
-      </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 md:pt-48 md:pb-32 overflow-hidden border-b border-white/10">
+      <section className="relative pt-32 pb-20 md:pt-36 md:pb-32 overflow-hidden border-b border-black/10 dark:border-white/10">
         {/* Background Gradients */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-orange-600/10 rounded-full blur-[150px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
@@ -238,10 +238,10 @@ export default function BlogsPage() {
               Writing & Deep Dives
             </div>
 
-            <h1 className="text-5xl md:text-8xl font-medium tracking-tight mb-8 leading-tight">
+            <h1 className="text-5xl md:text-8xl font-medium tracking-tight mb-8 leading-tight text-black dark:text-white">
               Insights & <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 italic">Case Studies</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-black/50 dark:text-white/50 max-w-2xl mx-auto leading-relaxed">
               Explore our latest thoughts, operational strategies, and inside looks at how we help ambitious businesses scale using cutting-edge technology and premium design.
             </p>
           </motion.div>
@@ -249,7 +249,7 @@ export default function BlogsPage() {
       </section>
 
       {/* Blogs Grid */}
-      <section className="py-24 bg-black relative">
+      <section className="py-24 bg-white dark:bg-black relative">
         <div className="max-w-7xl mx-auto px-6">
           {/* Filter Navbar */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-16">
@@ -259,7 +259,7 @@ export default function BlogsPage() {
                 onClick={() => setActiveFilter(filter)}
                 className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border ${activeFilter === filter
                   ? "bg-orange-500 border-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]"
-                  : "bg-white/5 border-white/10 text-white/50 hover:text-white hover:border-white/30"
+                  : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white hover:border-black/30 dark:hover:border-white/30"
                   }`}
               >
                 {filter}

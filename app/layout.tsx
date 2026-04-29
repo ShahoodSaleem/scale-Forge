@@ -5,6 +5,7 @@ import InitialLoader from "../components/InitialLoader";
 import Navbar from "../components/Navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "../components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -31,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
       >
-        <InitialLoader />
-        <Navbar />
-        {children}
-        <SpeedInsights />
-        <Analytics />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <InitialLoader />
+          <Navbar />
+          {children}
+          <SpeedInsights />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

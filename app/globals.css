@@ -6,8 +6,25 @@ html {
 }
 
 :root {
-  background-color: #000000;
-  color: white;
+  --theme-black: #ffffff;
+  --theme-white: #000000;
+  --theme-accent-300: #a5f3fc;
+  --theme-accent-400: #67e8f9;
+  --theme-accent-500: #00f3ff;
+  --theme-accent-600: #0891b2;
+  background-color: var(--theme-black);
+  color: var(--theme-white);
+}
+
+.dark {
+  --theme-black: #000000;
+  --theme-white: #ffffff;
+  --theme-accent-300: #fdba74;
+  --theme-accent-400: #fb923c;
+  --theme-accent-500: #f97316;
+  --theme-accent-600: #ea580c;
+  background-color: var(--theme-black);
+  color: var(--theme-white);
 }
 
 /* Hide scrollbar for all elements */
@@ -27,6 +44,12 @@ html, body {
 }
 
 @theme {
+  --color-black: var(--theme-black);
+  --color-white: var(--theme-white);
+  --color-orange-300: var(--theme-accent-300);
+  --color-orange-400: var(--theme-accent-400);
+  --color-orange-500: var(--theme-accent-500);
+  --color-orange-600: var(--theme-accent-600);
   --color-brand: #ffffff;
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-heading: var(--font-heading), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

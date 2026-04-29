@@ -2,7 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Cpu, Zap, Globe } from 'lucide-react';
-import YouTubePlayer from './YouTubePlayer';
+
+import { useTheme } from 'next-themes';
+import { useState, useEffect } from 'react';
 
 const Badge = ({ icon: Icon, text }: { icon: any, text: string }) => (
   <div className="flex items-center gap-4 px-4 py-2 rounded-full border border-white/10 backdrop-blur-xl bg-white/5 text-white/80 text-sm font-medium">
@@ -12,6 +14,15 @@ const Badge = ({ icon: Icon, text }: { icon: any, text: string }) => (
 );
 
 const Hero = () => {
+  const [mounted, setMounted] = useState(false);
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const videoSrc = mounted && theme === 'light' ? '/Assets/WhiteWaves.mp4' : '/Assets/Hero_Dark.mp4';
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -35,9 +46,22 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, delay: 3.8 }}
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none bg-black"
       >
-        <YouTubePlayer videoId="YDzKhixBDhg" />
+        <div className={`relative w-full h-full transition-opacity duration-[3000ms] ease-in-out ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}>
+          <video
+            key={videoSrc}
+            src={videoSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            onCanPlay={() => setIsVideoLoaded(true)}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Subtle Overlay to enhance text readability */}
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
         {/* Seamless Transition Gradient Overlay */}
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/70 to-transparent z-[1]" />
       </motion.div>

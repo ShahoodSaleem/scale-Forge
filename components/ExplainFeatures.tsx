@@ -91,7 +91,7 @@ const FeatureDetail = ({ title, icon: Icon, description, details, metric, index,
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
                         {details.map((detail: string, idx: number) => (
                             <li key={idx} className="flex items-center gap-3 text-white/80 font-medium">
-                                <div className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
+                                <div className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_color-mix(in_srgb,var(--color-orange-500)_50%,transparent)]" />
                                 {detail}
                             </li>
                         ))}

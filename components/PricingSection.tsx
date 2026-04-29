@@ -39,9 +39,9 @@ const PricingCard = ({ plan, planIdx }: any) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: planIdx * 0.1 }}
-      className="blob-card group min-h-[500px]"
+      className="blob-card group min-h-[500px] bg-black"
     >
-      <div className="blob-bg"></div>
+      <div className="blob-bg bg-black/85"></div>
       <motion.div
         className="blob-element transition-opacity duration-1000 opacity-30 md:opacity-20 group-hover:opacity-80"
         style={{
@@ -193,13 +193,11 @@ const PricingSection = () => {
           flex-direction: column;
           box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           border: 1px solid rgba(255, 255, 255, 0.05);
-          background: #080808;
         }
         .blob-bg {
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           z-index: 2;
-          background: rgba(8, 8, 8, 0.85);
           backdrop-filter: blur(16px);
         }
         .blob-element {
@@ -207,7 +205,7 @@ const PricingSection = () => {
           z-index: 1;
           width: 300px; height: 300px;
           border-radius: 50%;
-          background-color: #ea580c;
+          background-color: var(--color-orange-600);
           opacity: 0.5;
           filter: blur(50px);
           pointer-events: none;

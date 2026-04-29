@@ -123,7 +123,7 @@ const ComparisonSection = () => {
           {/* Other Agencies */}
           <motion.div
             variants={leftCardVariants}
-            className="flex-1 relative p-8 md:p-12 rounded-[2rem] border border-white/5 bg-zinc-950/50 backdrop-blur-md overflow-hidden group transition-colors hover:border-white/10"
+            className="flex-1 relative p-8 md:p-12 rounded-[2rem] border border-white/5 bg-black/50 backdrop-blur-md overflow-hidden group transition-colors hover:border-white/10"
           >
             {/* Dark red gradient at top */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 blur-[100px] pointer-events-none transition-opacity group-hover:opacity-100 opacity-50" />
@@ -154,7 +154,7 @@ const ComparisonSection = () => {
           {/* Scale Forge */}
           <motion.div
             variants={rightCardVariants}
-            className="flex-1 relative p-8 md:p-12 rounded-[2rem] border border-orange-500/30 bg-[#0a0a0a] backdrop-blur-xl overflow-hidden shadow-[0_0_80px_-20px_rgba(234,88,12,0.15)] group transition-all hover:shadow-[0_0_100px_-20px_rgba(234,88,12,0.25)] hover:border-orange-500/50"
+            className="flex-1 relative p-8 md:p-12 rounded-[2rem] border border-orange-500/30 bg-black backdrop-blur-xl overflow-hidden shadow-[0_0_80px_-20px_color-mix(in_srgb,var(--color-orange-600)_15%,transparent)] group transition-all hover:shadow-[0_0_100px_-20px_color-mix(in_srgb,var(--color-orange-600)_25%,transparent)] hover:border-orange-500/50"
           >
             {/* Animated Glare */}
             <motion.div
@@ -176,7 +176,7 @@ const ComparisonSection = () => {
 
             <div className="mb-12 flex items-center justify-between relative z-20">
               <h3 className="text-2xl font-medium text-white flex items-center gap-3">
-                <span className="w-12 h-[2px] bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,1)]" />
+                <span className="w-12 h-[2px] bg-orange-500 shadow-[0_0_10px_var(--color-orange-600)]" />
                 Scale Forge
               </h3>
             </div>
@@ -188,7 +188,7 @@ const ComparisonSection = () => {
                   variants={itemVariants}
                   className="flex items-start gap-4"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-600 to-orange-400 p-[1px] shrink-0 mt-0.5 shadow-[0_0_20px_rgba(234,88,12,0.4)]">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-600 to-orange-400 p-[1px] shrink-0 mt-0.5 shadow-[0_0_20px_color-mix(in_srgb,var(--color-orange-600)_40%,transparent)]">
                     <div className="w-full h-full bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center">
                       <Check className="w-4 h-4 text-orange-500" />
                     </div>

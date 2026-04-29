@@ -100,7 +100,7 @@ const ContactSection = () => {
             initial={{ opacity: 0, scale: 0.95, y: 30 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-[#111111] border border-white/10 rounded-none p-10 lg:p-14 shadow-2xl relative"
+            className="bg-black border border-white/10 rounded-none p-10 lg:p-14 shadow-2xl relative"
           >
             <h3 className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-12">Feedback Form</h3>
 

@@ -39,7 +39,7 @@ const PricingCard = ({ plan, planIdx }: any) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: planIdx * 0.1 }}
-      className={`blob-card group min-h-[500px] transition-all duration-500 ${
+      className={`blob-card group min-h-[500px] transition-all duration-500 bg-black ${
         plan.popular 
           ? '!border-transparent relative z-20 md:-translate-y-2' 
           : 'hover:!border-white/10'
@@ -47,7 +47,7 @@ const PricingCard = ({ plan, planIdx }: any) => {
     >
       {/* Outer static glow for popular card */}
       {plan.popular && (
-        <div className="absolute inset-0 rounded-[20px] shadow-[0_0_50px_rgba(234,88,12,0.15)] pointer-events-none z-0" />
+        <div className="absolute inset-0 rounded-[20px] shadow-[0_0_50px_color-mix(in_srgb,var(--color-orange-600)_15%,transparent)] pointer-events-none z-0" />
       )}
 
       {/* Premium Masked Moving Border */}
@@ -63,12 +63,12 @@ const PricingCard = ({ plan, planIdx }: any) => {
           <div 
             className="absolute inset-[-100%] animate-[spin_4s_linear_infinite]"
             style={{
-              background: "conic-gradient(from 0deg, transparent 40%, rgba(234, 88, 12, 0.1) 60%, rgba(234, 88, 12, 0.8) 90%, rgba(255, 138, 26, 1) 100%)"
+              background: "conic-gradient(from 0deg, transparent 40%, color-mix(in srgb, var(--color-orange-600) 10%, transparent) 60%, color-mix(in srgb, var(--color-orange-600) 80%, transparent) 90%, var(--color-orange-400) 100%)"
             }}
           />
         </div>
       )}
-      <div className="blob-bg"></div>
+      <div className="blob-bg bg-black/85"></div>
       <motion.div
         className="blob-element transition-opacity duration-1000 opacity-30 md:opacity-20 group-hover:opacity-80"
         style={{
@@ -189,14 +189,12 @@ const HomePricingSection = () => {
           flex-direction: column;
           box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           border: 1px solid rgba(255, 255, 255, 0.05);
-          background: #080808;
         }
 
         .blob-bg {
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           z-index: 2;
-          background: rgba(8, 8, 8, 0.85);
           backdrop-filter: blur(16px);
         }
 
@@ -205,7 +203,7 @@ const HomePricingSection = () => {
           z-index: 1;
           width: 300px; height: 300px;
           border-radius: 50%;
-          background-color: #ea580c;
+          background-color: var(--color-orange-600);
           opacity: 0.5;
           filter: blur(50px);
           pointer-events: none;

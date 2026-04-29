@@ -1,7 +1,39 @@
+:root {
+  --loader-bg: #ffffff;
+  --loader-fade: rgba(255, 255, 255, 1);
+  --loader-fade-transparent: rgba(255, 255, 255, 0.0);
+  --loader-c1: #0891b2;
+  --loader-c2: #06b6d4;
+  --loader-c3: #00c7e6;
+  --loader-c4: #00d8fa;
+  --loader-c5: #00e9ff;
+  --loader-c6: #1af2ff;
+  --loader-c7: #33f5ff;
+  --loader-c8: #4df8ff;
+  --loader-c9: #66fbff;
+  --loader-c10: #80fdff;
+}
+
+html.dark {
+  --loader-bg: #000000;
+  --loader-fade: rgba(0, 0, 0, 1);
+  --loader-fade-transparent: rgba(0, 0, 0, 0.3);
+  --loader-c1: #8B3A00;
+  --loader-c2: #9E4500;
+  --loader-c3: #B05000;
+  --loader-c4: #C35A00;
+  --loader-c5: #D66500;
+  --loader-c6: #E87000;
+  --loader-c7: #FB7B00;
+  --loader-c8: #FF8A1A;
+  --loader-c9: #FF9933;
+  --loader-c10: #FFA84D;
+}
+
 .loader-container {
   position: fixed;
   inset: 0;
-  background: black;
+  background: var(--loader-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +70,7 @@
   left: -25%;
   width: 150%;
   height: 110%;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0.3));
+  background: linear-gradient(0deg, var(--loader-fade), var(--loader-fade) 20%, var(--loader-fade-transparent));
 }
 
 /* The bar */
@@ -48,7 +80,7 @@
   left: 0;
   width: 20px;
   height: 100px;
-  background-color: #8B3A00;
+  background-color: var(--loader-c1);
   transform: scaleY(0);
   transform-style: preserve3d;
   animation: bar 3s cubic-bezier(.81,.04,.4,.7) infinite;
@@ -56,55 +88,55 @@
 
 .bar:nth-child(2) {
   left: 20px;
-  background-color: #9E4500;
+  background-color: var(--loader-c2);
   animation-delay: 50ms;
 }
 
 .bar:nth-child(3) {
   left: 40px;
-  background-color: #B05000;
+  background-color: var(--loader-c3);
   animation-delay: 100ms;
 }
 
 .bar:nth-child(4) {
   left: 60px;
-  background-color: #C35A00;
+  background-color: var(--loader-c4);
   animation-delay: 150ms;
 }
 
 .bar:nth-child(5) {
   left: 80px;
-  background-color: #D66500;
+  background-color: var(--loader-c5);
   animation-delay: 200ms;
 }
 
 .bar:nth-child(6) {
   left: 100px;
-  background-color: #E87000;
+  background-color: var(--loader-c6);
   animation-delay: 250ms;
 }
 
 .bar:nth-child(7) {
   left: 120px;
-  background-color: #FB7B00;
+  background-color: var(--loader-c7);
   animation-delay: 300ms;
 }
 
 .bar:nth-child(8) {
   left: 140px;
-  background-color: #FF8A1A;
+  background-color: var(--loader-c8);
   animation-delay: 350ms;
 }
 
 .bar:nth-child(9) {
   left: 160px;
-  background-color: #FF9933;
+  background-color: var(--loader-c9);
   animation-delay: 400ms;
 }
 
 .bar:nth-child(10) {
   left: 180px;
-  background-color: #FFA84D;
+  background-color: var(--loader-c10);
   animation-delay: 450ms;
 }
 

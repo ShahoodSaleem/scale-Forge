@@ -46,7 +46,7 @@ export default function TeamSection() {
               className="flex flex-col group cursor-pointer"
             >
               {/* Image Container */}
-              <div className="w-full aspect-[3/4] bg-[#0a0a0a] mb-8 relative overflow-hidden flex flex-col items-center justify-center border border-white/5 transition-colors duration-500 group-hover:border-white/10">
+              <div className="w-full aspect-[3/4] bg-black mb-8 relative overflow-hidden flex flex-col items-center justify-center border border-white/5 transition-colors duration-500 group-hover:border-white/10">
                 <Image
                   src={member.image}
                   alt={member.name}
@@ -69,7 +69,7 @@ export default function TeamSection() {
                 <h3 className="text-2xl md:text-3xl font-semibold text-white mb-6 tracking-tight">
                   {member.name}
                 </h3>
-                <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light w-full lg:w-11/12">
+                <p className="text-sm md:text-base text-white/60 leading-relaxed font-light w-full lg:w-11/12">
                   {member.description}
                 </p>
               </div>

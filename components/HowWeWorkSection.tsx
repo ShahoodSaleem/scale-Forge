@@ -29,7 +29,7 @@ export default function HowWeWorkSection() {
   }, []);
 
   return (
-    <section className="bg-[#050505] py-24 px-6 md:px-12 w-full overflow-hidden relative">
+    <section className="bg-black py-24 px-6 md:px-12 w-full overflow-hidden relative">
       <div className="max-w-[1450px] w-full mx-auto flex flex-col gap-16">
 
         {/* Top Content Area */}
@@ -59,7 +59,7 @@ export default function HowWeWorkSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-gray-400 text-base md:text-lg leading-relaxed max-w-md pb-2"
+            className="text-white/60 text-base md:text-lg leading-relaxed max-w-md pb-2"
           >
             We compiled our development lifecycle into a mind map. This high-level diagram outlines the critical phases, technical milestones, and our parallel workflows from concept to deployment.
           </motion.p>
@@ -89,7 +89,7 @@ export default function HowWeWorkSection() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="px-6 py-3 rounded-xl bg-[#FF6900] text-black font-bold whitespace-nowrap shadow-[0_0_25px_rgba(255,105,0,0.5)] z-10"
+                className="px-6 py-3 rounded-xl bg-orange-500 text-black font-bold whitespace-nowrap shadow-orange-500/50 z-10"
               >
                 Project Kickoff
               </motion.div>
@@ -251,7 +251,7 @@ export default function HowWeWorkSection() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.8 }}
-                    className="px-6 py-3 rounded-xl bg-[#FF6900] text-black font-bold whitespace-nowrap shadow-[0_0_25px_rgba(255,105,0,0.5)] z-10"
+                    className="px-6 py-3 rounded-xl bg-orange-500 text-black font-bold whitespace-nowrap shadow-orange-500/50 z-10"
                   >
                     Project Completion
                   </motion.div>
@@ -304,16 +304,16 @@ const NodeGroup = ({ title, items, delay, fullHighlight = false }: NodeGroupProp
     >
       <div
         className={`text-[11px] px-3 py-1.5 rounded-lg w-fit transition-colors shadow-lg font-medium
-          ${fullHighlight ? 'bg-[#FF6900] text-black shadow-[0_0_15px_rgba(255,105,0,0.5)]' : 'bg-[#1a1a1a] text-gray-200'}`}
+          ${fullHighlight ? 'bg-orange-500 text-black shadow-orange-500/50' : 'bg-white/5 text-white/80'}`}
       >
         {title}
       </div>
-      <div className="bg-[#131313] p-2 rounded-xl flex flex-col gap-1.5 border border-white/5 shadow-xl">
+      <div className="bg-white/10 p-2 rounded-xl flex flex-col gap-1.5 border border-white/5 shadow-xl">
         {items.map((item, idx) => (
           <div
             key={idx}
             className={`text-[11px] px-2.5 py-1.5 rounded-lg w-full transition-colors leading-tight
-              ${item.highlight ? 'bg-[#FF6900] text-black font-semibold' : 'bg-[#1c1c1c] text-gray-300 hover:bg-[#252525]'}`}
+              ${item.highlight ? 'bg-orange-500 text-black font-semibold' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
           >
             {item.label}
           </div>

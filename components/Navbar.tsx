@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 import PremiumButton from "./PremiumButton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,6 +12,14 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const glowClass = mounted && theme === 'light'
+    ? 'text-black [text-shadow:0_0_8px_#00f3ff,0_0_16px_#00f3ff,0_0_24px_#00c8ff]'
+    : 'text-white [text-shadow:0_0_8px_#f97316,0_0_16px_#f97316,0_0_24px_#ea580c]';
 
   const navLinks: { name: string; href: string; strikethrough?: boolean }[] = [
     { name: 'Home', href: '/' },
@@ -45,7 +55,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:text-white/80 z-10 ${isMatch ? 'text-white [text-shadow:0_0_8px_#f97316,0_0_16px_#f97316,0_0_24px_#ea580c]' : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
+                  className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:text-white/80 z-10 ${isMatch ? glowClass : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
                     }`}
                 >
                   {link.name}
@@ -54,7 +64,16 @@ const Navbar = () => {
             })}
           </div>
 
-          <div className="hidden md:block pl-4 pr-1">
+          <div className="hidden md:flex items-center pl-4 pr-1 gap-2">
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors pointer-events-auto flex items-center justify-center w-10 h-10"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            )}
             <PremiumButton
               label="Book a Call"
               onClick={() => window.open('https://cal.com/scale-forge-guqonp/30min', '_blank')}
@@ -63,7 +82,16 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden pr-2 pl-2">
+          <div className="md:hidden flex items-center gap-2 pr-2 pl-2">
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors pointer-events-auto flex items-center justify-center w-10 h-10"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-white p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors pointer-events-auto"
@@ -93,7 +121,7 @@ const Navbar = () => {
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-2xl font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isMatch ? 'text-white [text-shadow:0_0_12px_#f97316,0_0_24px_#f97316,0_0_36px_#ea580c]' : 'text-white/40'
+                    className={`text-2xl font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isMatch ? glowClass : 'text-white/40'
                       }`}
                   >
                     {link.name}

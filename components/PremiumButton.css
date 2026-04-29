@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
-  background-color: #f97316; /* Neon Orange */
+  background-color: var(--color-orange-500); /* Neon Orange */
   border-radius: 30px;
   color: rgb(19, 19, 19);
   font-weight: 600;
@@ -14,7 +14,7 @@
   position: relative;
   cursor: pointer;
   transition-duration: .5s;
-  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-orange-500) 30%, transparent);
   padding-left: 10px;
   overflow: hidden;
   font-size: 14px;
@@ -31,8 +31,8 @@
 }
 
 .premium-button:hover {
-  background-color: #fb923c; /* Lighter Orange */
-  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+  background-color: var(--color-orange-400); /* Lighter Orange */
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--color-orange-500) 40%, transparent);
 }
 
 .premium-button:active {

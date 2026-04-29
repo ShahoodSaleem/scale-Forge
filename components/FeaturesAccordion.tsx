@@ -21,23 +21,23 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExpanded, onHover, details, metric }: FeatureCardProps) => {
   const colorMap: Record<string, string> = {
-    blue: 'rgba(255, 255, 255, 1)',
-    purple: 'rgba(255, 255, 255, 0.2)',
-    emerald: 'rgba(255, 255, 255, 0.2)',
-    amber: 'rgba(255, 255, 255, 0.2)',
-    rose: 'rgba(255, 255, 255, 0.2)',
-    indigo: 'rgba(255, 255, 255, 0.2)',
-    cyan: 'rgba(255, 255, 255, 0.2)',
+    blue: 'color-mix(in srgb, var(--theme-white) 100%, transparent)',
+    purple: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
+    emerald: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
+    amber: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
+    rose: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
+    indigo: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
+    cyan: 'color-mix(in srgb, var(--theme-white) 20%, transparent)',
   };
 
   const textColorMap: Record<string, string> = {
-    blue: 'text-white',
-    purple: 'text-white',
-    emerald: 'text-white',
-    amber: 'text-white',
-    rose: 'text-white',
-    indigo: 'text-white',
-    cyan: 'text-white',
+    blue: 'text-[#ffffff]',
+    purple: 'text-[#ffffff]',
+    emerald: 'text-[#ffffff]',
+    amber: 'text-[#ffffff]',
+    rose: 'text-[#ffffff]',
+    indigo: 'text-[#ffffff]',
+    cyan: 'text-[#ffffff]',
   };
   return (
     <motion.div
@@ -45,10 +45,10 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => window.innerWidth > 768 ? onHover(id) : undefined}
       onClick={() => onHover(id)}
-      className={`relative cursor-pointer overflow-hidden rounded-none border border-white/10 ${
+      className={`relative cursor-pointer overflow-hidden rounded-none border border-[#ffffff]/10 ${
         isExpanded 
-          ? 'bg-white/10 h-[550px] md:h-[650px] md:flex-[5]' 
-          : 'bg-white/5 h-[80px] md:h-[650px] md:flex-1 hover:bg-white/10'
+          ? 'bg-[#ffffff]/10 h-[550px] md:h-[650px] md:flex-[5]' 
+          : 'bg-[#ffffff]/5 h-[80px] md:h-[650px] md:flex-1 hover:bg-[#ffffff]/10'
       }`}
     >
       {/* Background Image */}
@@ -58,10 +58,10 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
       />
 
       {/* Left-to-Right Gradient Fade */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/60 to-transparent z-[2]" />
 
       {/* Background Overlay (Top-to-Bottom) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/80 z-[2]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#ffffff]/5 via-transparent to-[#000000]/80 z-[3]" />
 
       {/* Glow Effect when expanded */}
       <AnimatePresence>
@@ -89,7 +89,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
               transition={{ duration: 0.8 }}
               className="absolute inset-0 flex items-center justify-start md:justify-center px-6 md:px-0 pointer-events-none"
             >
-              <span className="inline-block whitespace-nowrap text-lg font-semibold tracking-tighter text-white/20 uppercase md:rotate-[-90deg] origin-center">
+              <span className="inline-block whitespace-nowrap text-lg font-semibold tracking-tighter text-[#ffffff]/60 uppercase md:rotate-[-90deg] origin-center">
                 {title}
               </span>
             </motion.div>
@@ -104,7 +104,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
                 <span className={`text-xl font-medium tracking-tight uppercase italic ${textColorMap[color]}`}>
                   {title}
                 </span>
-                <p className="text-white/60 text-sm md:text-base leading-relaxed max-w-[280px]">
+                <p className="text-[#ffffff]/60 text-sm md:text-base leading-relaxed max-w-[280px]">
                   {description}
                 </p>
                 {/* Highlights List */}
@@ -115,9 +115,9 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.4 + (idx * 0.1) }}
-                      className="flex items-center gap-3 text-white/80 text-xs md:text-sm font-medium"
+                      className="flex items-center gap-3 text-[#ffffff]/80 text-xs md:text-sm font-medium"
                     >
-                      <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#ffffff]/30" />
                       {detail}
                     </motion.li>
                   ))}
@@ -127,10 +127,10 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="mt-6 md:mt-12 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 inline-block w-fit"
+                  className="mt-6 md:mt-12 backdrop-blur-xl bg-[#ffffff]/5 border border-[#ffffff]/10 rounded-2xl p-4 inline-block w-fit"
                 >
-                  <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/40 mb-1">Impact Metric</p>
-                  <p className="text-xl md:text-2xl font-semibold text-white">{metric}</p>
+                  <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#ffffff]/40 mb-1">Impact Metric</p>
+                  <p className="text-xl md:text-2xl font-semibold text-[#ffffff]">{metric}</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -139,7 +139,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
 
         {/* Bottom Icon */}
         <div className={`mt-auto transition-all duration-300 ${!isExpanded ? 'absolute right-6 top-1/2 -translate-y-1/2 md:relative md:top-auto md:translate-y-0 md:mb-0' : 'absolute right-6 top-6 md:relative md:top-auto md:right-auto md:mt-auto'}`}>
-          <Icon className={`w-6 h-6 transition-colors ${isExpanded ? 'text-white' : 'text-white/30'}`} />
+          <Icon className={`w-6 h-6 transition-colors ${isExpanded ? 'text-[#ffffff]' : 'text-[#ffffff]/30'}`} />
         </div>
       </div>
     </motion.div>
