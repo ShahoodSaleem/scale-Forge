@@ -75,7 +75,6 @@ const Navbar = () => {
                           <Link
                             key={subLink.name}
                             href={subLink.href}
-                            target="_blank"
                             className={`px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors hover:bg-white/5 ${isSubMatch ? glowClass : 'text-white/40 hover:text-white/80'}`}
                           >
                             {subLink.name}
@@ -168,7 +167,6 @@ const Navbar = () => {
                             <Link
                               key={subLink.name}
                               href={subLink.href}
-                              target="_blank"
                               onClick={() => setIsMobileMenuOpen(false)}
                               className={`text-lg font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isSubMatch ? glowClass : 'text-white/40 hover:text-white/80'}`}
                             >
