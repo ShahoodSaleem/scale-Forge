@@ -1,0 +1,104 @@
+{
+  "product": {
+    "name": "ScaleForge CEO Portal",
+    "version": "1.0",
+    "description": "A secure, exclusive portal for the CEO providing real-time financial insights, business analytics, and executive dashboards."
+  },
+
+  "design_system": {
+    "philosophy": [
+      "premium, high-contrast",
+      "glassmorphism design elements",
+      "consistent with ScaleForge website aesthetics",
+      "dark mode (main) and light mode (alternate), with smooth transitions"
+    ],
+    "themes": {
+      "dark": {
+        "background": "deep black with subtle orange/red gradient accents",
+        "text_primary": "white",
+        "text_secondary": "gray-400",
+        "buttons": "glowing orange gradient",
+        "cards": "semi-transparent glass surfaces"
+      },
+      "light": {
+        "background": "soft white with subtle cyan gradient accents",
+        "text_primary": "black",
+        "text_secondary": "gray-600",
+        "buttons": "glowing cyan gradient",
+        "cards": "glass with soft shadows"
+      }
+    },
+    "ui_rules": {
+      "border_radius": "xl (16px–24px)",
+      "spacing": "consistent padding (20px–32px)",
+      "grid": "12-column responsive",
+      "animations": ["fade-in on load", "hover scale", "subtle motion"],
+      "no heavy UI clutter": true
+    }
+  },
+
+  "authentication": {
+    "access_control": "CEO exclusive access",
+    "features": [
+      "Supabase Auth",
+      "CEO role-based access (no admin or employee access)",
+      "multi-factor authentication (MFA) optional"
+    ]
+  },
+
+  "modules": {
+    "owner_homepage": {
+      "summary": [
+        "My Balance: total account balance overview",
+        "Savings Account: detailed savings breakdown",
+        "Investment Portfolio: asset classes, performance metrics",
+        "Wallets: manually added wallets with balance updates",
+        "Cash Flow: monthly income vs. expenses",
+        "Recent Activities: client closures, invoices, brief log of requirements vs. charges"
+      ],
+      "ui": "glassmorphism cards, financial graphs, and minimalist log display"
+    },
+    "analytics_page": {
+      "summary": [
+        "ROI (Return on Investment) metrics",
+        "COGS (Cost of Goods Sold)",
+        "EBITDA (Earnings Before Interest, Taxes, Depreciation)",
+        "Revenue growth graphs",
+        "Client acquisition trends",
+        "Employee cost vs. revenue analysis"
+      ],
+      "ui": "financial dashboards, multi-line graphs, KPI cards"
+    },
+    "transactions_page": {
+      "summary": [
+        "All financial transactions: date, amount, type (income/expense), category",
+        "Filter by date, category, client"
+      ],
+      "ui": "list view with financial icons, color coding (income/expense), export options (CSV/PDF)"
+    },
+    "invoices_page": {
+      "summary": [
+        "Invoice list: number, client, date, amount, status (paid/unpaid)",
+        "Invoice detail: breakdown, payment history"
+      ],
+      "ui": "clean invoice cards, clickable for detailed view"
+    },
+    "additional_features": {
+      "summary": [
+        "Cash Flow Forecast: visual monthly projections (line chart)",
+        "Real-Time ROI: updated per project or investment",
+        "Client Growth: track new vs. recurring clients"
+      ],
+      "ui": "dynamic charts, KPI cards, financial KPIs"
+    }
+  },
+
+  "security": {
+    "policies": [
+      "Supabase Row Level Security (RLS) for CEO access only",
+      "all data encrypted",
+      "MFA optional for CEO",
+      "no employee/admin
+    ]
+  }
+  

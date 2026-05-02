@@ -2,23 +2,51 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase, type AttendanceLog, type Profile } from "../../../lib/supabase";
-import { Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { supabase, type AttendanceLog, type Profile, type Task, type Meeting, type Team } from "../../../lib/supabase";
+import { Clock, AlertTriangle, CheckCircle2, Calendar, CheckSquare, Users } from "lucide-react";
 
 export default function OverviewTab({ profile }: { profile: Profile }) {
   const [logs, setLogs] = useState<AttendanceLog[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("attendance_logs")
-      .select("*")
-      .eq("profile_id", profile.id)
-      .eq("event_type", "time_in")
-      .order("timestamp", { ascending: false })
-      .then(({ data }) => {
-        setLogs(data ?? []);
-        setLoading(false);
-      });
+    async function loadData() {
+      const [logsRes, tasksRes, meetingsRes, teamsRes] = await Promise.all([
+        supabase.from("attendance_logs")
+          .select("*")
+          .eq("profile_id", profile.id)
+          .eq("event_type", "time_in")
+          .order("timestamp", { ascending: false }),
+        supabase.from("tasks")
+          .select("*")
+          .eq("assigned_to", profile.id)
+          .neq("status", "done")
+          .order("deadline", { ascending: true, nullsFirst: false }),
+        supabase.from("meetings")
+          .select("*")
+          .contains("attendees", [profile.id])
+          .gte("start_time", new Date().toISOString())
+          .order("start_time", { ascending: true }),
+        supabase.from("team_members")
+          .select("*, teams(*)")
+          .eq("profile_id", profile.id)
+      ]);
+
+      setLogs(logsRes.data ?? []);
+      setTasks(tasksRes.data ?? []);
+      setMeetings(meetingsRes.data ?? []);
+      
+      // Extract team objects from the join
+      const userTeams = (teamsRes.data ?? []).map((tm: any) => tm.teams).filter(Boolean);
+      setTeams(userTeams);
+      
+      setLoading(false);
+    }
+    
+    loadData();
   }, [profile.id]);
 
   const expectedIn = profile.expected_time_in;
@@ -137,6 +165,100 @@ export default function OverviewTab({ profile }: { profile: Profile }) {
                 );
               })}
             </AnimatePresence>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        {/* Active Tasks */}
+        <div>
+          <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+            <CheckSquare size={20} className="text-cyan-400" /> Tasks in Hand
+            {tasks.length > 0 && (
+              <span className="bg-cyan-500/20 text-cyan-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {tasks.length} Active
+              </span>
+            )}
+          </h3>
+          {tasks.length === 0 ? (
+            <div className="text-center py-8 bg-white/5 border border-white/10 rounded-2xl">
+              <p className="text-white/40 text-sm">No active tasks assigned to you.</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+              {tasks.map(task => (
+                <div key={task.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-colors">
+                  <h4 className="text-white font-semibold mb-1 text-sm">{task.title}</h4>
+                  <div className="flex items-center justify-between text-[10px] mt-3">
+                    <span className={`px-2 py-1 rounded border font-semibold ${
+                      task.priority === 'urgent' ? 'bg-red-500/20 border-red-500/50 text-red-400' :
+                      task.priority === 'high' ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' :
+                      task.priority === 'medium' ? 'bg-blue-500/20 border-blue-500/50 text-blue-400' :
+                      'bg-gray-500/20 border-gray-500/50 text-gray-400'
+                    }`}>
+                      {task.priority.toUpperCase()}
+                    </span>
+                    <span className="text-white/40">
+                      {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'No deadline'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Upcoming Meetings */}
+        <div>
+          <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+            <Calendar size={20} className="text-orange-400" /> Upcoming Meetings
+            {meetings.length > 0 && (
+              <span className="bg-orange-500/20 text-orange-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {meetings.length} Scheduled
+              </span>
+            )}
+          </h3>
+          {meetings.length === 0 ? (
+            <div className="text-center py-8 bg-white/5 border border-white/10 rounded-2xl">
+              <p className="text-white/40 text-sm">No upcoming meetings scheduled.</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+              {meetings.map(meeting => {
+                const start = new Date(meeting.start_time);
+                const end = new Date(meeting.end_time);
+                return (
+                  <div key={meeting.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 border-l-4" style={{ borderLeftColor: meeting.color }}>
+                    <h4 className="text-white font-semibold text-sm mb-1">{meeting.title}</h4>
+                    <p className="text-white/50 text-[10px] mb-2">{start.toLocaleDateString()}</p>
+                    <div className="text-xs font-medium text-white/80">
+                      {start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Enrolled Teams */}
+      <div className="mt-6">
+        <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+          <Users size={20} className="text-purple-400" /> Your Teams
+        </h3>
+        {teams.length === 0 ? (
+          <div className="text-center py-8 bg-white/5 border border-white/10 rounded-2xl">
+            <p className="text-white/40 text-sm">You are not enrolled in any teams.</p>
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {teams.map(team => (
+              <div key={team.id} className="bg-purple-500/10 border border-purple-500/20 rounded-xl px-5 py-3 flex flex-col">
+                <span className="text-purple-300 font-semibold text-sm">{team.name}</span>
+                {team.department && <span className="text-purple-400/50 text-[10px] uppercase mt-1">{team.department}</span>}
+              </div>
+            ))}
           </div>
         )}
       </div>

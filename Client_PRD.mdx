@@ -1,0 +1,99 @@
+{
+  "product": {
+    "name": "ScaleForge Client Portal",
+    "version": "1.0",
+    "description": "A secure client-facing portal providing project transparency, payment tracking, and milestone updates, seamlessly integrated with ScaleForge’s design."
+  },
+
+  "design_system": {
+    "philosophy": [
+      "premium, consistent with ScaleForge website",
+      "glassmorphism elements",
+      "high-contrast dark and light modes",
+      "minimalist, clean typography"
+    ],
+    "themes": {
+      "dark": {
+        "background": "deep black with subtle orange gradient highlights",
+        "text_primary": "white",
+        "text_secondary": "gray-400",
+        "buttons": "glowing orange gradient",
+        "cards": "semi-transparent glass surfaces"
+      },
+      "light": {
+        "background": "soft white with subtle cyan accents",
+        "text_primary": "black",
+        "text_secondary": "gray-600",
+        "buttons": "glowing cyan gradient",
+        "cards": "glass with subtle shadow"
+      }
+    },
+    "ui_rules": {
+      "border_radius": "xl (16px–24px)",
+      "spacing": "consistent padding (20px–32px)",
+      "grid": "12-column responsive",
+      "animations": ["fade-in on load", "smooth scroll", "hover scale"]
+    }
+  },
+
+  "authentication": {
+    "access_control": "client-specific access (via unique client credentials)",
+    "features": [
+      "Supabase Auth with role: client",
+      "personalized dashboard per client"
+    ]
+  },
+
+  "modules": {
+    "client_dashboard": {
+      "summary": [
+        "Project Overview: project name, description, current status (phase-by-phase progress)",
+        "Payment Summary: total project cost, advance paid, remaining balance",
+        "Work Stages: updated by admin (e.g., design, development, testing)",
+        "Client Milestones: key delivery dates, with progress visuals",
+        "Recent Activities: log of closed deals, milestones achieved, and notes on requirements vs. deliverables"
+      ],
+      "ui": "glassmorphism cards, progress bars, financial summary tiles"
+    },
+    "payments_page": {
+      "summary": [
+        "Payment Plan: choose from 3, 6, or 9-month installments for web projects",
+        "Recurring Payments: automated monthly charges for SEO",
+        "Payment Status: paid, pending, overdue, next due date",
+        "Secure Payment Form: credit card, bank transfer options"
+      ],
+      "ui": "payment progress bars, plan selection dropdown, secure form fields"
+    },
+    "project_stage_updates": {
+      "summary": [
+        "Current project stage visible (e.g., design, development, testing)",
+        "Stage progress: percentage complete, admin-updated",
+        "Milestone due dates: visible timeline of expected deliverables"
+      ],
+      "ui": "stage progress bars, timeline, admin update notifications"
+    },
+    "support_and_contact": {
+      "summary": [
+        "Direct support contact: email, chat support",
+        "FAQ: common client queries",
+        "Dedicated relationship manager contact info"
+      ],
+      "ui": "simple contact card, FAQ accordion"
+    },
+    "additional_features": {
+      "summary": [
+        "Notifications: real-time updates on project stages and payments",
+        "Document Center: download project briefs, contracts, and invoices",
+        "Custom Reports: request tailored progress or financial reports"
+      ],
+      "ui": "notification bell, downloadable documents, report request form"
+    }
+  },
+
+  "security": {
+    "policies": [
+      "Supabase Row Level Security (RLS) ensuring only the relevant client sees their own data",
+      "all payment transactions encrypted",
+      "no access 
+      ]
+    }
