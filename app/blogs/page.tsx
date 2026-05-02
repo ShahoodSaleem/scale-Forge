@@ -53,6 +53,15 @@ const blogs = [
     date: "April 2026",
     image: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=1596&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "How a regional real estate firm tripled qualified lead volume in 9 months."
+  },
+  {
+    id: 2,
+    slug: "SEO_Optimization",
+    title: "SEO Optimization",
+    category: "Blogs",
+    date: "May 2026",
+    image: "https://images.unsplash.com/photo-1674027326254-88c960d8e561?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    description: "How the Right SEO Agency Can Transform Your Business in 2026."
   }
   //Jo bhi Article likha ha, uper se aak section copy karoo nechay, name change karoo aur phir blogs me new floder bana kr likhdo//
 
