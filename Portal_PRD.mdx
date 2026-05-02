@@ -1,0 +1,236 @@
+{
+  "product": {
+    "name": "ScaleForge Employee & Admin Portal",
+    "version": "1.1",
+    "design_goal": "Seamless visual and experiential consistency with ScaleForge marketing website"
+  },
+
+  "design_system": {
+    "philosophy": [
+      "minimal",
+      "premium",
+      "high-contrast",
+      "soft gradients",
+      "glassmorphism accents",
+      "subtle motion over heavy UI"
+    ],
+
+    "themes": {
+      "dark": {
+        "background": "deep black with gradient overlays (black → dark orange/red glow)",
+        "cards": "semi-transparent dark surfaces with soft borders",
+        "text_primary": "white",
+        "text_secondary": "gray-400",
+        "accent": "orange / amber gradient",
+        "buttons": "rounded, glowing gradient (orange → pink)",
+        "hover_effects": "soft glow + slight scale"
+      },
+
+      "light": {
+        "background": "soft white / light gray with subtle wave gradients",
+        "cards": "pure white with soft shadows",
+        "text_primary": "black",
+        "text_secondary": "gray-600",
+        "accent": "cyan / blue gradient",
+        "buttons": "rounded, soft cyan gradient",
+        "hover_effects": "shadow elevation + slight scale"
+      }
+    },
+
+    "ui_rules": {
+      "border_radius": "xl (16px–24px)",
+      "spacing": "generous padding (16px–32px)",
+      "grid": "12-column responsive",
+      "animations": [
+        "fade-in on load",
+        "hover scale (1.02–1.05)",
+        "smooth transitions (200–300ms ease)"
+      ],
+      "no_hard_edges": true,
+      "no_flat_design": true
+    },
+
+    "components_style": {
+      "cards": {
+        "style": "glass + gradient border subtle",
+        "shadow": "soft, diffused",
+        "hover": "lift + glow"
+      },
+      "buttons": {
+        "style": "pill-shaped",
+        "primary": "gradient filled",
+        "secondary": "outline with glow on hover"
+      },
+      "inputs": {
+        "style": "rounded, soft border, dark fill (dark mode) / white fill (light mode)"
+      },
+      "tables": {
+        "style": "card-based rows instead of hard tables",
+        "hover": "highlight row with glow"
+      }
+    }
+  },
+
+  "layout": {
+    "structure": {
+      "navbar": {
+        "style": "same as website (floating, blurred background)",
+        "elements": ["logo", "role badge", "logout"]
+      },
+
+      "dashboard": {
+        "max_width": "1400px",
+        "padding": "24px",
+        "sections_spacing": "32px"
+      }
+    }
+  },
+
+  "modules": {
+
+    "admin_dashboard": {
+      "ui_alignment": "match website card + gradient aesthetic",
+
+      "top_cards": {
+        "style": "gradient glass cards",
+        "items": [
+          "Employees Active",
+          "Tasks Active",
+          "Live Attendance",
+          "Alerts"
+        ]
+      },
+
+      "employee_tracking": {
+        "ui": "card list (NOT table-heavy)",
+        "features": [
+          "status badges (color-coded)",
+          "quick actions (edit/remove)",
+          "live status indicator (dot pulse)"
+        ]
+      },
+
+      "task_tracking": {
+        "ui": "kanban-lite + list hybrid",
+        "features": [
+          "status pills",
+          "priority color coding",
+          "quick update inline"
+        ]
+      },
+
+      "attendance_logs": {
+        "ui": "timeline-style logs (not boring table)",
+        "features": [
+          "time blocks",
+          "visual break indicators"
+        ]
+      },
+
+      "calendar": {
+        "ui": "full-width glass calendar",
+        "features": [
+          "event chips",
+          "hover preview",
+          "add meeting modal"
+        ]
+      },
+
+      "team_management": {
+        "ui": "kanban board",
+        "columns": "dynamic (HR, DevOps, etc.)",
+        "cards": "team blocks",
+
+        "features": [
+          "drag-and-drop members",
+          "team lead tagging",
+          "expand team → view members"
+        ]
+      },
+
+      "task_assignment": {
+        "ui": "side panel modal",
+        "style": "glass card",
+        "fields": [
+          "title",
+          "description",
+          "assign (user/team)",
+          "priority",
+          "deadline"
+        ]
+      },
+
+      "onboarding": {
+        "ui": "form card",
+        "features": [
+          "create user (Supabase)",
+          "auto email invite",
+          "force password reset"
+        ]
+      }
+    },
+
+    "employee_portal": {
+      "ui_alignment": "clean, minimal, less clutter than admin",
+
+      "attendance_bar": {
+        "ui": "horizontal control panel",
+        "buttons": [
+          "Time In",
+          "Break Start",
+          "Break End",
+          "Time Out"
+        ],
+        "status_display": "live (Working / On Break)"
+      },
+
+      "tabs": [
+        "Active Tasks",
+        "Attendance History",
+        "Calendar",
+        "Team"
+      ],
+
+      "team_tab": {
+        "features": [
+          "see team members",
+          "see team lead",
+          "team tasks overview"
+        ]
+      }
+    }
+  },
+
+  "ux_rules": [
+    "no clutter — everything must breathe",
+    "every action should be 1–2 clicks max",
+    "no dense tables unless absolutely necessary",
+    "use color + motion instead of text overload",
+    "feedback for every action (toast / animation)"
+  ],
+
+  "motion_system": {
+    "page_load": "fade + slight upward motion",
+    "card_hover": "lift + glow",
+    "button_click": "scale down + ripple",
+    "drag_drop": "smooth shadow follow"
+  },
+
+  "backend": {
+    "provider": "Supabase",
+    "features": [
+      "auth",
+      "realtime subscriptions",
+      "row level security",
+      "storage (optional for files)"
+    ]
+  },
+
+  "advanced_features": [
+    "AI productivity insights (weekly reports)",
+    "auto flag inactive employees",
+    "smart task suggestions",
+    "meeting conflict detection",
+    "team performance heatmap"
+  ]
+}

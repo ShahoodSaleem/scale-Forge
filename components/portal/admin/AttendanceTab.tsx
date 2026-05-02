@@ -1,0 +1,345 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase, type AttendanceLog, type Profile } from "../../../lib/supabase";
+import { Timer, LogIn, LogOut, Coffee, ChevronDown, ChevronUp } from "lucide-react";
+
+function calcHoursWorked(logs: AttendanceLog[]): string {
+  let totalMs = 0;
+  let lastIn: Date | null = null;
+  let breakStart: Date | null = null;
+  let breakTotal = 0;
+
+  logs.forEach(log => {
+    const ts = new Date(log.timestamp);
+    if (log.event_type === "time_in") lastIn = ts;
+    if (log.event_type === "break_start") breakStart = ts;
+    if (log.event_type === "break_end" && breakStart) { 
+      breakTotal += ts.getTime() - breakStart.getTime(); 
+      breakStart = null; 
+    }
+    if (log.event_type === "time_out" && lastIn) { 
+      totalMs += ts.getTime() - lastIn.getTime() - breakTotal; 
+      lastIn = null; 
+      breakTotal = 0;
+    }
+  });
+
+  const hrs = Math.floor(totalMs / 3600000);
+  const mins = Math.floor((totalMs % 3600000) / 60000);
+  return totalMs > 0 ? `${hrs}h ${mins}m` : "—";
+}
+
+function aggregateDayLogs(logs: AttendanceLog[]) {
+  const shifts: { in: string | null; out: string | null }[] = [];
+  const breaks: { start: string | null; end: string | null }[] = [];
+  
+  const sorted = [...logs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  
+  let currentShift: { in: string | null; out: string | null } | null = null;
+  let currentBreak: { start: string | null; end: string | null } | null = null;
+
+  sorted.forEach(log => {
+    if (log.event_type === "time_in") {
+      currentShift = { in: log.timestamp, out: null };
+      shifts.push(currentShift);
+    } else if (log.event_type === "time_out") {
+      if (currentShift) {
+        currentShift.out = log.timestamp;
+        currentShift = null;
+      } else {
+        shifts.push({ in: null, out: log.timestamp });
+      }
+    } else if (log.event_type === "break_start") {
+      currentBreak = { start: log.timestamp, end: null };
+      breaks.push(currentBreak);
+    } else if (log.event_type === "break_end") {
+      if (currentBreak) {
+        currentBreak.end = log.timestamp;
+        currentBreak = null;
+      } else {
+        breaks.push({ start: null, end: log.timestamp });
+      }
+    }
+  });
+
+  return { shifts, breaks };
+}
+
+function formatTime(iso: string) {
+  return new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+}
+
+function groupLogs(logs: AttendanceLog[]) {
+  const grouped: Record<string, Record<string, AttendanceLog[]>> = {};
+  logs.forEach(log => {
+    if (!grouped[log.date]) grouped[log.date] = {};
+    if (!grouped[log.date][log.profile_id]) grouped[log.date][log.profile_id] = [];
+    grouped[log.date][log.profile_id].push(log);
+  });
+  return grouped;
+}
+
+function AdminAttendanceCard({ emp, dayLogs, delayIndex, onMarkAbsent }: { emp: Profile | undefined, dayLogs: AttendanceLog[], delayIndex: number, onMarkAbsent?: (empId: string, date: string, isAbsent: boolean) => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const hours = calcHoursWorked([...dayLogs].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()));
+  const agg = aggregateDayLogs(dayLogs);
+
+  // A shift is ongoing if the last shift has no time out.
+  const isOngoing = agg.shifts.length > 0 && agg.shifts[agg.shifts.length - 1].out === null;
+  const isAbsent = dayLogs.some(l => l.event_type === "absent");
+  const dateStr = dayLogs.length > 0 ? dayLogs[0].date : "";
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: delayIndex * 0.05 }}
+      className={`border rounded-2xl overflow-hidden transition-colors ${isAbsent ? "bg-red-500/5 border-red-500/20" : "bg-white/5 border-white/10"}`}
+    >
+      {/* Header */}
+      <button 
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 hover:bg-white/5 transition-colors text-left"
+      >
+        <div className="flex flex-col">
+          <h3 className="text-white font-bold text-sm">{emp?.full_name ?? "Unknown Employee"}</h3>
+          <span className="text-white/40 text-[10px] uppercase tracking-widest">{emp?.department ?? "No Department"}</span>
+        </div>
+        <div className="flex items-center gap-4 flex-wrap">
+          {isAbsent ? (
+            <div className="flex items-center gap-2 text-red-400 font-bold bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-xl text-xs">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              Absent
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-orange-400 font-bold bg-orange-500/10 border border-orange-500/20 px-3 py-1.5 rounded-xl text-xs">
+              <Timer size={14} />
+              {hours !== "—" ? `${hours} Total` : ""}
+              {hours === "—" && isOngoing ? "Ongoing Shift" : ""}
+              {hours !== "—" && isOngoing ? " (+ Ongoing)" : ""}
+              {hours === "—" && !isOngoing ? "No Completed Shifts" : ""}
+            </div>
+          )}
+          <div className="text-white/40 flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors">
+            {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </div>
+        </div>
+      </button>
+
+      {/* Content */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            className="px-5 pb-5"
+          >
+            <div className="pt-5 border-t border-white/5">
+              {/* Shifts */}
+              <div className="space-y-4 mb-6">
+                {agg.shifts.map((s, i) => (
+                  <div key={i} className="grid grid-cols-2 gap-4 sm:gap-6">
+                    <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                      <div className="flex items-center gap-2 text-green-400 mb-2">
+                        <LogIn size={14} />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Time In {agg.shifts.length > 1 ? `#${i+1}` : ""}</span>
+                      </div>
+                      <p className="text-white font-medium text-lg">{s.in ? formatTime(s.in) : "—"}</p>
+                    </div>
+                    <div className="bg-black/20 rounded-xl p-4 border border-white/5">
+                      <div className="flex items-center gap-2 text-red-400 mb-2">
+                        <LogOut size={14} />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Time Out {agg.shifts.length > 1 ? `#${i+1}` : ""}</span>
+                      </div>
+                      <p className="text-white font-medium text-lg">{s.out ? formatTime(s.out) : "—"}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Breaks */}
+              {agg.breaks.length > 0 && (
+                <div className="space-y-3">
+                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                    <Coffee size={12} /> Break History ({agg.breaks.length})
+                  </span>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {agg.breaks.map((b, i) => (
+                      <div key={i} className="flex items-center justify-between text-sm text-white/70 bg-black/20 rounded-xl p-3 border border-white/5">
+                        <span className="font-medium text-white">{b.start ? formatTime(b.start) : "—"}</span>
+                        <span className="text-white/30 text-[10px] uppercase">to</span>
+                        <span className="font-medium text-white">{b.end ? formatTime(b.end) : "Ongoing"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+export default function AttendanceTab({ addToast }: { addToast: (t: any, m: string) => void }) {
+  const [employees, setEmployees] = useState<Profile[]>([]);
+  const [teams, setTeams] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+
+  const [selectedId, setSelectedId] = useState("all");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState("all");
+  const [selectedDept, setSelectedDept] = useState("all");
+
+  const [logs, setLogs] = useState<AttendanceLog[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from("profiles").select("*").eq("role", "employee"),
+      supabase.from("teams").select("*"),
+      supabase.from("team_members").select("*")
+    ]).then(([p, t, tm]) => {
+      setEmployees(p.data ?? []);
+      setTeams(t.data ?? []);
+      setTeamMembers(tm.data ?? []);
+    });
+  }, []);
+
+  useEffect(() => {
+    let q = supabase.from("attendance_logs").select("*").order("timestamp", { ascending: false }).limit(500);
+    if (selectedId !== "all") q = q.eq("profile_id", selectedId);
+    if (selectedDate) q = q.eq("date", selectedDate);
+    q.then(({ data }) => setLogs(data ?? []));
+  }, [selectedId, selectedDate]);
+
+  const filteredLogs = logs.filter(log => {
+    const emp = employees.find(e => e.id === log.profile_id);
+    if (!emp) return true; 
+    if (selectedDept !== "all" && emp.department !== selectedDept) return false;
+    if (selectedTeam !== "all") {
+      const isMember = teamMembers.some(tm => tm.team_id === selectedTeam && tm.profile_id === emp.id);
+      if (!isMember) return false;
+    }
+    return true;
+  });
+
+  const grouped = groupLogs(filteredLogs);
+  const dates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+  const uniqueDepts = Array.from(new Set(employees.map(e => e.department).filter(Boolean)));
+
+  return (
+    <div className="space-y-6">
+      {/* Filter */}
+      <div className="flex flex-col gap-4 p-4 rounded-2xl border border-white/8 bg-white/5">
+        <h3 className="text-white/60 text-[10px] font-bold uppercase tracking-widest">Filters</h3>
+        <div className="flex items-center gap-3 flex-wrap">
+          <input 
+            type="date"
+            value={selectedDate}
+            onChange={e => setSelectedDate(e.target.value)}
+            className="bg-black border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white outline-none focus:border-orange-500/50 transition-colors"
+          />
+
+          <select 
+            value={selectedDept}
+            onChange={e => setSelectedDept(e.target.value)}
+            className="bg-black border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white outline-none focus:border-orange-500/50 transition-colors"
+          >
+            <option value="all">All Departments</option>
+            {uniqueDepts.map(d => <option key={d} value={d}>{d}</option>)}
+          </select>
+
+          <select 
+            value={selectedTeam}
+            onChange={e => setSelectedTeam(e.target.value)}
+            className="bg-black border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white outline-none focus:border-orange-500/50 transition-colors"
+          >
+            <option value="all">All Teams</option>
+            {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
+
+          <select 
+            value={selectedId}
+            onChange={e => setSelectedId(e.target.value)}
+            className="bg-black border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white outline-none focus:border-orange-500/50 transition-colors"
+          >
+            <option value="all">All Employees</option>
+            {employees.map(e => <option key={e.id} value={e.id}>{e.full_name}</option>)}
+          </select>
+          
+          {(selectedDate || selectedDept !== "all" || selectedTeam !== "all" || selectedId !== "all") && (
+            <button 
+              onClick={() => {
+                setSelectedDate("");
+                setSelectedDept("all");
+                setSelectedTeam("all");
+                setSelectedId("all");
+              }}
+              className="text-[10px] font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 ml-auto"
+            >
+              Clear Filters
+            </button>
+          )}
+
+          {selectedId !== "all" && selectedDate && (
+            <button
+              onClick={async () => {
+                const existing = logs.find(l => l.profile_id === selectedId && l.date === selectedDate && l.event_type === "absent");
+                if (existing) {
+                  addToast("info", "Employee is already marked absent on this date.");
+                  return;
+                }
+                const { error } = await supabase.from("attendance_logs").insert({
+                  profile_id: selectedId,
+                  event_type: "absent",
+                  date: selectedDate,
+                  timestamp: new Date(`${selectedDate}T00:00:00Z`).toISOString()
+                });
+                if (!error) {
+                  addToast("success", "Employee marked absent.");
+                  const { data } = await supabase.from("attendance_logs").select("*").eq("profile_id", selectedId).eq("date", selectedDate);
+                  if (data) setLogs(prev => [...prev, ...data]);
+                } else {
+                  addToast("error", error.message);
+                }
+              }}
+              className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors"
+            >
+              Mark Absent
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div className="space-y-8">
+        {dates.length === 0 && (
+          <p className="text-white/30 text-sm text-center py-16">No attendance records found.</p>
+        )}
+        {dates.map((date, dateIndex) => (
+          <div key={date}>
+            <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-4">
+              {new Date(date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
+            
+            <div className="space-y-4">
+              {Object.keys(grouped[date]).map((profileId, empIndex) => {
+                const dayLogs = grouped[date][profileId];
+                const emp = employees.find(e => e.id === profileId);
+
+                return (
+                  <AdminAttendanceCard 
+                    key={profileId}
+                    emp={emp}
+                    dayLogs={dayLogs}
+                    delayIndex={(dateIndex * 10) + empIndex}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
