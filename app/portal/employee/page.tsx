@@ -181,7 +181,7 @@ export default function EmployeePortal() {
           {activeTab === "overview"   && <OverviewTab profile={profile!} />}
           {activeTab === "tasks"      && <ActiveTasksTab profileId={profile!.id} addToast={addToast} />}
           {activeTab === "attendance" && <AttendanceHistoryTab profileId={profile!.id} />}
-          {activeTab === "calendar"   && <CalendarTab addToast={addToast} />}
+          {activeTab === "calendar"   && <CalendarTab role="employee" addToast={addToast} />}
           {activeTab === "team"       && <TeamTab profileId={profile!.id} />}
         </motion.div>
       </div>

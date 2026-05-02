@@ -103,7 +103,7 @@ export default function AdminDashboard() {
           {activeTab === "employees"  && <EmployeesTab {...sharedProps} />}
           {activeTab === "tasks"      && <TasksTab {...sharedProps} />}
           {activeTab === "attendance" && <AttendanceTab {...sharedProps} />}
-          {activeTab === "calendar"   && <CalendarTab {...sharedProps} />}
+          {activeTab === "calendar"   && <CalendarTab role="admin" {...sharedProps} />}
           {activeTab === "teams"      && <TeamsTab {...sharedProps} />}
           {activeTab === "onboarding" && <OnboardingTab {...sharedProps} />}
         </motion.div>
