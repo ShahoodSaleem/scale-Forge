@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn("⚠️ Supabase environment variables are missing! Portals will not function.");
 }
@@ -15,7 +14,7 @@ export interface Profile {
   id: string;
   email: string;
   full_name: string;
-  role: 'admin' | 'employee';
+  role: string; // Changed from 'admin' | 'employee' to allow flexible roles like SEO Head
   avatar_url?: string;
   department?: string;
   position?: string;

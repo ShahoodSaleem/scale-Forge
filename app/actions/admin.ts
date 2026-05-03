@@ -13,8 +13,11 @@ export async function createEmployeeAccount(data: {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
-    return { error: "Server missing Supabase credentials. Please add SUPABASE_SERVICE_ROLE_KEY to your .env.local file." };
+    console.error("❌ createEmployeeAccount failed: Missing SUPABASE_SERVICE_ROLE_KEY on server.");
+    return { error: "Server missing Supabase credentials. Please add SUPABASE_SERVICE_ROLE_KEY to your .env.local file and RESTART your dev server." };
   }
+  
+  console.log("✅ createEmployeeAccount: Service key found, initializing admin client.");
 
   const supabaseAdmin = createClient(supabaseUrl, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false }
