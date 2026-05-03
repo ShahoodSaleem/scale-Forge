@@ -86,11 +86,10 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
               <span>{blog.readTime} Min Read</span>
             </div>
 
-            <h3 className="text-xl font-medium mb-4 text-black dark:text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-black to-black dark:from-white dark:to-white group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
+            <h3 className="text-xl font-bold text-black dark:text-white mb-2 line-clamp-2">
               {blog.title}
             </h3>
-
-            <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+            <p className="text-sm text-black/60 dark:text-white/60 line-clamp-2">
               {blog.description}
             </p>
 
