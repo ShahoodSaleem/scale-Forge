@@ -3,6 +3,8 @@ import { POSTS_QUERY } from "@/sanity/lib/queries";
 import BlogGrid from "./BlogGrid";
 import ContactSection from "../../components/ContactSection";
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogsPage() {
   const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
 

@@ -8,6 +8,8 @@ import ResultsCard from "@/components/ResultsCard";
 import ContactSection from "../../../components/ContactSection";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
