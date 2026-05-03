@@ -1,235 +1,30 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { sanityFetch } from "@/sanity/lib/live";
+import { POSTS_QUERY } from "@/sanity/lib/queries";
+import BlogGrid from "./BlogGrid";
 import ContactSection from "../../components/ContactSection";
 
-// Only Use The Category as: "Case Studies", "Blogs", "Articles", "Testing"
+export default async function BlogsPage() {
+  const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
 
-const blogs = [
-  // {
-  //   id: 1,
-  //   slug: "how-we-scaled-ecommerce",
-  //   title: "How We Scaled This Brand's Visitors by 300%",
-  //   category: "Case Studies",
-  //   date: "Mar 2026",
-  //   image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
-  //   description: "Discover the strategies and implementations we used to triple the revenue of a leading e-commerce brand through state-of-the-art UX optimizations."
-  // },
-  // {
-  //   id: 2,
-  //   slug: "future-of-web-dev-2026",
-  //   title: "The Future of Web Development & SEO in 2026",
-  //   category: "Blogs",
-  //   date: "Feb 2026",
-  //   image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-  //   description: "Explore the cutting-edge technologies shaping the next generation of web experiences, from AI integrations to seamless interactive animations."
-  // },
-  // {
-  //   id: 3,
-  //   slug: "custom-crm-enterprise",
-  //   title: "What Looks Good vs What Sells",
-  //   category: "Case Studies",
-  //   date: "Jan 2026",
-  //   image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
-  //   description: "How a custom CRM streamlined operations, reduced friction, and saved 40 hours per week for our leading enterprise client."
-  // },
-  // {
-  //   id: 4,
-  //   slug: "design-conversion-rates",
-  //   title: "Why Design Matters for Conversion Rates",
-  //   category: "Articles",
-  //   date: "Dec 2025",
-  //   image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=800",
-  //   description: "An in-depth look at how UI/UX improvements, aesthetics, and user psychology directly impact your bottom line and user retention."
-  // },
-  {
-    id: 1,
-    slug: "zero-organic-traction-to-page-one-dominance",
-    title: "Zero Organic Traction to Page-One Dominance",
-    category: "Case Studies",
-    date: "April 2026",
-    image: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=1596&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    description: "How a regional real estate firm tripled qualified lead volume in 9 months."
-  },
-  {
-    id: 2,
-    slug: "SEO_Optimization",
-    title: "SEO Optimization",
-    category: "Blogs",
-    date: "May 2026",
-    image: "https://images.unsplash.com/photo-1674027326254-88c960d8e561?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    description: "How the Right SEO Agency Can Transform Your Business in 2026."
-  }
-  //Jo bhi Article likha ha, uper se aak section copy karoo nechay, name change karoo aur phir blogs me new floder bana kr likhdo//
-
-];
-
-const BlogCard = ({ blog }: { blog: any }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(-1000);
-  const mouseY = useMotionValue(-1000);
-
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 40 });
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
-
-  useEffect(() => {
-    if (window.innerWidth <= 768) {
-      mouseX.set(200);
-      mouseY.set(200);
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current || window.innerWidth <= 768) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      mouseX.set(x);
-      mouseY.set(y);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
-      className="h-full blob-card group"
-    >
-      <div className="blob-bg"></div>
-      <motion.div
-        className="blob-element transition-opacity duration-1000 opacity-0 group-hover:opacity-60"
-        style={{
-          x: springX,
-          y: springY,
-          top: 0,
-          left: 0,
-          marginLeft: "-125px",
-          marginTop: "-125px"
-        }}
-      />
-
-      <Link href={`/blogs/${blog.slug}`} className="relative z-10 flex flex-col h-full cursor-pointer">
-        <div className="h-full flex flex-col">
-          {/* Image Container */}
-          <div className="relative h-[200px] w-full overflow-hidden shrink-0">
-            <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
-            <img
-              src={blog.image}
-              alt={blog.title}
-              className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
-            />
-
-            {/* Category Tag */}
-            <div className="absolute top-4 left-4 z-20">
-              <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-white/20 text-white/80 text-[9px] font-bold uppercase tracking-wider">
-                {blog.category}
-              </span>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-6 md:p-8 relative flex-1 flex flex-col">
-            <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40 mb-4">
-              <span>{blog.date}</span>
-              <div className="w-1 h-1 rounded-full bg-orange-500" />
-              <span>5 Min Read</span>
-            </div>
-
-            <h3 className="text-xl font-medium mb-4 text-black dark:text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-black to-black dark:from-white dark:to-white group-hover:from-orange-400 group-hover:to-orange-500 transition-all duration-300">
-              {blog.title}
-            </h3>
-
-            <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
-              {blog.description}
-            </p>
-
-            <div className="flex items-center pt-6 border-t border-black/10 dark:border-white/10 gap-2 text-orange-500 text-[10px] font-bold uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-300 mt-auto">
-              <span>Read Article</span>
-              <ArrowRight size={14} />
-            </div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-};
-
-
-export default function BlogsPage() {
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const existingCategories = Array.from(new Set(blogs.map(b => b.category)));
-  const filters = ["All", ...existingCategories];
-
-  const filteredBlogs = blogs.filter((blog) => {
-    if (activeFilter === "All") return true;
-    return blog.category === activeFilter;
-  });
+  // Map Sanity posts to the format expected by BlogGrid
+  const blogs = posts.map((post: any) => ({
+    id: post._id,
+    slug: post.slug,
+    title: post.title,
+    category: post.category,
+    date: post.publishedAt
+      ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        })
+      : "Coming Soon",
+    readTime: post.readTime || 5,
+    description: post.description,
+    image: post.coverImage?.asset?.url || "https://images.unsplash.com/photo-1674027326254-88c960d8e561?q=80&w=1632&auto=format&fit=crop",
+  }));
 
   return (
     <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-orange-500/30">
-      <style>{`
-        .blob-card {
-          position: relative;
-          z-index: 10;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          background: #f5f5f5;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          transition: border-color 0.5s;
-        }
-
-        .blob-card:hover {
-          border-color: rgba(59, 130, 246, 0.6);
-        }
-
-        :is(.dark) .blob-card:hover {
-          border-color: rgba(249, 115, 22, 0.5);
-        }
-
-        .blob-bg {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 2;
-          background: rgba(245, 245, 245, 0.97);
-          backdrop-filter: blur(24px);
-          pointer-events: none;
-        }
-
-        .blob-element {
-          position: absolute;
-          z-index: 1;
-          width: 250px;
-          height: 250px;
-          border-radius: 50%;
-          background-color: #ea580c;
-          filter: blur(40px);
-          pointer-events: none;
-        }
-
-        :is(.dark) .blob-card {
-          background: #111111;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        :is(.dark) .blob-bg {
-          background: rgba(17, 17, 17, 0.95);
-        }
-      `}</style>
-
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-36 md:pb-32 overflow-hidden border-b border-black/10 dark:border-white/10">
         {/* Background Gradients */}
@@ -237,11 +32,7 @@ export default function BlogsPage() {
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
+          <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/5 text-orange-500 text-[10px] font-bold uppercase tracking-widest mb-8">
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               Writing & Deep Dives
@@ -253,38 +44,12 @@ export default function BlogsPage() {
             <p className="text-lg md:text-xl text-black/50 dark:text-white/50 max-w-2xl mx-auto leading-relaxed">
               Explore our latest thoughts, operational strategies, and inside looks at how we help ambitious businesses scale using cutting-edge technology and premium design.
             </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Blogs Grid */}
-      <section className="py-24 bg-white dark:bg-black relative">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Filter Navbar */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-16">
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border ${activeFilter === filter
-                  ? "bg-orange-500 border-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]"
-                  : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white hover:border-black/30 dark:hover:border-white/30"
-                  }`}
-              >
-                {filter}
-              </button>
-            ))}
           </div>
-
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <AnimatePresence mode="popLayout">
-              {filteredBlogs.map((blog, index) => (
-                <BlogCard key={blog.id} blog={blog} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
         </div>
       </section>
+
+      {/* Dynamic Blogs Grid */}
+      <BlogGrid blogs={blogs} />
 
       <ContactSection />
     </main>

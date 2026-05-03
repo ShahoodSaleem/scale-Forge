@@ -23,6 +23,8 @@ export const metadata: Metadata = {
   description: "Experience the power of premium design and cutting-edge technology.",
 };
 
+import { SanityLive } from "@/sanity/lib/live";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +43,7 @@ export default async function RootLayout({
           {!isPortal && <InitialLoader />}
           {!isPortal && <Navbar />}
           {children}
+          <SanityLive />
           <SpeedInsights />
           <Analytics />
         </ThemeProvider>
