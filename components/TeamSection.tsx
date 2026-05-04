@@ -8,13 +8,13 @@ import RuhanImg from "../assets/Ruhan_2.png";
 
 const teamMembers = [
   {
-    role: "PARTNER",
+    role: "Founder / CEO",
     name: "Shahood Saleem",
     description: "As Chief Executive Officer and Strategic Lead at Scale Forge, Shahood Saleem drives the company’s vision, client strategy, and digital growth initiatives. With a focus on web strategy, automation, and scalable systems, he helps businesses build strong digital foundations that improve performance, increase conversions, and support long-term growth.",
     image: ShahoodImg
   },
   {
-    role: "PARTNER",
+    role: "Partner / CTO",
     name: "Ruhan Bhaleshah",
     description: "Ruhan is the Chief Technology Officer at Scale Forge, leading the development of the systems and technologies that power the company’s digital solutions. With expertise in SEO systems, AI automation, and technical infrastructure, he builds scalable frameworks that improve efficiency, support growth, and ensure every strategy is backed by data-driven performance.",
     image: RuhanImg
