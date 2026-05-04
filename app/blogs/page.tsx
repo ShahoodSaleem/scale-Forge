@@ -9,7 +9,7 @@ export default async function BlogsPage() {
   const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
 
   // Map Sanity posts to the format expected by BlogGrid
-  const blogs = posts.map((post: any) => ({
+  const blogs = (posts || []).map((post: any) => ({
     id: post._id,
     slug: post.slug,
     title: post.title,

@@ -9,9 +9,10 @@ const InitialLoader = () => {
 
   useEffect(() => {
     // Hide loader after a delay or when the page is fully loaded
+    const timeoutDuration = process.env.NODE_ENV === 'development' ? 500 : 3000;
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, timeoutDuration);
 
     return () => clearTimeout(timeout);
   }, []);

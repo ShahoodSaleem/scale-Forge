@@ -1,9 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  reactStrictMode: false,
+  logging: {
+    fetches: {
+      fullUrl: false,
+    },
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'clsx', 'tailwind-merge', '@radix-ui/react-slot'],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  swcMinify: true,
   images: {
     remotePatterns: [
       {

@@ -45,9 +45,9 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
     <motion.div
       ref={cardRef}
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 1, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
+      exit={{ opacity: 1, scale: 0.9 }}
       transition={{ duration: 0.3 }}
       className="h-full blob-card group"
     >
@@ -149,8 +149,8 @@ export default function BlogGrid({ blogs }: { blogs: Blog[] }) {
                 id={`filter-${filter.toLowerCase().replace(/\s+/g, "-")}`}
                 onClick={() => setActiveFilter(filter)}
                 className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border ${activeFilter === filter
-                    ? "bg-orange-500 border-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]"
-                    : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white hover:border-black/30 dark:hover:border-white/30"
+                  ? "bg-orange-500 border-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]"
+                  : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white hover:border-black/30 dark:hover:border-white/30"
                   }`}
               >
                 {filter}

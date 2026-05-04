@@ -33,6 +33,8 @@ export default async function RootLayout({
   const headersList = await headers();
   const pathname = headersList.get('x-pathname') ?? '';
   const isPortal = pathname.startsWith('/portal');
+  const isStudio = pathname.startsWith('/studio');
+  const hideUI = isPortal || isStudio;
 
   return (
     <html lang="en" className="scroll-smooth">
@@ -40,8 +42,8 @@ export default async function RootLayout({
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {!isPortal && <InitialLoader />}
-          {!isPortal && <Navbar />}
+          {!hideUI && <InitialLoader />}
+          {!hideUI && <Navbar />}
           {children}
           <SanityLive />
           <SpeedInsights />
