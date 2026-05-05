@@ -37,7 +37,7 @@ export default async function RootLayout({
   const hideUI = isPortal || isStudio;
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
       >

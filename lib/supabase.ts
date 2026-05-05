@@ -72,3 +72,114 @@ export interface Meeting {
   color: string;
   created_at: string;
 }
+
+// ── CEO Portal Types ──────────────────────────────────────────────────────────
+
+export interface FinancialAccount {
+  id: string;
+  name: string;
+  type: 'checking' | 'savings' | 'investment' | 'wallet';
+  balance: number;
+  currency: string;
+  institution?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CeoTransaction {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  type: 'income' | 'expense';
+  category: string;
+  client_name?: string;
+  account_id?: string;
+  reference?: string;
+  notes?: string;
+  created_at: string;
+}
+
+export interface Invoice {
+  id: string;
+  invoice_number: string;
+  client_name: string;
+  client_email?: string;
+  issued_date: string;
+  due_date?: string;
+  status: 'unpaid' | 'paid' | 'overdue' | 'draft' | 'cancelled';
+  subtotal: number;
+  tax_rate: number;
+  tax_amount: number;
+  total: number;
+  notes?: string;
+  paid_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InvoiceItem {
+  id: string;
+  invoice_id: string;
+  description: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  created_at: string;
+}
+
+export interface PaymentPlan {
+  id: string;
+  client_name: string;
+  project_name: string;
+  total_amount: number;
+  upfront_amount: number;
+  remaining_balance: number;
+  installment_amount: number;
+  frequency: 'monthly' | 'bimonthly' | 'quarterly';
+  currency: string;
+  total_installments: number;
+  installments_paid: number;
+  start_date: string;
+  status: 'active' | 'completed' | 'paused' | 'cancelled';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EmployeeSalary {
+  id: string;
+  employee_name: string;
+  position: string;
+  department?: string;
+  role_type: 'regular' | 'sales' | 'senior' | 'contractor';
+  base_salary: number;
+  currency: string;
+  commission_rate?: number;
+  start_date: string;
+  status: 'active' | 'inactive' | 'on_leave';
+  impact_notes?: string;
+  profile_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SalarySalesRecord {
+  id: string;
+  employee_id: string;
+  month: number;
+  year: number;
+  sales_amount: number;
+  commission_rate?: number;
+  commission_earned: number;
+  notes?: string;
+  created_at: string;
+}
+
+export interface CurrencyRate {
+  id: string;
+  currency: string;
+  to_pkr_rate: number;
+  updated_at: string;
+}

@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Sun, Moon, Shield, User } from "lucide-react";
+import { LogOut, Sun, Moon, Shield, User, Crown } from "lucide-react";
 import { useTheme } from "next-themes";
 import { supabase } from "../../lib/supabase";
 import { useRouter } from "next/navigation";
 
 interface PortalNavProps {
   userName: string;
-  role: "admin" | "employee";
+  role: "admin" | "employee" | "ceo";
 }
 
 export default function PortalNav({ userName, role }: PortalNavProps) {
@@ -24,6 +24,7 @@ export default function PortalNav({ userName, role }: PortalNavProps) {
   };
 
   const isAdmin = role === "admin";
+  const isCeo   = role === "ceo";
   const glowColor = theme === "light"
     ? "[text-shadow:0_0_8px_#00f3ff]"
     : "[text-shadow:0_0_8px_#f97316]";
@@ -42,12 +43,14 @@ export default function PortalNav({ userName, role }: PortalNavProps) {
 
       {/* Role badge */}
       <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
-        isAdmin
+        isCeo
+          ? "bg-yellow-500/15 border border-yellow-400/40 text-yellow-400"
+          : isAdmin
           ? "bg-orange-500/10 border border-orange-500/30 text-orange-400"
           : "bg-blue-500/10 border border-blue-500/30 text-blue-400"
       }`}>
-        {isAdmin ? <Shield size={10} /> : <User size={10} />}
-        {isAdmin ? "Admin" : "Employee"}
+        {isCeo ? <Crown size={10} /> : isAdmin ? <Shield size={10} /> : <User size={10} />}
+        {isCeo ? "CEO" : isAdmin ? "Admin" : "Employee"}
       </div>
 
       {/* User name */}

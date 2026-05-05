@@ -27,7 +27,13 @@ export default function PortalLogin() {
           .single();
           
         if (profile) {
-          router.replace(profile.role === "admin" ? "/portal/admin" : "/portal/employee");
+          if (profile.role === "ceo") {
+            router.replace("/portal/ceo");
+          } else if (profile.role === "admin") {
+            router.replace("/portal/admin");
+          } else {
+            router.replace("/portal/employee");
+          }
         } else {
           // Break the infinite loop if profile is missing
           await supabase.auth.signOut();
@@ -57,7 +63,13 @@ export default function PortalLogin() {
       .single();
       
     if (profile) {
-      router.replace(profile.role === "admin" ? "/portal/admin" : "/portal/employee");
+      if (profile.role === "ceo") {
+        router.replace("/portal/ceo");
+      } else if (profile.role === "admin") {
+        router.replace("/portal/admin");
+      } else {
+        router.replace("/portal/employee");
+      }
     } else {
       await supabase.auth.signOut();
       setError("Account setup incomplete: No profile found.");
