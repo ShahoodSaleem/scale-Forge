@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
@@ -31,8 +31,18 @@ export default function CeoPortal() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [globalCurrency, setGlobalCurrency] = useState<"USD" | "PKR">("USD");
+  const [rates, setRates] = useState<Record<string, number>>({ USD: 278.5, EUR: 300.2, GBP: 350 });
   const [loading, setLoading] = useState(true);
   const { toasts, add: addToast, remove } = useToast();
+
+  const loadRates = useCallback(async () => {
+    const { data } = await supabase.from("currency_rates").select("*");
+    if (data && data.length > 0) {
+      const rMap: Record<string, number> = { USD: 278.5, EUR: 300.2, GBP: 350 };
+      data.forEach((r: { currency: string; to_pkr_rate: number }) => { rMap[r.currency] = r.to_pkr_rate; });
+      setRates(rMap);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -53,9 +63,10 @@ export default function CeoPortal() {
         return;
       }
       setProfile(prof);
+      await loadRates();
       setLoading(false);
     })();
-  }, [router]);
+  }, [router, loadRates]);
 
   if (loading) {
     return (
@@ -152,12 +163,12 @@ export default function CeoPortal() {
           transition={{ duration: 0.3 }}
         >
           {activeTab === "dashboard"     && <CeoDashboardTab    addToast={addToast} globalCurrency={globalCurrency} />}
-          {activeTab === "payment-plans" && <CeoPaymentPlansTab addToast={addToast} />}
-          {activeTab === "transactions" && <CeoTransactionsTab addToast={addToast} />}
-          {activeTab === "invoices"     && <CeoInvoicesTab     addToast={addToast} />}
-          {activeTab === "salaries"     && <CeoSalariesTab     addToast={addToast} />}
-          {activeTab === "analytics"    && <CeoAnalyticsTab    addToast={addToast} />}
-          {activeTab === "settings"     && <CeoSettingsTab     addToast={addToast} />}
+          {activeTab === "payment-plans" && <CeoPaymentPlansTab addToast={addToast} globalCurrency={globalCurrency} rates={rates} />}
+          {activeTab === "transactions"  && <CeoTransactionsTab addToast={addToast} globalCurrency={globalCurrency} rates={rates} />}
+          {activeTab === "invoices"      && <CeoInvoicesTab     addToast={addToast} globalCurrency={globalCurrency} rates={rates} />}
+          {activeTab === "salaries"      && <CeoSalariesTab     addToast={addToast} globalCurrency={globalCurrency} rates={rates} />}
+          {activeTab === "analytics"     && <CeoAnalyticsTab    addToast={addToast} globalCurrency={globalCurrency} rates={rates} />}
+          {activeTab === "settings"      && <CeoSettingsTab     addToast={addToast} onRatesSaved={loadRates} />}
         </motion.div>
       </div>
 

@@ -114,6 +114,8 @@ export interface Invoice {
   tax_amount: number;
   total: number;
   notes?: string;
+  pdf_url?: string;
+  currency: string;
   paid_at?: string;
   created_at: string;
   updated_at: string;

@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import { Settings, Save, RefreshCw } from "lucide-react";
 import type { CurrencyRate } from "../../../lib/supabase";
 
-export default function CeoSettingsTab({ addToast }: {
+export default function CeoSettingsTab({ addToast, onRatesSaved }: {
   addToast: (type: "success" | "error" | "info", msg: string) => void;
+  onRatesSaved?: () => void;
 }) {
   const [rates, setRates] = useState<CurrencyRate[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,7 @@ export default function CeoSettingsTab({ addToast }: {
     addToast("success", "Exchange rates updated successfully.");
     setSaving(false);
     load();
+    onRatesSaved?.();
   };
 
   if (loading) return (

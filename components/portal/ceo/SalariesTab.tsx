@@ -40,9 +40,8 @@ const ROLE_CFG: Record<string, { label: string; color: string; icon: React.Eleme
   contractor: { label: "Contractor", color: "text-orange-400 bg-orange-500/10 border-orange-500/20", icon: Briefcase },
 };
 
-function fmtMoney(n: number, curr = "USD") {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: curr, maximumFractionDigits: 0 }).format(n);
-}
+
+
 
 const emptyForm = {
   employee_name: "", position: "", department: "", role_type: "regular" as EmployeeSalary["role_type"],
@@ -55,9 +54,21 @@ const emptySalesForm = {
   sales_amount: "", commission_rate: "", notes: ""
 };
 
-export default function CeoSalariesTab({ addToast }: {
+export default function CeoSalariesTab({ addToast, globalCurrency = "USD", rates = {} }: {
   addToast: (type: "success" | "error" | "info", msg: string) => void;
+  globalCurrency?: "USD" | "PKR";
+  rates?: Record<string, number>;
 }) {
+  // Bridge conversion: stored_currency -> PKR -> globalCurrency
+  const convertSalary = (amount: number, storedCurr: string) => {
+    const fromRate = storedCurr === "PKR" ? 1 : (rates[storedCurr] ?? rates["USD"] ?? 278.5);
+    const inPkr = amount * fromRate;
+    if (globalCurrency === "PKR") return inPkr;
+    const toRate = rates[globalCurrency] ?? rates["USD"] ?? 278.5;
+    return inPkr / toRate;
+  };
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
   const [salaries, setSalaries] = useState<EmployeeSalary[]>([]);
   const [salesRecords, setSalesRecords] = useState<SalarySalesRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -86,13 +97,14 @@ export default function CeoSalariesTab({ addToast }: {
   useEffect(() => { load(); }, [load]);
 
   const activeSalaries = salaries.filter(s => s.status === "active");
-  const totalMonthlyBase = activeSalaries.reduce((acc, s) => acc + s.base_salary, 0); // Simplified assuming all USD for summary
+  const totalMonthlyBase = activeSalaries.reduce((acc, s) => acc + convertSalary(s.base_salary, s.currency), 0);
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   
+  // Commission records are stored in USD (sales amounts entered in USD)
   const currentMonthCommissions = salesRecords
     .filter(r => r.month === currentMonth && r.year === currentYear)
-    .reduce((acc, r) => acc + r.commission_earned, 0);
+    .reduce((acc, r) => acc + convertSalary(r.commission_earned, "USD"), 0);
 
   const openEdit = (s: EmployeeSalary) => {
     setEditing(s);
@@ -232,7 +244,7 @@ export default function CeoSalariesTab({ addToast }: {
                 </div>
                 
                 <div className="text-right shrink-0">
-                  <p className="text-white/80 text-sm font-bold font-mono">{fmtMoney(emp.base_salary, emp.currency)}</p>
+                  <p className="text-white/80 text-sm font-bold font-mono">{fmtMoney(convertSalary(emp.base_salary, emp.currency))}</p>
                   <p className="text-white/30 text-[9px] uppercase tracking-widest">Base / Mo</p>
                 </div>
                 
@@ -316,8 +328,8 @@ export default function CeoSalariesTab({ addToast }: {
                               {empSales.map(r => (
                                 <div key={r.id} className="flex items-center justify-between text-xs py-1.5 border-b border-white/5 last:border-0 group">
                                   <span className="text-white/50 w-24">{r.month}/{r.year}</span>
-                                  <span className="text-white/70 font-mono w-24">{fmtMoney(r.sales_amount)} sales</span>
-                                  <span className="text-emerald-400 font-bold font-mono w-24">+{fmtMoney(r.commission_earned)}</span>
+                                  <span className="text-white/70 font-mono w-24">{fmtMoney(convertSalary(r.sales_amount, "USD"))} sales</span>
+                                  <span className="text-emerald-400 font-bold font-mono w-24">+{fmtMoney(convertSalary(r.commission_earned, "USD"))}</span>
                                   <span className="text-white/30 text-[9px] italic flex-1 truncate">{r.notes}</span>
                                   <button onClick={() => deleteSalesRecord(r.id)} className="opacity-0 group-hover:opacity-100 text-red-400/50 hover:text-red-400 transition-opacity"><Trash2 size={12} /></button>
                                 </div>

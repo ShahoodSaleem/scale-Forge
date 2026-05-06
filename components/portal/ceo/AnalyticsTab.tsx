@@ -9,9 +9,6 @@ interface Transaction {
   id: string; date: string; amount: number; type: "income" | "expense"; category: string; client_name?: string;
 }
 
-function fmtMoney(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
-}
 function fmtPct(n: number) { return `${n >= 0 ? "+" : ""}${n.toFixed(1)}%`; }
 
 function KpiCard({ label, value, sub, icon: Icon, positive, neutral }: {
@@ -63,7 +60,16 @@ function BarChart({ data, label, colorClass }: { data: { label: string; value: n
   );
 }
 
-export default function CeoAnalyticsTab({ addToast }: { addToast: (type: "success"|"error"|"info", msg: string) => void }) {
+export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rates = {} }: {
+  addToast: (type: "success"|"error"|"info", msg: string) => void;
+  globalCurrency?: "USD" | "PKR";
+  rates?: Record<string, number>;
+}) {
+  // Transactions stored in USD → convert for display
+  const usdToPkr = rates["USD"] ?? 278.5;
+  const convert = (usd: number) => globalCurrency === "PKR" ? usd * usdToPkr : usd;
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
   const [txns, setTxns]     = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,12 +85,12 @@ export default function CeoAnalyticsTab({ addToast }: { addToast: (type: "succes
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 rounded-full border-2 border-yellow-500/30 border-t-yellow-400 animate-spin" /></div>;
 
   // ── Calculations ─────────────────────────────────────────────────────────────
-  const totalRevenue  = txns.filter(t => t.type === "income").reduce((s, t) => s + t.amount, 0);
-  const totalExpenses = txns.filter(t => t.type === "expense").reduce((s, t) => s + t.amount, 0);
-  const payroll       = txns.filter(t => t.category === "payroll").reduce((s, t) => s + t.amount, 0);
-  const cogs          = txns.filter(t => ["payroll","software","rent","marketing"].includes(t.category)).reduce((s, t) => s + t.amount, 0);
+  const totalRevenue  = txns.filter(t => t.type === "income").reduce((s, t) => s + convert(t.amount), 0);
+  const totalExpenses = txns.filter(t => t.type === "expense").reduce((s, t) => s + convert(t.amount), 0);
+  const payroll       = txns.filter(t => t.category === "payroll").reduce((s, t) => s + convert(t.amount), 0);
+  const cogs          = txns.filter(t => ["payroll","software","rent","marketing"].includes(t.category)).reduce((s, t) => s + convert(t.amount), 0);
   const grossProfit   = totalRevenue - cogs;
-  const ebitda        = grossProfit;            // Simplified: EBITDA ≈ gross profit for operational data
+  const ebitda        = grossProfit;
   const roi           = totalExpenses > 0 ? ((totalRevenue - totalExpenses) / totalExpenses) * 100 : 0;
   const profitMargin  = totalRevenue > 0 ? ((totalRevenue - totalExpenses) / totalRevenue) * 100 : 0;
 
@@ -93,7 +99,7 @@ export default function CeoAnalyticsTab({ addToast }: { addToast: (type: "succes
   txns.forEach(t => {
     const month = new Date(t.date).toLocaleDateString("en-US", { month: "short", year: "2-digit" });
     if (!monthlyData[month]) monthlyData[month] = { income: 0, expense: 0 };
-    monthlyData[month][t.type] += t.amount;
+    monthlyData[month][t.type] += convert(t.amount);
   });
   const months = Object.keys(monthlyData).slice(-6);
   const revenueByMonth  = months.map(m => ({ label: m, value: monthlyData[m]?.income ?? 0 }));
@@ -102,7 +108,7 @@ export default function CeoAnalyticsTab({ addToast }: { addToast: (type: "succes
   // Client revenue breakdown
   const clientRevenue: Record<string, number> = {};
   txns.filter(t => t.type === "income" && t.client_name).forEach(t => {
-    clientRevenue[t.client_name!] = (clientRevenue[t.client_name!] ?? 0) + t.amount;
+    clientRevenue[t.client_name!] = (clientRevenue[t.client_name!] ?? 0) + convert(t.amount);
   });
   const clientData = Object.entries(clientRevenue)
     .map(([label, value]) => ({ label, value }))
@@ -111,7 +117,7 @@ export default function CeoAnalyticsTab({ addToast }: { addToast: (type: "succes
   // Expense category breakdown
   const categoryExpense: Record<string, number> = {};
   txns.filter(t => t.type === "expense").forEach(t => {
-    categoryExpense[t.category] = (categoryExpense[t.category] ?? 0) + t.amount;
+    categoryExpense[t.category] = (categoryExpense[t.category] ?? 0) + convert(t.amount);
   });
   const expenseCatData = Object.entries(categoryExpense)
     .map(([label, value]) => ({ label, value }))

@@ -21,9 +21,7 @@ interface Transaction {
 
 const CATEGORIES = ["general", "client_payment", "payroll", "rent", "software", "marketing", "utilities", "other"];
 
-function fmtMoney(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(n);
-}
+
 
 function exportToCSV(data: Transaction[]) {
   const headers = ["Date", "Description", "Amount", "Type", "Category", "Client"];
@@ -37,7 +35,16 @@ function exportToCSV(data: Transaction[]) {
   URL.revokeObjectURL(url);
 }
 
-export default function CeoTransactionsTab({ addToast }: { addToast: (type: "success" | "error" | "info", msg: string) => void }) {
+export default function CeoTransactionsTab({ addToast, globalCurrency = "USD", rates = {} }: {
+  addToast: (type: "success" | "error" | "info", msg: string) => void;
+  globalCurrency?: "USD" | "PKR";
+  rates?: Record<string, number>;
+}) {
+  // Transactions are stored in USD. Convert to globalCurrency for display.
+  const usdToPkr = rates["USD"] ?? 278.5;
+  const convert = (usd: number) => globalCurrency === "PKR" ? usd * usdToPkr : usd;
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
   const [txns, setTxns]         = useState<Transaction[]>([]);
   const [loading, setLoading]   = useState(true);
   const [search, setSearch]     = useState("");
@@ -75,8 +82,8 @@ export default function CeoTransactionsTab({ addToast }: { addToast: (type: "suc
     return true;
   });
 
-  const totalIncome  = filtered.filter(t => t.type === "income").reduce((s, t) => s + t.amount, 0);
-  const totalExpense = filtered.filter(t => t.type === "expense").reduce((s, t) => s + t.amount, 0);
+  const totalIncome  = filtered.filter(t => t.type === "income").reduce((s, t) => s + convert(t.amount), 0);
+  const totalExpense = filtered.filter(t => t.type === "expense").reduce((s, t) => s + convert(t.amount), 0);
 
   const handleAdd = async () => {
     if (!form.description || !form.amount) { addToast("error", "Description and amount are required."); return; }
@@ -205,7 +212,7 @@ export default function CeoTransactionsTab({ addToast }: { addToast: (type: "suc
               <span className="text-white/30 text-xs pr-4 text-right font-mono">{new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })}</span>
               <div className="flex items-center gap-2 justify-end">
                 <span className={`text-sm font-bold font-mono ${t.type === "income" ? "text-green-400" : "text-red-400"}`}>
-                  {t.type === "income" ? "+" : "-"}{fmtMoney(t.amount)}
+                  {t.type === "income" ? "+" : "-"}{fmtMoney(convert(t.amount))}
                 </span>
                 <button onClick={() => handleDelete(t.id)}
                   className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all p-1 rounded">

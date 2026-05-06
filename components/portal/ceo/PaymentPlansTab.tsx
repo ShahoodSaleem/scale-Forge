@@ -36,9 +36,8 @@ const FREQ_LABEL: Record<string, string> = {
   monthly: "Monthly", bimonthly: "Bi-Monthly", quarterly: "Quarterly",
 };
 
-function fmtMoney(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
-}
+
+
 
 const emptyForm = {
   client_name: "", project_name: "", total_amount: "", upfront_amount: "",
@@ -47,9 +46,21 @@ const emptyForm = {
   status: "active" as PaymentPlan["status"], notes: "", currency: "USD",
 };
 
-export default function CeoPaymentPlansTab({ addToast }: {
+export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", rates = {} }: {
   addToast: (type: "success" | "error" | "info", msg: string) => void;
+  globalCurrency?: "USD" | "PKR";
+  rates?: Record<string, number>;
 }) {
+  // Bridge conversion: stored_currency -> PKR -> globalCurrency
+  const convertPlan = (amount: number, storedCurr: string) => {
+    const fromRate = storedCurr === "PKR" ? 1 : (rates[storedCurr] ?? rates["USD"] ?? 278.5);
+    const inPkr = amount * fromRate;
+    if (globalCurrency === "PKR") return inPkr;
+    const toRate = rates[globalCurrency] ?? rates["USD"] ?? 278.5;
+    return inPkr / toRate;
+  };
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
   const [plans, setPlans] = useState<PaymentPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -70,8 +81,8 @@ export default function CeoPaymentPlansTab({ addToast }: {
   const filtered = plans.filter(p => filterStatus === "all" || p.status === filterStatus);
 
   // Summaries
-  const totalOutstanding = plans.filter(p => p.status === "active").reduce((s, p) => s + p.remaining_balance, 0);
-  const totalCollected = plans.reduce((s, p) => s + (p.upfront_amount + p.installments_paid * p.installment_amount), 0);
+  const totalOutstanding = plans.filter(p => p.status === "active").reduce((s, p) => s + convertPlan(p.remaining_balance, p.currency || "USD"), 0);
+  const totalCollected = plans.reduce((s, p) => s + convertPlan(p.upfront_amount + p.installments_paid * p.installment_amount, p.currency || "USD"), 0);
   const activePlans = plans.filter(p => p.status === "active").length;
 
   const openEdit = (p: PaymentPlan) => {
@@ -155,8 +166,8 @@ export default function CeoPaymentPlansTab({ addToast }: {
       {/* Summary Strip */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "Outstanding", value: new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(totalOutstanding), sub: `${activePlans} active plan${activePlans !== 1 ? "s" : ""}`, color: "text-yellow-600 dark:text-yellow-400" },
-          { label: "Total Collected", value: new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(totalCollected), sub: "across all plans", color: "text-emerald-600 dark:text-emerald-400" },
+          { label: "Outstanding", value: fmtMoney(totalOutstanding), sub: `${activePlans} active plan${activePlans !== 1 ? "s" : ""}`, color: "text-yellow-600 dark:text-yellow-400" },
+          { label: "Total Collected", value: fmtMoney(totalCollected), sub: "across all plans", color: "text-emerald-600 dark:text-emerald-400" },
           { label: "Total Plans", value: String(plans.length), sub: `${plans.filter(p => p.status === "completed").length} completed`, color: "text-foreground" },
         ].map(c => (
           <div key={c.label} className="rounded-xl border border-border bg-card px-5 py-4 shadow-sm transition-all">
@@ -213,13 +224,13 @@ export default function CeoPaymentPlansTab({ addToast }: {
                 </div>
                 <div className="text-right shrink-0">
                   <p className="opacity-90 text-sm font-bold font-mono">
-                    {new Intl.NumberFormat("en-US", { style: "currency", currency: p.currency || "USD", maximumFractionDigits: 0 }).format(p.remaining_balance)}
+                    {fmtMoney(convertPlan(p.remaining_balance, p.currency || "USD"))}
                   </p>
                   <p className="opacity-30 text-[9px]">remaining</p>
                 </div>
                 <div className="text-right shrink-0 hidden sm:block">
                   <p className="opacity-60 text-xs font-mono">
-                    {new Intl.NumberFormat("en-US", { style: "currency", currency: p.currency || "USD", maximumFractionDigits: 0 }).format(p.installment_amount)}
+                    {fmtMoney(convertPlan(p.installment_amount, p.currency || "USD"))}
                   </p>
                   <p className="opacity-30 text-[9px]">{FREQ_LABEL[p.frequency]}</p>
                 </div>
@@ -249,8 +260,8 @@ export default function CeoPaymentPlansTab({ addToast }: {
                       {/* Stats grid */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
-                          { label: "Total Project Value", value: new Intl.NumberFormat("en-US", { style: "currency", currency: p.currency || "USD", maximumFractionDigits: 0 }).format(p.total_amount) },
-                          { label: "Upfront Paid", value: new Intl.NumberFormat("en-US", { style: "currency", currency: p.currency || "USD", maximumFractionDigits: 0 }).format(p.upfront_amount) },
+                          { label: "Total Project Value", value: fmtMoney(convertPlan(p.total_amount, p.currency || "USD")) },
+                          { label: "Upfront Paid", value: fmtMoney(convertPlan(p.upfront_amount, p.currency || "USD")) },
                           { label: "Paid Installments", value: `${p.installments_paid} / ${p.total_installments}` },
                           { label: "Start Date", value: new Date(p.start_date).toLocaleDateString("en-US", { dateStyle: "medium" }) },
                         ].map(f => (
