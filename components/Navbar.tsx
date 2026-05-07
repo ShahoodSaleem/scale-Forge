@@ -17,7 +17,7 @@ const Navbar = () => {
 
   useEffect(() => setMounted(true), []);
 
-  if (pathname?.startsWith('/portal')) return null;
+  if (pathname?.startsWith('/portal') || pathname?.startsWith('/studio')) return null;
 
   const glowClass = mounted && theme === 'light'
     ? 'text-black [text-shadow:0_0_8px_#00f3ff,0_0_16px_#00f3ff,0_0_24px_#00c8ff]'
