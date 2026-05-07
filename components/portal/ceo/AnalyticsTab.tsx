@@ -35,7 +35,7 @@ function KpiCard({ label, value, sub, icon: Icon, positive, neutral }: {
   );
 }
 
-function BarChart({ data, label, colorClass }: { data: { label: string; value: number }[]; label: string; colorClass: string }) {
+function BarChart({ data, label, colorClass, fmtMoney }: { data: { label: string; value: number }[]; label: string; colorClass: string; fmtMoney: (n: number) => string }) {
   const max = Math.max(...data.map(d => d.value), 1);
   return (
     <div>
@@ -159,16 +159,16 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-white/8 bg-white/3 p-6">
-          <BarChart data={revenueByMonth} label="Monthly Revenue" colorClass="bg-gradient-to-r from-green-500 to-green-400" />
+          <BarChart data={revenueByMonth} label="Monthly Revenue" colorClass="bg-gradient-to-r from-green-500 to-green-400" fmtMoney={fmtMoney} />
         </div>
         <div className="rounded-2xl border border-white/8 bg-white/3 p-6">
-          <BarChart data={expenseByMonth} label="Monthly Expenses" colorClass="bg-gradient-to-r from-red-500 to-red-400" />
+          <BarChart data={expenseByMonth} label="Monthly Expenses" colorClass="bg-gradient-to-r from-red-500 to-red-400" fmtMoney={fmtMoney} />
         </div>
         <div className="rounded-2xl border border-white/8 bg-white/3 p-6">
-          <BarChart data={clientData} label="Revenue by Client" colorClass="bg-gradient-to-r from-yellow-500 to-yellow-400" />
+          <BarChart data={clientData} label="Revenue by Client" colorClass="bg-gradient-to-r from-yellow-500 to-yellow-400" fmtMoney={fmtMoney} />
         </div>
         <div className="rounded-2xl border border-white/8 bg-white/3 p-6">
-          <BarChart data={expenseCatData} label="Expense Breakdown by Category" colorClass="bg-gradient-to-r from-orange-500 to-orange-400" />
+          <BarChart data={expenseCatData} label="Expense Breakdown by Category" colorClass="bg-gradient-to-r from-orange-500 to-orange-400" fmtMoney={fmtMoney} />
         </div>
       </div>
 

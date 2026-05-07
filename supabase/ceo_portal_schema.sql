@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS public.payment_plans (
   project_name       text          NOT NULL,
   total_amount       numeric(15,2) NOT NULL,
   upfront_amount     numeric(15,2) NOT NULL DEFAULT 0,
+  upfront_paid       boolean       NOT NULL DEFAULT false,
   remaining_balance  numeric(15,2) NOT NULL,
   installment_amount numeric(15,2) NOT NULL,
   frequency          text          NOT NULL DEFAULT 'monthly'

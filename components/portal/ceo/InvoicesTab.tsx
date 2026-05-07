@@ -65,10 +65,17 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
   const usdToPkr = rates["USD"] ?? 278.5;
   const convert = (amount: number, fromCurr: string = "USD") => {
     if (fromCurr === globalCurrency) return amount;
-    // Convert fromCurr to USD
-    const usdAmount = fromCurr === "PKR" ? amount / usdToPkr : amount;
-    // Convert USD to globalCurrency
-    return globalCurrency === "PKR" ? usdAmount * usdToPkr : usdAmount;
+    const fromRate = fromCurr === "PKR" ? 1 : (rates[fromCurr] || usdToPkr);
+    const inPkr = amount * fromRate;
+    if (globalCurrency === "PKR") return inPkr;
+    const toRate = rates[globalCurrency] || usdToPkr;
+    return inPkr / toRate;
+  };
+  const getUsdAmount = (amount: number, currency: string) => {
+    if (currency === "USD") return amount;
+    const fromRate = currency === "PKR" ? 1 : (rates[currency] || usdToPkr);
+    const inPkr = amount * fromRate;
+    return inPkr / usdToPkr;
   };
   const fmtMoney = (n: number, curr?: string) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: curr || globalCurrency, maximumFractionDigits: 0 }).format(n);
@@ -116,6 +123,23 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
   const handleMarkPaid = async (inv: Invoice) => {
     const { error } = await supabase.from("invoices").update({ status: "paid", paid_at: new Date().toISOString() }).eq("id", inv.id);
     if (error) { addToast("error", "Failed to update status."); return; }
+    
+    // Create transaction
+    const { error: txnError } = await supabase.from("transactions").insert({
+      date: new Date().toISOString().split("T")[0],
+      description: `Payment for Invoice ${inv.invoice_number}`,
+      amount: getUsdAmount(inv.total, inv.currency),
+      type: "income",
+      category: "client_payment",
+      client_name: inv.client_name,
+      notes: `Original amount: ${fmtMoney(inv.total, inv.currency)}`,
+    });
+
+    if (txnError) {
+      console.error("Failed to record transaction:", txnError);
+      addToast("error", "Invoice marked as paid, but failed to record transaction.");
+    }
+
     addToast("success", `Invoice ${inv.invoice_number} marked as paid.`);
     load();
     if (detail?.id === inv.id) setDetail({ ...inv, status: "paid", paid_at: new Date().toISOString() });
@@ -203,9 +227,25 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
       await handlePdfUpload(newInv.id, form.pdfFile);
     }
 
+    if (form.status === "paid") {
+      const { error: txnError } = await supabase.from("transactions").insert({
+        date: new Date().toISOString().split("T")[0],
+        description: `Payment for Invoice ${invNumber}`,
+        amount: getUsdAmount(total, form.currency),
+        type: "income",
+        category: "client_payment",
+        client_name: form.client_name,
+        notes: `Original amount: ${fmtMoney(total, form.currency)}`,
+      });
+      if (txnError) {
+        console.error("Failed to record transaction:", txnError);
+        addToast("error", "Invoice created, but failed to record transaction.");
+      }
+    }
+
     addToast("success", `Invoice ${invNumber} created.`);
     setShowAdd(false);
-    setForm({ client_name: "", client_email: "", issued_date: new Date().toISOString().split("T")[0], due_date: "", tax_rate: "0", notes: "", status: "unpaid", pdfFile: null });
+    setForm({ client_name: "", client_email: "", issued_date: new Date().toISOString().split("T")[0], due_date: "", tax_rate: "0", notes: "", status: "unpaid", currency: "USD", pdfFile: null });
     setLineItems([{ description: "", quantity: "1", unit_price: "" }]);
     load();
   };

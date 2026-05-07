@@ -14,6 +14,7 @@ interface PaymentPlan {
   project_name: string;
   total_amount: number;
   upfront_amount: number;
+  upfront_paid: boolean;
   remaining_balance: number;
   installment_amount: number;
   frequency: "monthly" | "bimonthly" | "quarterly";
@@ -61,6 +62,13 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
   };
   const fmtMoney = (n: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
+  const getUsdAmount = (amount: number, currency: string) => {
+    const usdToPkr = rates["USD"] ?? 278.5;
+    if (currency === "USD") return amount;
+    const fromRate = currency === "PKR" ? 1 : (rates[currency] || usdToPkr);
+    const inPkr = amount * fromRate;
+    return inPkr / usdToPkr;
+  };
   const [plans, setPlans] = useState<PaymentPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -82,7 +90,7 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
 
   // Summaries
   const totalOutstanding = plans.filter(p => p.status === "active").reduce((s, p) => s + convertPlan(p.remaining_balance, p.currency || "USD"), 0);
-  const totalCollected = plans.reduce((s, p) => s + convertPlan(p.upfront_amount + p.installments_paid * p.installment_amount, p.currency || "USD"), 0);
+  const totalCollected = plans.reduce((s, p) => s + convertPlan((p.upfront_paid ? p.upfront_amount : 0) + p.installments_paid * p.installment_amount, p.currency || "USD"), 0);
   const activePlans = plans.filter(p => p.status === "active").length;
 
   const openEdit = (p: PaymentPlan) => {
@@ -126,6 +134,27 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       addToast("error", `Failed to save plan: ${error.message}`);
       return;
     }
+
+    // NOTE: Upfront payment recording is now handled manually via the "Advance Payment Paid" button
+    // as requested, to allow marking it as paid AFTER plan creation.
+
+
+    // If installments were marked as paid during creation
+    if (!editing && paidInst > 0) {
+      const { error: txnError } = await supabase.from("transactions").insert({
+        date: new Date().toISOString().split("T")[0],
+        description: `Initial Paid Installments (${paidInst}): ${form.project_name} (${form.client_name})`,
+        amount: getUsdAmount(paidInst * installAmt, form.currency),
+        type: "income",
+        category: "client_payment",
+        client_name: form.client_name,
+        notes: `Initial ${paidInst} installments recorded during plan creation. Original: ${paidInst * installAmt} ${form.currency}`,
+      });
+      if (txnError) {
+        console.error("Failed to record initial installments transaction:", txnError);
+      }
+    }
+
     addToast("success", editing ? "Plan updated." : "Payment plan created.");
     setShowForm(false); setEditing(null); setForm({ ...emptyForm }); load();
   };
@@ -139,7 +168,55 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       installments_paid: newPaid, remaining_balance: newRemaining, status: newStatus,
     }).eq("id", p.id);
     if (error) { addToast("error", "Failed to record payment."); return; }
+
+    // Create transaction for installment
+    const { error: txnError } = await supabase.from("transactions").insert({
+      date: new Date().toISOString().split("T")[0],
+      description: `Installment #${newPaid}: ${p.project_name} (${p.client_name})`,
+      amount: getUsdAmount(p.installment_amount, p.currency || "USD"),
+      type: "income",
+      category: "client_payment",
+      client_name: p.client_name,
+      notes: `Installment ${newPaid}/${p.total_installments} for ${p.project_name}. Original: ${p.installment_amount} ${p.currency || "USD"}`,
+    });
+
+    if (txnError) {
+      console.error("Failed to record installment transaction:", txnError);
+      addToast("error", "Payment recorded in plan, but failed to record transaction.");
+    }
+
     addToast("success", newStatus === "completed" ? `✓ Plan for ${p.client_name} fully paid!` : `Payment #${newPaid} recorded for ${p.client_name}.`);
+    load();
+  };
+  
+  const recordUpfrontPayment = async (p: PaymentPlan) => {
+    if (p.upfront_paid) { addToast("info", "Upfront payment already recorded."); return; }
+    
+    // Update the plan
+    const { error } = await supabase.from("payment_plans").update({
+      upfront_paid: true
+    }).eq("id", p.id);
+    
+    if (error) { addToast("error", "Failed to mark upfront as paid."); return; }
+    
+    // Create transaction
+    const { error: txnError } = await supabase.from("transactions").insert({
+      date: new Date().toISOString().split("T")[0],
+      description: `Advanced payment: ${p.client_name}`,
+      amount: getUsdAmount(p.upfront_amount, p.currency || "USD"),
+      type: "income",
+      category: "client_payment",
+      client_name: p.client_name,
+      notes: `Advanced payment for ${p.project_name}: ${p.upfront_amount} ${p.currency || "USD"}`,
+    });
+    
+    if (txnError) {
+      console.error("Failed to record upfront transaction:", txnError);
+      addToast("error", "Upfront marked as paid in plan, but failed to record transaction.");
+    } else {
+      addToast("success", `Advanced payment for ${p.client_name} recorded.`);
+    }
+    
     load();
   };
 
@@ -261,13 +338,13 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
                           { label: "Total Project Value", value: fmtMoney(convertPlan(p.total_amount, p.currency || "USD")) },
-                          { label: "Upfront Paid", value: fmtMoney(convertPlan(p.upfront_amount, p.currency || "USD")) },
+                          { label: "Upfront Amount", value: fmtMoney(convertPlan(p.upfront_amount, p.currency || "USD")) },
+                          { label: "Upfront Status", value: p.upfront_paid ? "Paid" : "Pending", color: p.upfront_paid ? "text-emerald-400" : "text-yellow-400" },
                           { label: "Paid Installments", value: `${p.installments_paid} / ${p.total_installments}` },
-                          { label: "Start Date", value: new Date(p.start_date).toLocaleDateString("en-US", { dateStyle: "medium" }) },
                         ].map(f => (
                           <div key={f.label} className="bg-foreground/[0.03] rounded-lg px-3.5 py-2.5">
                             <p className="opacity-30 text-[9px] font-bold uppercase tracking-wider mb-0.5">{f.label}</p>
-                            <p className="opacity-70 text-xs font-semibold">{f.value}</p>
+                            <p className={`text-xs font-semibold ${f.color || "opacity-70"}`}>{f.value}</p>
                           </div>
                         ))}
                       </div>
@@ -291,6 +368,12 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
                           className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-foreground/5 border border-border text-foreground/50 text-[10px] font-bold hover:bg-foreground/10 transition-all">
                           <Pencil size={11} /> Edit
                         </button>
+                        {!p.upfront_paid && p.upfront_amount > 0 && (
+                          <button onClick={() => recordUpfrontPayment(p)}
+                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 dark:text-yellow-400 text-[10px] font-bold hover:bg-yellow-500/20 transition-all">
+                            <DollarSign size={11} /> Advanced Payment Paid
+                          </button>
+                        )}
                         <button onClick={() => handleDelete(p.id)}
                           className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-red-500/8 border border-red-500/15 text-red-500 dark:text-red-400/70 text-[10px] font-bold hover:bg-red-500/15 transition-all ml-auto">
                           <X size={11} /> Delete
