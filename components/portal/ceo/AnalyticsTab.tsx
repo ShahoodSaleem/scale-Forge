@@ -61,7 +61,7 @@ function BarChart({ data, label, colorClass, fmtMoney }: { data: { label: string
 }
 
 export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rates = {} }: {
-  addToast: (type: "success"|"error"|"info", msg: string) => void;
+  addToast: (type: "success" | "error" | "info", msg: string) => void;
   globalCurrency?: "USD" | "PKR";
   rates?: Record<string, number>;
 }) {
@@ -70,7 +70,7 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
   const convert = (usd: number) => globalCurrency === "PKR" ? usd * usdToPkr : usd;
   const fmtMoney = (n: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: globalCurrency, maximumFractionDigits: 0 }).format(n);
-  const [txns, setTxns]     = useState<Transaction[]>([]);
+  const [txns, setTxns] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
@@ -85,14 +85,14 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 rounded-full border-2 border-yellow-500/30 border-t-yellow-400 animate-spin" /></div>;
 
   // ── Calculations ─────────────────────────────────────────────────────────────
-  const totalRevenue  = txns.filter(t => t.type === "income").reduce((s, t) => s + convert(t.amount), 0);
+  const totalRevenue = txns.filter(t => t.type === "income").reduce((s, t) => s + convert(t.amount), 0);
   const totalExpenses = txns.filter(t => t.type === "expense").reduce((s, t) => s + convert(t.amount), 0);
-  const payroll       = txns.filter(t => t.category === "payroll").reduce((s, t) => s + convert(t.amount), 0);
-  const cogs          = txns.filter(t => ["payroll","software","rent","marketing"].includes(t.category)).reduce((s, t) => s + convert(t.amount), 0);
-  const grossProfit   = totalRevenue - cogs;
-  const ebitda        = grossProfit;
-  const roi           = totalExpenses > 0 ? ((totalRevenue - totalExpenses) / totalExpenses) * 100 : 0;
-  const profitMargin  = totalRevenue > 0 ? ((totalRevenue - totalExpenses) / totalRevenue) * 100 : 0;
+  const payroll = txns.filter(t => t.category === "payroll").reduce((s, t) => s + convert(t.amount), 0);
+  const cogs = txns.filter(t => ["payroll", "software", "rent", "marketing"].includes(t.category)).reduce((s, t) => s + convert(t.amount), 0);
+  const grossProfit = totalRevenue - cogs;
+  const ebitda = grossProfit;
+  const roi = totalExpenses > 0 ? ((totalRevenue - totalExpenses) / totalExpenses) * 100 : 0;
+  const profitMargin = totalRevenue > 0 ? ((totalRevenue - totalExpenses) / totalRevenue) * 100 : 0;
 
   // Monthly revenue breakdown (last 6 months)
   const monthlyData: Record<string, { income: number; expense: number }> = {};
@@ -102,8 +102,8 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
     monthlyData[month][t.type] += convert(t.amount);
   });
   const months = Object.keys(monthlyData).slice(-6);
-  const revenueByMonth  = months.map(m => ({ label: m, value: monthlyData[m]?.income ?? 0 }));
-  const expenseByMonth  = months.map(m => ({ label: m, value: monthlyData[m]?.expense ?? 0 }));
+  const revenueByMonth = months.map(m => ({ label: m, value: monthlyData[m]?.income ?? 0 }));
+  const expenseByMonth = months.map(m => ({ label: m, value: monthlyData[m]?.expense ?? 0 }));
 
   // Client revenue breakdown
   const clientRevenue: Record<string, number> = {};
@@ -127,12 +127,12 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
     <div className="space-y-8">
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <KpiCard label="Total Revenue"  value={fmtMoney(totalRevenue)}  icon={DollarSign} positive neutral />
+        <KpiCard label="Total Revenue" value={fmtMoney(totalRevenue)} icon={DollarSign} positive neutral />
         <KpiCard label="Total Expenses" value={fmtMoney(totalExpenses)} icon={TrendingDown} positive={false} />
-        <KpiCard label="ROI"            value={fmtPct(roi)}             icon={Percent}    positive={roi >= 0} sub="Return on investment" />
-        <KpiCard label="COGS"           value={fmtMoney(cogs)}         icon={BarChart3}  positive={false} sub="Cost of goods sold" />
-        <KpiCard label="EBITDA"         value={fmtMoney(ebitda)}        icon={TrendingUp} positive={ebitda >= 0} sub="Earnings before tax" />
-        <KpiCard label="Profit Margin"  value={fmtPct(profitMargin)}    icon={Percent}    positive={profitMargin >= 0} sub="Net margin %" />
+        <KpiCard label="ROI" value={fmtPct(roi)} icon={Percent} positive={roi >= 0} sub="Return on investment" />
+        <KpiCard label="COGS" value={fmtMoney(cogs)} icon={BarChart3} positive={false} sub="Cost of goods sold" />
+        <KpiCard label="EBITDA" value={fmtMoney(ebitda)} icon={TrendingUp} positive={ebitda >= 0} sub="Earnings before tax" />
+        <KpiCard label="Profit Margin" value={fmtPct(profitMargin)} icon={Percent} positive={profitMargin >= 0} sub="Net margin %" />
       </div>
 
       {/* Summary Cards */}
@@ -177,9 +177,9 @@ export default function CeoAnalyticsTab({ addToast, globalCurrency = "USD", rate
         <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-6">Cash Flow Forecast (Next 3 Months)</p>
         <div className="grid grid-cols-3 gap-4">
           {[1, 2, 3].map(offset => {
-            const avgIncome  = totalRevenue  / Math.max(months.length, 1);
+            const avgIncome = totalRevenue / Math.max(months.length, 1);
             const avgExpense = totalExpenses / Math.max(months.length, 1);
-            const projected  = (avgIncome - avgExpense) * offset;
+            const projected = (avgIncome - avgExpense) * offset;
             const mName = new Date(Date.now() + offset * 30 * 24 * 3600 * 1000).toLocaleDateString("en-US", { month: "long" });
             return (
               <div key={offset} className={`rounded-xl border p-4 ${projected >= 0 ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"}`}>

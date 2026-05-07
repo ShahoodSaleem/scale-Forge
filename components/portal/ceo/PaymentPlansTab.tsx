@@ -41,7 +41,7 @@ const FREQ_LABEL: Record<string, string> = {
 
 
 const emptyForm = {
-  client_name: "", project_name: "", total_amount: "", upfront_amount: "",
+  client_name: "", project_name: "", total_amount: "", upfront_amount: "", upfront_paid: false,
   installment_amount: "", frequency: "monthly" as PaymentPlan["frequency"],
   total_installments: "", installments_paid: "0", start_date: new Date().toISOString().split("T")[0],
   status: "active" as PaymentPlan["status"], notes: "", currency: "USD",
@@ -77,6 +77,25 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
   const [filterStatus, setFilterStatus] = useState<"all" | PaymentPlan["status"]>("all");
   const [form, setForm] = useState({ ...emptyForm });
 
+  // History state
+  const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  const loadHistory = useCallback(async (id: string) => {
+    setLoadingHistory(true);
+    const { data } = await supabase.from("transactions").select("*").eq("reference", id).order("date", { ascending: false });
+    setPaymentHistory(data ?? []);
+    setLoadingHistory(false);
+  }, []);
+
+  useEffect(() => {
+    if (expanded) {
+      loadHistory(expanded);
+    } else {
+      setPaymentHistory([]);
+    }
+  }, [expanded, loadHistory]);
+
   const load = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase.from("payment_plans").select("*").order("created_at", { ascending: false });
@@ -101,6 +120,7 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       installment_amount: String(p.installment_amount), frequency: p.frequency,
       total_installments: String(p.total_installments), installments_paid: String(p.installments_paid),
       start_date: p.start_date, status: p.status, notes: p.notes ?? "", currency: p.currency || "USD",
+      upfront_paid: p.upfront_paid,
     });
     setShowForm(true);
   };
@@ -123,6 +143,7 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       installment_amount: installAmt, frequency: form.frequency,
       total_installments: totalInst, installments_paid: paidInst,
       start_date: form.start_date, status: form.status, notes: form.notes || null, currency: form.currency,
+      upfront_paid: form.upfront_paid,
     };
 
     const { error } = editing
@@ -148,11 +169,25 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
         type: "income",
         category: "client_payment",
         client_name: form.client_name,
+        reference: editing?.id || undefined, // Link to plan if editing
         notes: `Initial ${paidInst} installments recorded during plan creation. Original: ${paidInst * installAmt} ${form.currency}`,
       });
       if (txnError) {
         console.error("Failed to record initial installments transaction:", txnError);
       }
+    }
+
+    // If upfront was marked as paid during creation
+    if (!editing && form.upfront_paid && upfront > 0) {
+      await supabase.from("transactions").insert({
+        date: new Date().toISOString().split("T")[0],
+        description: `Advanced payment: ${form.project_name} (${form.client_name})`,
+        amount: getUsdAmount(upfront, form.currency),
+        type: "income",
+        category: "client_payment",
+        client_name: form.client_name,
+        notes: `Advanced payment recorded during plan creation. Original: ${upfront} ${form.currency}`,
+      });
     }
 
     addToast("success", editing ? "Plan updated." : "Payment plan created.");
@@ -177,6 +212,7 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       type: "income",
       category: "client_payment",
       client_name: p.client_name,
+      reference: p.id,
       notes: `Installment ${newPaid}/${p.total_installments} for ${p.project_name}. Original: ${p.installment_amount} ${p.currency || "USD"}`,
     });
 
@@ -188,17 +224,21 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
     addToast("success", newStatus === "completed" ? `✓ Plan for ${p.client_name} fully paid!` : `Payment #${newPaid} recorded for ${p.client_name}.`);
     load();
   };
-  
+
   const recordUpfrontPayment = async (p: PaymentPlan) => {
     if (p.upfront_paid) { addToast("info", "Upfront payment already recorded."); return; }
-    
+
     // Update the plan
     const { error } = await supabase.from("payment_plans").update({
       upfront_paid: true
     }).eq("id", p.id);
-    
-    if (error) { addToast("error", "Failed to mark upfront as paid."); return; }
-    
+
+    if (error) {
+      console.error("Upfront update error:", error);
+      addToast("error", `Failed to mark upfront as paid: ${error.message || "Unknown error"}`);
+      return;
+    }
+
     // Create transaction
     const { error: txnError } = await supabase.from("transactions").insert({
       date: new Date().toISOString().split("T")[0],
@@ -207,16 +247,17 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
       type: "income",
       category: "client_payment",
       client_name: p.client_name,
+      reference: p.id,
       notes: `Advanced payment for ${p.project_name}: ${p.upfront_amount} ${p.currency || "USD"}`,
     });
-    
+
     if (txnError) {
       console.error("Failed to record upfront transaction:", txnError);
-      addToast("error", "Upfront marked as paid in plan, but failed to record transaction.");
+      addToast("error", `Upfront marked as paid, but transaction failed: ${txnError.message}`);
     } else {
       addToast("success", `Advanced payment for ${p.client_name} recorded.`);
     }
-    
+
     load();
   };
 
@@ -348,6 +389,41 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
                           </div>
                         ))}
                       </div>
+
+                      {/* Payment History Section */}
+                      <div className="space-y-3">
+                        <p className="text-white/30 text-[9px] font-bold uppercase tracking-widest px-1">Payment History</p>
+                        {loadingHistory ? (
+                          <div className="flex items-center gap-2 text-white/20 text-xs px-1">
+                            <div className="w-3 h-3 rounded-full border border-white/20 border-t-white/60 animate-spin" /> Loading...
+                          </div>
+                        ) : paymentHistory.length === 0 ? (
+                          <div className="rounded-xl border border-dashed border-white/8 p-4 text-center">
+                            <p className="text-white/20 text-[10px] italic">No transactions linked to this plan.</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            {paymentHistory.map((txn) => (
+                              <div key={txn.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5 group hover:bg-white/[0.04] transition-colors">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                    <CheckCircle2 size={12} className="text-emerald-500/60" />
+                                  </div>
+                                  <div>
+                                    <p className="text-white/70 text-xs font-medium">{txn.description}</p>
+                                    <p className="text-white/20 text-[9px] font-mono">{new Date(txn.date).toLocaleDateString("en-US", { dateStyle: "medium" })}</p>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <p className="text-emerald-500/80 text-xs font-bold font-mono">+{fmtMoney(convertPlan(txn.amount, "USD"))}</p>
+                                  <p className="text-white/20 text-[9px] uppercase tracking-wider">Confirmed</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
                       {p.notes && <p className="opacity-40 text-xs italic">{p.notes}</p>}
 
                       {/* Actions */}
@@ -403,7 +479,7 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
                   { label: "Client Name *", key: "client_name", type: "text", full: true },
                   { label: "Project Name *", key: "project_name", type: "text", full: true },
                   { label: "Total Amount *", key: "total_amount", type: "number" },
-                  { label: "Upfront Paid", key: "upfront_amount", type: "number" },
+                  { label: "Upfront amount", key: "upfront_amount", type: "number" },
                   { label: "Installment Amount *", key: "installment_amount", type: "number" },
                   { label: "Total Installments *", key: "total_installments", type: "number" },
                   { label: "Already Paid (count)", key: "installments_paid", type: "number" },
@@ -438,6 +514,14 @@ export default function CeoPaymentPlansTab({ addToast, globalCurrency = "USD", r
                     className="w-full bg-white/4 border border-white/8 rounded-lg px-3.5 py-2.5 text-white text-sm outline-none focus:border-yellow-500/40">
                     {["USD", "PKR", "EUR", "GBP"].map(c => <option key={c} value={c} className="bg-[#0d0d0d]">{c}</option>)}
                   </select>
+                </div>
+                <div className="col-span-2 flex items-center gap-3 py-1">
+                  <input type="checkbox" id="upfront_paid" checked={form.upfront_paid}
+                    onChange={e => setForm(f => ({ ...f, upfront_paid: e.target.checked }))}
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 accent-yellow-500" />
+                  <label htmlFor="upfront_paid" className="text-white/60 text-xs font-medium cursor-pointer select-none">
+                    Mark Advanced Payment as Paid immediately
+                  </label>
                 </div>
                 <div className="col-span-2">
                   <label className="text-white/30 text-[9px] font-bold uppercase tracking-widest block mb-1.5">Notes</label>

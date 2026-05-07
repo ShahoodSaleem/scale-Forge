@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FileText, Plus, X, Check, ChevronRight,
+  FileText, Plus, X, Check, ChevronRight, Download,
   ArrowLeft, Clock, CheckCircle2, AlertCircle, XCircle, FileMinus, UploadCloud, ExternalLink, Loader2
 } from "lucide-react";
 
@@ -56,6 +56,20 @@ function StatusBadge({ status }: { status: Invoice["status"] }) {
   );
 }
 
+function exportInvoicesCSV(data: any[], convert: any, globalCurrency: string) {
+  const headers = ["Invoice #", "Client", "Email", "Issued", "Due", "Status", "Total (USD)", `Total (${globalCurrency})` ];
+  const rows = data.map(inv => [
+    inv.invoice_number, `"${inv.client_name}"`, inv.client_email ?? "",
+    inv.issued_date, inv.due_date ?? "", inv.status,
+    inv.total, convert(inv.total, inv.currency)
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = `invoices_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates = {} }: {
   addToast: (type: "success" | "error" | "info", msg: string) => void;
   globalCurrency?: "USD" | "PKR";
@@ -100,6 +114,29 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
   });
   const [lineItems, setLineItems] = useState([{ description: "", quantity: "1", unit_price: "" }]);
   const [uploadingPdf, setUploadingPdf] = useState(false);
+  
+  // History state
+  const [paymentHistory, setPaymentHistory] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  const loadHistory = useCallback(async (invoiceId: string) => {
+    setLoadingHistory(true);
+    const { data } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("reference", invoiceId)
+      .order("date", { ascending: false });
+    setPaymentHistory(data ?? []);
+    setLoadingHistory(false);
+  }, []);
+
+  useEffect(() => {
+    if (detail) {
+      loadHistory(detail.id);
+    } else {
+      setPaymentHistory([]);
+    }
+  }, [detail, loadHistory]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -118,12 +155,14 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
 
   // Totals for filter view
   const totalPaid = invoices.filter(i => i.status === "paid").reduce((s, i) => s + convert(i.total, i.currency), 0);
-  const totalUnpaid = invoices.filter(i => i.status === "unpaid" || i.status === "overdue").reduce((s, i) => s + convert(i.total, i.currency), 0);
+  const totalPending = invoices.filter(i => i.status === "unpaid").reduce((s, i) => s + convert(i.total, i.currency), 0);
+  const totalOverdue = invoices.filter(i => i.status === "overdue").reduce((s, i) => s + convert(i.total, i.currency), 0);
+  const totalInvoiced = invoices.reduce((s, i) => s + convert(i.total, i.currency), 0);
 
   const handleMarkPaid = async (inv: Invoice) => {
     const { error } = await supabase.from("invoices").update({ status: "paid", paid_at: new Date().toISOString() }).eq("id", inv.id);
     if (error) { addToast("error", "Failed to update status."); return; }
-    
+
     // Create transaction
     const { error: txnError } = await supabase.from("transactions").insert({
       date: new Date().toISOString().split("T")[0],
@@ -132,6 +171,7 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
       type: "income",
       category: "client_payment",
       client_name: inv.client_name,
+      reference: inv.id,
       notes: `Original amount: ${fmtMoney(inv.total, inv.currency)}`,
     });
 
@@ -235,6 +275,7 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
         type: "income",
         category: "client_payment",
         client_name: form.client_name,
+        reference: newInv.id,
         notes: `Original amount: ${fmtMoney(total, form.currency)}`,
       });
       if (txnError) {
@@ -324,6 +365,40 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
             </div>
           )}
 
+          {/* Payment History Section */}
+          <div className="space-y-3">
+            <p className="text-white/30 text-[9px] font-bold uppercase tracking-widest px-1">Payment History</p>
+            {loadingHistory ? (
+              <div className="flex items-center gap-2 text-white/20 text-xs px-1">
+                <Loader2 size={12} className="animate-spin" /> Loading payments...
+              </div>
+            ) : paymentHistory.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-white/10 p-4 text-center">
+                <p className="text-white/20 text-xs italic text-center">No transactions recorded for this invoice.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {paymentHistory.map((txn) => (
+                  <div key={txn.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/3 border border-white/5 group hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center">
+                        <CheckCircle2 size={14} className="text-green-400/70" />
+                      </div>
+                      <div>
+                        <p className="text-white/80 text-xs font-medium">{txn.description}</p>
+                        <p className="text-white/30 text-[10px] font-mono">{new Date(txn.date).toLocaleDateString("en-US", { dateStyle: "medium" })}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-green-400 text-xs font-bold font-mono">+{fmtMoney(convert(txn.amount, "USD"))}</p>
+                      <p className="text-white/20 text-[9px] uppercase tracking-wider">Confirmed</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* PDF Section */}
           <div className="rounded-xl border border-white/8 bg-white/3 px-4 py-4">
             <div className="flex items-center justify-between">
@@ -380,19 +455,19 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         <div className="rounded-2xl border border-green-500/20 bg-green-500/5 p-5">
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Total Collected</p>
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Collected</p>
           <p className="text-2xl font-bold text-green-400">{fmtMoney(totalPaid)}</p>
-          <p className="text-white/30 text-xs mt-1">{invoices.filter(i => i.status === "paid").length} paid invoices</p>
+          <p className="text-white/30 text-[9px] mt-1">{invoices.filter(i => i.status === "paid").length} paid</p>
         </div>
         <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-5">
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Outstanding</p>
-          <p className="text-2xl font-bold text-yellow-400">{fmtMoney(totalUnpaid)}</p>
-          <p className="text-white/30 text-xs mt-1">{invoices.filter(i => i.status === "unpaid" || i.status === "overdue").length} open invoices</p>
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Pending</p>
+          <p className="text-2xl font-bold text-yellow-400">{fmtMoney(totalPending)}</p>
+          <p className="text-white/30 text-[9px] mt-1">{invoices.filter(i => i.status === "unpaid").length} open</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-white/3 p-5">
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Total Invoiced</p>
-          <p className="text-2xl font-bold text-white">{fmtMoney(invoices.reduce((s, i) => s + convert(i.total, i.currency), 0))}</p>
-          <p className="text-white/30 text-xs mt-1">{invoices.length} total invoices</p>
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-5">
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Overdue</p>
+          <p className="text-2xl font-bold text-red-400">{fmtMoney(totalOverdue)}</p>
+          <p className="text-white/30 text-[9px] mt-1">{invoices.filter(i => i.status === "overdue").length} critical</p>
         </div>
       </div>
 
@@ -401,13 +476,17 @@ export default function CeoInvoicesTab({ addToast, globalCurrency = "USD", rates
         <div className="flex gap-1 p-1 bg-white/5 border border-white/8 rounded-xl flex-wrap">
           {(["all", "unpaid", "paid", "overdue", "draft"] as const).map(s => (
             <button key={s} onClick={() => setFilterStatus(s)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${filterStatus === s ? "bg-yellow-500 text-black" : "text-white/40 hover:text-white/70"}`}>
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${filterStatus === s ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/20" : "text-white/40 hover:text-white/70"}`}>
               {s}
             </button>
           ))}
         </div>
+        <button onClick={() => exportInvoicesCSV(filtered, convert, globalCurrency)}
+          className="ml-auto flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/50 text-xs font-bold hover:bg-white/10 transition-all">
+          <Download size={12} /> Export CSV
+        </button>
         <button onClick={() => setShowAdd(true)}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-bold hover:bg-yellow-500/20 transition-all">
+          className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-bold hover:bg-yellow-500/20 transition-all">
           <Plus size={12} /> New Invoice
         </button>
       </div>
