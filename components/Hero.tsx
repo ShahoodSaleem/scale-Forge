@@ -83,9 +83,9 @@ const Hero = () => {
         {/* Headline */}
         <motion.h1
           variants={itemVariants}
-          className="text-7xl md:text-[100px] font-medium tracking-tight text-white mb-8 leading-[1.05]"
+          className="text-7xl md:text-[90px] font-medium tracking-tight text-white mb-8 leading-[1.05]"
         >
-          Where Goals <br /> Meet Reality
+          Building Businesses Around The Globe
         </motion.h1>
 
         {/* Subtext */}
@@ -93,8 +93,8 @@ const Hero = () => {
           variants={itemVariants}
           className="text-lg md:text-xl text-white/60 max-w-2xl mb-12 leading-relaxed"
         >
-          We help businesses achieve their goals through innovative solutions and cutting-edge technology. <br className="hidden md:block" />
-          Scale your business with precision.
+          designing and developing fast, professional websites for your business with high-coverting SEO & marketing strategies
+
         </motion.p>
 
         {/* Buttons */}
@@ -106,10 +106,10 @@ const Hero = () => {
             Let's Get Started
           </button>
           <button
-            onClick={() => window.location.href = '/blogs'}
+            onClick={() => window.location.href = '/projects'}
             className="backdrop-blur-xl bg-white/5 border border-white/10 text-white/90 px-8 py-4 rounded-full text-base font-medium hover:bg-white/10 transition-all w-full sm:w-auto"
           >
-            View Our Blogs
+            View Our Work
           </button>
         </motion.div>
       </motion.div>

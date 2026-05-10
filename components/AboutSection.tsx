@@ -39,27 +39,7 @@ const AboutSection = () => {
           Our mission is to scale your business with precision, purpose, and premium aesthetics.
         </motion.p>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-white/10">
-          {[
-            { label: 'Happy Clients', value: '20+' },
-            { label: 'Projects Done', value: '35+' },
-            { label: 'Expert Staff', value: '5' },
-            { label: 'Years', value: '5' },
-          ].map((stat, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 + (idx * 0.1) }}
-              className="flex flex-col items-center"
-            >
-              <span className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</span>
-              <span className="text-xs uppercase tracking-widest text-white/40">{stat.label}</span>
-            </motion.div>
-          ))}
-        </div>
+
       </div>
     </section>
   );

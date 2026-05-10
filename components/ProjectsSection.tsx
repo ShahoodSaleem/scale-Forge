@@ -9,37 +9,30 @@ const projects = [
     title: 'Car Rental Website',
     description: 'Car Rental Website For Malaysian Client.',
     image: '/Assets/car.jpg',
-    link: 'https://example.com'
   },
   {
     id: 2,
     title: 'Dental Clinic Website',
     description: 'Dental Website For Australian Client.',
     image: '/Assets/teeth.jpg',
-    link: 'https://example.com'
   },
   {
     id: 3,
     title: 'Jewellery Store Website',
     description: 'Premium Jewellery E-commerce Store.',
     image: '/Assets/Jewellery.jpg',
-    link: 'https://example.com'
   },
   {
     id: 4,
     title: 'E-Commerce Website',
     description: 'E commerce Website Mockup For Future Client Inspiration.',
     image: '/Assets/Ecommerce.jpg',
-    link: 'https://example.com'
   },
 ];
 
 const ProjectCard = ({ project, index }: { project: any, index: number }) => {
   return (
-    <motion.a
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -71,20 +64,15 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
             {project.title}
           </h3>
 
-          <p className="text-[#ffffff]/60 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <p className="text-[#ffffff]/60 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             {project.description}
           </p>
-
-          <div className="flex items-center gap-2 text-[#ffffff] font-medium text-sm group/btn">
-            <span>Learn More</span>
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:rotate-45" />
-          </div>
         </div>
       </div>
 
       {/* Subtle Border Glow */}
       <div className="absolute inset-0 border border-[#ffffff]/0 transition-colors duration-500 group-hover:border-[#ffffff]/10 rounded-3xl pointer-events-none" />
-    </motion.a>
+    </motion.div>
   );
 };
 

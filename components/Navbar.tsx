@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import PremiumButton from "./PremiumButton";
@@ -23,7 +23,7 @@ const Navbar = () => {
     ? 'text-black [text-shadow:0_0_8px_#00f3ff,0_0_16px_#00f3ff,0_0_24px_#00c8ff]'
     : 'text-white [text-shadow:0_0_8px_#f97316,0_0_16px_#f97316,0_0_24px_#ea580c]';
 
-  const navLinks: { name: string; href?: string; strikethrough?: boolean; subLinks?: { name: string; href: string }[] }[] = [
+  const navLinks: { name: string; href: string; strikethrough?: boolean }[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Projects', href: '/projects' },
@@ -32,14 +32,6 @@ const Navbar = () => {
     { name: 'FAQ', href: '/faq' },
     { name: 'Blogs', href: '/blogs' },
     { name: 'Contact', href: '/contact' },
-    {
-      name: 'Portal',
-      subLinks: [
-        { name: 'Admin', href: '/portal/admin' },
-        { name: 'Employee', href: '/portal/employee' },
-        { name: 'Client', href: '/portal' },
-      ],
-    },
   ];
 
   return (
@@ -58,38 +50,14 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isMatch = link.href 
-                ? (link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/')
-                : pathname.startsWith('/portal');
-
-              if (link.subLinks) {
-                return (
-                  <div key={link.name} className="relative group">
-                    <button className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:text-white/80 z-10 flex items-center gap-1 ${isMatch ? glowClass : 'text-white/40'}`}>
-                      {link.name} <ChevronDown size={12} className="transition-transform duration-300 group-hover:rotate-180" />
-                    </button>
-                    <div className="absolute top-full left-0 mt-2 w-32 bg-black/90 backdrop-blur-md border border-white/10 rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col py-2 overflow-hidden shadow-xl shadow-black/50">
-                      {link.subLinks.map(subLink => {
-                        const isSubMatch = pathname === subLink.href;
-                        return (
-                          <Link
-                            key={subLink.name}
-                            href={subLink.href}
-                            className={`px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors hover:bg-white/5 ${isSubMatch ? glowClass : 'text-white/40 hover:text-white/80'}`}
-                          >
-                            {subLink.name}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              }
+              const isMatch = link.href === '/'
+                ? pathname === '/'
+                : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/';
 
               return (
                 <Link
                   key={link.name}
-                  href={link.href!}
+                  href={link.href}
                   className={`relative px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:text-white/80 z-10 ${isMatch ? glowClass : link.strikethrough ? 'text-white/40 line-through decoration-white/20' : 'text-white/40'
                     }`}
                 >
@@ -150,39 +118,14 @@ const Navbar = () => {
           >
             <div className="flex flex-col items-center gap-8 w-full px-6 pointer-events-auto">
               {navLinks.map((link) => {
-                const isMatch = link.href
-                  ? (link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/')
-                  : pathname.startsWith('/portal');
-
-                if (link.subLinks) {
-                  return (
-                    <div key={link.name} className="flex flex-col items-center gap-4 w-full">
-                      <div className={`text-2xl font-bold tracking-[0.2em] uppercase flex items-center gap-2 ${isMatch ? glowClass : 'text-white/40'}`}>
-                        {link.name} <ChevronDown size={20} />
-                      </div>
-                      <div className="flex flex-col items-center gap-4 w-full bg-white/5 rounded-2xl py-4">
-                        {link.subLinks.map(subLink => {
-                          const isSubMatch = pathname === subLink.href;
-                          return (
-                            <Link
-                              key={subLink.name}
-                              href={subLink.href}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className={`text-lg font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isSubMatch ? glowClass : 'text-white/40 hover:text-white/80'}`}
-                            >
-                              {subLink.name}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                }
+                const isMatch = link.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(link.href.split('#')[0]) && link.href.split('#')[0] !== '/';
 
                 return (
                   <Link
                     key={link.name}
-                    href={link.href!}
+                    href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`text-2xl font-bold tracking-[0.2em] relative uppercase transition-all duration-300 ${isMatch ? glowClass : 'text-white/40'
                       }`}

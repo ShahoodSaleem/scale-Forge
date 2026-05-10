@@ -101,53 +101,93 @@ const PricingSection = () => {
       plans: [
         {
           tier: "Starter",
-          price: "999",
-          period: "Single Page",
-          description: "Perfect for a high-impact product launch or portfolio.",
-          features: ["Custom UI/UX Design", "Fully Responsive", "Basic SEO Setup", "Contact Form", "3 Days Delivery"]
+          price: "1,800",
+          period: "/ project",
+          description: "A clean, professional site for individuals and small businesses just getting online.",
+          features: [
+            "Up to 5 pages",
+            "Mobile responsive design",
+            "Contact form integration",
+            "2 rounds of revisions",
+            "30-day post-launch support"
+          ]
         },
         {
-          tier: "Business",
-          price: "1,999",
-          period: "Multi-Page",
+          tier: "Growth",
+          price: "4,500",
+          period: "/ project",
           popular: true,
-          description: "Scalable websites for growing brands and companies.",
-          features: ["Up to 5 Custom Pages", "CMS Integration", "Premium Animations", "Advanced SEO", "7-10 Days Delivery"]
+          description: "A full-featured site for growing brands that need custom design and more functionality.",
+          features: [
+            "Up to 15 pages",
+            "Custom UI/UX design",
+            "CMS integration (WordPress/Webflow)",
+            "Basic SEO setup",
+            "4 rounds of revisions",
+            "60-day post-launch support"
+          ]
         },
         {
-          tier: "Elite",
-          price: "3,499",
-          period: "Custom App",
-          description: "Complex solutions for enterprise-grade digital needs.",
-          features: ["Full E-commerce Setup", "Custom Database", "API Integrations", "Priority Support", "Dedicated Project Manager"]
+          tier: "Enterprise",
+          price: "9,500+",
+          period: "/ project",
+          description: "High-performance, scalable web solutions for established businesses with complex needs.",
+          features: [
+            "Unlimited pages",
+            "Custom development & integrations",
+            "E-commerce / portal functionality",
+            "Performance & security hardening",
+            "Unlimited revisions",
+            "90-day dedicated support"
+          ]
         }
       ]
     },
     {
-      title: "SEO Mastery",
+      title: "SEO",
       description: "Strategic optimization to climb the rankings and dominate search.",
       plans: [
         {
           tier: "Essential",
-          price: "499",
-          period: "/Month",
-          description: "The foundation for a solid search presence.",
-          features: ["Keyword Research", "On-Page Optimization", "Technical SEO Audit", "Monthly Performance Report", "Local SEO Setup"]
+          price: "650",
+          period: "/month",
+          description: "Core SEO for businesses building their organic presence from the ground up.",
+          features: [
+            "Keyword research (20 keywords)",
+            "On-page optimization",
+            "Google Search Console setup",
+            "Monthly performance report",
+            "Technical SEO audit"
+          ]
         },
         {
-          tier: "Growth",
-          price: "999",
-          period: "/Month",
+          tier: "Authority",
+          price: "1,400",
+          period: "/month",
           popular: true,
-          description: "Aggressive optimization for competitive industries.",
-          features: ["Competitor Analysis", "High-Quality Backlinks", "Content Strategy", "Speed Optimization", "Bi-Weekly Strategy Sync"]
+          description: "Comprehensive SEO for brands serious about ranking higher and driving qualified traffic.",
+          features: [
+            "Keyword research (60 keywords)",
+            "On-page + technical optimization",
+            "Link building (10 links/mo)",
+            "Competitor analysis",
+            "Bi-weekly strategy calls",
+            "Detailed monthly reporting"
+          ]
         },
         {
-          tier: "Dominance",
-          price: "1,999",
-          period: "/Month",
-          description: "Full-scale authority building for market leaders.",
-          features: ["PR & Guest Posting", "Advanced Link Building", "Voice Search SEO", "Conversion Rate Optimization", "Full Analytics War-room"]
+          tier: "Dominate",
+          price: "3,200",
+          period: "/month",
+          description: "Aggressive SEO strategy for businesses that need to own their market's search results.",
+          features: [
+            "Unlimited keyword targeting",
+            "Full technical SEO management",
+            "Link building (25+ links/mo)",
+            "Content strategy alignment",
+            "Weekly strategy calls",
+            "Dedicated SEO manager"
+          ]
         }
       ]
     },
@@ -156,26 +196,46 @@ const PricingSection = () => {
       description: "Authority-building content that scales your brand's reach.",
       plans: [
         {
-          tier: "Basic",
-          price: "399",
-          period: "/Month",
-          description: "Keep your digital presence active and professional.",
-          features: ["2 Premium Blog Articles", "4 Social Media Posts", "Basic Graphics", "Content Calendar", "1 Revision per post"]
+          tier: "Essentials",
+          price: "900",
+          period: "/month",
+          description: "Consistent, quality content for businesses looking to build a strong online presence.",
+          features: [
+            "4 blog articles / month",
+            "8 social media posts",
+            "Basic graphic design",
+            "Content calendar",
+            "1 revision per piece"
+          ]
         },
         {
-          tier: "Pro",
-          price: "799",
-          period: "/Month",
+          tier: "Professional",
+          price: "2,200",
+          period: "/month",
           popular: true,
-          description: "Dynamic content designed for high engagement.",
-          features: ["6 Premium Blog Articles", "12 Social Media Posts", "Custom Graphics Pack", "Newsletter Design", "Engagement Analysis"]
+          description: "High-impact content designed to build authority and drive consistent organic traffic.",
+          features: [
+            "8 blog articles / month",
+            "20 social media posts",
+            "Custom branded graphics",
+            "Email newsletter design",
+            "SEO-optimized copywriting",
+            "Engagement & performance analysis"
+          ]
         },
         {
-          tier: "Authority",
-          price: "1,499",
-          period: "/Month",
-          description: "The ultimate content machine for industry authority.",
-          features: ["12 Premium Blog Articles", "Daily Social Posts", "Video Script Writing", "Whitepaper Creation", "Full Brand Voice Management"]
+          tier: "Full-Scale",
+          price: "4,800",
+          period: "/month",
+          description: "An end-to-end content engine for businesses ready to dominate their niche.",
+          features: [
+            "16 blog articles / month",
+            "Daily social media posts",
+            "Video script writing",
+            "Whitepaper & lead magnet creation",
+            "Full brand voice management",
+            "Dedicated content strategist"
+          ]
         }
       ]
     }

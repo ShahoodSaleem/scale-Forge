@@ -77,7 +77,7 @@ const ComparisonSection = () => {
     "Omni channel approach",
     "Tailored best-fit solutions",
     "Provides industry specific expertise",
-    "Experts with 10+ years of experience",
+    "Dedicated team with hands-on project experience",
   ];
 
   return (
