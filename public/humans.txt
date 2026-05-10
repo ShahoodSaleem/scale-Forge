@@ -1,0 +1,36 @@
+/* TEAM */
+
+Agency: Scale Forge
+Site: https://scaleforgewebdev.vercel.app
+Location: Pakistan
+
+
+/* TECH STACK */
+
+Framework: Next.js 15 (App Router)
+Language: TypeScript
+Styling: Tailwind CSS
+Animations: Framer Motion
+CMS: Sanity.io
+Database: Supabase
+Hosting: Vercel
+Analytics: Vercel Analytics & Speed Insights
+Icons: Lucide React
+Fonts: Inter, Montserrat (Google Fonts)
+
+
+/* SITE */
+
+Last update: May 2026
+Standards: HTML5, CSS3, ES2024
+Components: React 19
+License: All rights reserved © Scale Forge 2026
+
+
+/* THANKS */
+
+Next.js — https://nextjs.org
+Sanity.io — https://sanity.io
+Vercel — https://vercel.com
+Framer Motion — https://framer.motion.com
+Tailwind CSS — https://tailwindcss.com
