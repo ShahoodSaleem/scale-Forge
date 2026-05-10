@@ -1,0 +1,138 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://scaleforgewebdev.vercel.app/#organization",
+      "name": "Scale Forge",
+      "url": "https://scaleforgewebdev.vercel.app",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://scaleforgewebdev.vercel.app/favicon.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://scaleforgewebdev.vercel.app/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "description": "Scale Forge is a web design & development agency that builds high-converting websites for growing businesses using Next.js, Tailwind CSS, and modern SEO strategies.",
+      "foundingDate": "2023",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://scaleforgewebdev.vercel.app/contact",
+        "availableLanguage": ["English", "Urdu"]
+      },
+      "sameAs": [],
+      "areaServed": {
+        "@type": "Place",
+        "name": "Worldwide"
+      },
+      "knowsAbout": [
+        "Web Design",
+        "Web Development",
+        "Next.js",
+        "SEO",
+        "Content Marketing",
+        "E-commerce Development",
+        "UI/UX Design"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://scaleforgewebdev.vercel.app/#website",
+      "url": "https://scaleforgewebdev.vercel.app",
+      "name": "Scale Forge",
+      "description": "Scale Forge builds high-converting websites for growing businesses using Next.js and modern SEO strategies.",
+      "publisher": {
+        "@id": "https://scaleforgewebdev.vercel.app/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://scaleforgewebdev.vercel.app/blogs?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://scaleforgewebdev.vercel.app/#webpage",
+      "url": "https://scaleforgewebdev.vercel.app",
+      "name": "Scale Forge | High-Converting Websites for Growing Businesses",
+      "isPartOf": {
+        "@id": "https://scaleforgewebdev.vercel.app/#website"
+      },
+      "about": {
+        "@id": "https://scaleforgewebdev.vercel.app/#organization"
+      },
+      "description": "Scale Forge designs and develops fast, professional websites using Next.js — helping businesses establish a credible digital presence that wins clients.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://scaleforgewebdev.vercel.app"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://scaleforgewebdev.vercel.app/#service",
+      "name": "Scale Forge",
+      "url": "https://scaleforgewebdev.vercel.app",
+      "image": "https://scaleforgewebdev.vercel.app/og-image.png",
+      "description": "Premium web design, development, SEO, and content creation services for growing businesses worldwide.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Karachi",
+        "addressRegion": "Sindh",
+        "addressCountry": "PK"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 24.8607,
+        "longitude": 67.0011
+      },
+      "priceRange": "$$",
+      "currenciesAccepted": "USD",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Scale Forge Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Web Design & Development",
+              "description": "Custom Next.js websites from $1,800 — built for speed, SEO, and conversion."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "SEO",
+              "description": "Technical and content SEO strategies starting at $650/month to grow your organic presence."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Content Creation",
+              "description": "Authority-building blog articles, social content, and brand copy from $900/month."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

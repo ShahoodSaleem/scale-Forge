@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import {
     Search, Layout, Palette, FileText, Zap, BarChart3, Target
 } from 'lucide-react';
@@ -108,10 +109,12 @@ const FeatureDetail = ({ title, icon: Icon, description, details, metric, index,
                 <div className="flex-1 w-full relative group">
                     <div className="absolute -inset-4 bg-orange-500/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div className="relative aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10">
-                        <img
+                        <Image
                             src={image}
                             alt={title}
-                            className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     </div>

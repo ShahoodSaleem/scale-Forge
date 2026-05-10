@@ -1,0 +1,28 @@
+# Scale Forge
+
+> Scale Forge is a premium web design, development, and SEO agency building high-converting websites for businesses around the globe.
+
+## Services Offered
+- Custom Web Design and Development (Next.js, Tailwind CSS)
+- Technical and Content SEO Optimization
+- Content Creation and Marketing Strategy
+- Digital Product Architecture and Branding
+
+## Technical Stack
+This website is built with:
+- Next.js 15 (React 19, App Router)
+- Tailwind CSS & Framer Motion
+- Sanity.io (Headless CMS)
+- Supabase (Backend/Database)
+- Hosted on Vercel
+
+## Key Pages
+- About: https://scaleforgewebdev.vercel.app/about
+- Services: https://scaleforgewebdev.vercel.app/services
+- Projects: https://scaleforgewebdev.vercel.app/projects
+- Pricing: https://scaleforgewebdev.vercel.app/pricing
+- Contact: https://scaleforgewebdev.vercel.app/contact
+
+## Contact Information
+For inquiries, reach out via our contact page.
+Location: Pakistan. Serving clients globally.

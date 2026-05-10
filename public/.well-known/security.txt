@@ -1,0 +1,6 @@
+Contact: mailto:security@scaleforgewebdev.vercel.app
+Contact: https://scaleforgewebdev.vercel.app/contact
+Expires: 2027-05-10T12:00:00.000Z
+Preferred-Languages: en
+Acknowledgments: https://scaleforgewebdev.vercel.app/security/acknowledgments
+Policy: https://scaleforgewebdev.vercel.app/privacy
