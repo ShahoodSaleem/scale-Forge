@@ -133,7 +133,7 @@ const HomePricingSection = () => {
       tier: "Starter Package",
       price: "1,350",
       period: "Starting At",
-      description: "Perfect for startups and small businesses that need branding + a professional website to get started.",
+      description: "Perfect for startups and small businesses that need branding and a professional website to get started. Our Starter Package provides everything a new venture requires to establish credibility from day one. You'll receive a custom-tailored visual identity that captures your unique value proposition, along with a high-performance Next.js website optimized for speed and conversion. We ensure your core service pages are meticulously designed and fully responsive across all devices, while integrating basic on-page SEO best practices to start building organic search visibility. This foundational package is engineered to launch your digital presence confidently and affordably.",
       bestFor: "Startups, personal brands, small local businesses",
       features: [
         "Full Brand Design & Guidelines",
@@ -149,7 +149,7 @@ const HomePricingSection = () => {
       price: "1,850",
       period: "Starting At",
       popular: true,
-      description: "Designed for businesses that want a stronger digital presence with better SEO and ongoing content.",
+      description: "Designed for businesses that want a stronger digital presence with advanced SEO and ongoing content creation. The Growth Package is the ideal choice for companies ready to capture more market share and generate consistent inbound leads. Beyond a stunning custom website, we implement a robust content strategy that includes premium blog articles designed to target high-intent keywords and attract qualified traffic. Our deep-dive local SEO and speed optimization ensures you outrank competitors in search results, while custom landing pages maximize your conversion rates. This tier actively transforms your website into a powerful, lead-generating asset.",
       bestFor: "Growing businesses, service providers, local brands",
       features: [
         "Everything in Starter, plus:",
@@ -164,7 +164,7 @@ const HomePricingSection = () => {
       tier: "Scale Package",
       price: "2,500",
       period: "Starting At",
-      description: "A complete digital growth package combining branding, design, SEO, and content strategy for scaling businesses.",
+      description: "A complete digital growth package combining premium branding, enterprise-grade design, comprehensive SEO, and aggressive content strategy for scaling businesses. The Scale Package is our most intensive offering, built for industry leaders and fast-growing agencies who require total market dominance. We execute a full-scale technical SEO roadmap, conduct rigorous competitor analysis, and launch aggressive link-building campaigns to secure top search rankings. Your digital platform will feature premium UI/UX design, up to 20 custom pages, and high-frequency content publishing to establish unparalleled authority. This is a complete, done-for-you digital growth engine designed to maximize revenue.",
       bestFor: "Established businesses, agencies, e-commerce brands",
       features: [
         "Everything in Growth, plus:",

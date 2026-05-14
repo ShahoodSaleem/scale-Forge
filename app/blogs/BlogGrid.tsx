@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Blog = {
   id: string;
@@ -66,10 +67,12 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
           {/* Image */}
           <div className="relative h-[200px] w-full overflow-hidden shrink-0">
             <div className="absolute inset-0 bg-black/40 z-10 group-hover:bg-transparent transition-colors duration-500" />
-            <img
+            <Image
               src={blog.image}
               alt={blog.title}
-              className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
             />
             <div className="absolute top-4 left-4 z-20">
               <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-white/20 text-white/80 text-[9px] font-bold uppercase tracking-wider">

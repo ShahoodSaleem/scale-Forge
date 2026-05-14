@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import ContactSection from "../../../components/ContactSection";
 
@@ -112,10 +113,13 @@ export default function ArticlePage() {
           className="w-full h-[400px] md:h-[600px] rounded-xl overflow-hidden border border-white/10 shadow-2xl relative"
         >
           <div className="absolute inset-0 bg-black/20 z-10 pointer-events-none" />
-          <img
+          <Image
             src={article.image}
             alt={article.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
           />
         </motion.div>
       </section>

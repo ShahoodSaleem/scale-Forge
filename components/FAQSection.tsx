@@ -55,19 +55,19 @@ const FAQSection = () => {
   const faqs = [
     {
       question: "How do I get started with Scale Forge?",
-      answer: "Getting started is simple. Just click the 'Book A Call' button at the top, and we'll walk you through a brief discovery session to understand your business goals and tailor our services accordingly."
+      answer: "Getting started is simple. Just click the 'Book A Call' button at the top, and we'll walk you through a brief discovery session to understand your business goals and tailor our services accordingly. During this session, we map out a clear digital strategy, identifying key growth areas where our custom web design and SEO services will have the highest immediate impact on your bottom line."
     },
     {
       question: "What industries do you specialize in?",
-      answer: "We focus on technology, finance, healthcare, SaaS and e-commerce businesses. Our strategies are designed to scale complex offerings into clear, high-conversion market leaders regardless of the industry."
+      answer: "We focus on technology, finance, healthcare, SaaS and e-commerce businesses. Our strategies are designed to scale complex offerings into clear, high-conversion market leaders regardless of the industry. We adapt our deep understanding of technical SEO, user experience, and modern web architectures to build bespoke digital solutions that resonate specifically with your target audience and outpace your competitors."
     },
     {
       question: "How long does a typical project take?",
-      answer: "A standard brand or web overhaul typically takes 6-10 weeks. However, we also offer 'Sprint' cycles for faster deliverables without compromising on the high-fidelity quality we're known for."
+      answer: "A standard brand or web overhaul typically takes 6-10 weeks. However, we also offer 'Sprint' cycles for faster deliverables without compromising on the high-fidelity quality we're known for. Throughout the process, our transparent development cycle ensures you are kept fully updated, from initial wireframing to final production deployment, maintaining a seamless flow of communication and rapid iteration."
     },
     {
       question: "Do you offer post-launch support?",
-      answer: "Absolutely. We provide comprehensive analytics tracking, A/B testing, and strategy refinement for 3 months following every major deployment to ensure your growth remains steady."
+      answer: "Absolutely. We provide comprehensive analytics tracking, A/B testing, and strategy refinement for 3 months following every major deployment to ensure your growth remains steady. Beyond the initial post-launch phase, we offer ongoing maintenance and SEO retainers to keep your platform secure, up-to-date, and continually rising in search engine rankings as market conditions evolve."
     }
   ];
 

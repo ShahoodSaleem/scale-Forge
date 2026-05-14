@@ -4,6 +4,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import { portableTextComponents } from "@/components/PortableTextComponents";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import ResultsCard from "@/components/ResultsCard";
 import ContactSection from "../../../components/ContactSection";
 import type { Metadata } from "next";
@@ -85,10 +86,13 @@ export default async function BlogPostPage({
       <section className="w-full max-w-6xl mx-auto px-6 relative z-20 mb-20">
         <div className="w-full h-[400px] md:h-[600px] rounded-xl overflow-hidden border border-white/10 shadow-2xl relative">
           <div className="absolute inset-0 bg-black/20 z-10 pointer-events-none" />
-          <img
+          <Image
             src={imageUrl}
             alt={post.coverImage?.alt || post.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
           />
         </div>
       </section>

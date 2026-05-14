@@ -6,6 +6,8 @@ import ComparisonSection from "../components/ComparisonSection";
 import HomePricingSection from "../components/HomePricingSection";
 import FAQSection from "../components/FAQSection";
 import ContactSection from "../components/ContactSection";
+import HowWeWorkSection from "../components/HowWeWorkSection";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 export default function Home() {
   return (
@@ -16,6 +18,8 @@ export default function Home() {
       <FeaturesAccordion />
       <ComparisonSection />
       <HomePricingSection />
+      <HowWeWorkSection />
+      <TestimonialsSection />
       <FAQSection />
       <ContactSection />
     </main>

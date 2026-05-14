@@ -88,7 +88,9 @@ const ContactSection = () => {
               <div>
                 <h3 className="text-white/30 text-[11px] font-bold uppercase tracking-[0.3em] mb-6">Our Contacts</h3>
                 <div className="text-white/50 text-base leading-relaxed space-y-2">
-                  <a href="mailto:scaleforge.sales@gmail.com" className="block hover:text-white transition-colors">scaleforge.sales@gmail.com</a>
+                  <span onClick={() => window.location.href = `mailto:${'scaleforge.sales'}@${'gmail.com'}`} className="block hover:text-white transition-colors cursor-pointer">
+                    {'scaleforge.sales'}@{'gmail.com'}
+                  </span>
                   <a href="tel:+923363791538" className="block hover:text-white transition-colors">+92 336 3791 538</a>
                 </div>
               </div>

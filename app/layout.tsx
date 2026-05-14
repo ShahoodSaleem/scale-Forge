@@ -23,7 +23,7 @@ const BASE_URL = 'https://scaleforgewebdev.vercel.app';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Scale Forge | High-Converting Websites for Growing Businesses',
+    default: 'Scale Forge — Web Design & SEO Agency',
     template: '%s | Scale Forge',
   },
   description:
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: BASE_URL,
     siteName: 'Scale Forge',
-    title: 'Scale Forge | High-Converting Websites for Growing Businesses',
+    title: 'Scale Forge — Web Design & SEO Agency',
     description:
       'Scale Forge designs and develops fast, professional websites using Next.js — helping businesses establish a credible digital presence that wins clients.',
     images: [
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@scaleforge',
     creator: '@scaleforge',
-    title: 'Scale Forge | High-Converting Websites for Growing Businesses',
+    title: 'Scale Forge — Web Design & SEO Agency',
     description:
       'Scale Forge designs and develops fast, professional websites using Next.js — helping businesses establish a credible digital presence that wins clients.',
     images: ['/twitter-card.png'],

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 
 const projects = [
   {
@@ -41,9 +42,12 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       className="group relative h-[550px] w-full block overflow-hidden rounded-3xl border border-orange-300/10 bg-[#ffffff]/5 backdrop-blur-sm"
     >
       {/* Background Image with Hover Zoom */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-115"
-        style={{ backgroundImage: `url(${project.image})` }}
+      <Image
+        src={project.image}
+        alt={project.title}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+        className="absolute inset-0 object-cover object-center transition-transform duration-700 group-hover:scale-110"
       />
 
       {/* Dynamic Overlay - Color Burn/Multiply Effect */}
