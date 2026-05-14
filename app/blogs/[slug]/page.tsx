@@ -90,9 +90,10 @@ export default async function BlogPostPage({
             src={imageUrl}
             alt={post.coverImage?.alt || post.title}
             fill
-            sizes="100vw"
+            sizes="(max-width: 1200px) 100vw, 1152px"
             className="object-cover"
-            priority
+            priority={true}
+            loading="eager"
           />
         </div>
       </section>

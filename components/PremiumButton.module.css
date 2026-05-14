@@ -1,0 +1,45 @@
+/* From Uiverse.io by vinodjangid07 - Adapted for Scale Forge */
+.premiumButton {
+  width: 140px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background-color: var(--color-orange-500);
+  border-radius: 30px;
+  color: rgb(19, 19, 19);
+  font-weight: 600;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  transition-duration: .5s;
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-orange-500) 30%, transparent);
+  padding-left: 10px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.premiumButtonSvg {
+  height: 24px;
+  width: 24px;
+  transition-duration: 1.5s;
+}
+
+.premiumButtonSvg path {
+  fill: rgb(19, 19, 19);
+}
+
+.premiumButton:hover {
+  background-color: var(--color-orange-400);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--color-orange-500) 40%, transparent);
+}
+
+.premiumButton:active {
+  transform: scale(0.97);
+  transition-duration: .2s;
+}
+
+.premiumButton:hover .premiumButtonSvg {
+  transform: rotate(250deg);
+}

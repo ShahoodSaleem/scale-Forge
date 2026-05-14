@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Check } from 'lucide-react';
 import PremiumButton from './PremiumButton';
 import { useEffect, useRef } from 'react';
+import styles from './HomePricingSection.module.css';
 
 const PricingCard = ({ plan, planIdx }: any) => {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -39,7 +40,7 @@ const PricingCard = ({ plan, planIdx }: any) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: planIdx * 0.1 }}
-      className={`blob-card group min-h-[500px] transition-all duration-500 bg-black ${
+      className={`${styles.blobCard} group min-h-[500px] transition-all duration-500 bg-black ${
         plan.popular 
           ? '!border-transparent relative z-20 md:-translate-y-2' 
           : 'hover:!border-white/10'
@@ -68,9 +69,9 @@ const PricingCard = ({ plan, planIdx }: any) => {
           />
         </div>
       )}
-      <div className="blob-bg bg-black/85"></div>
+      <div className={`${styles.blobBg} bg-black/85`}></div>
       <motion.div
-        className="blob-element transition-opacity duration-1000 opacity-30 md:opacity-20 group-hover:opacity-80"
+        className={`${styles.blobElement} transition-opacity duration-1000 opacity-30 md:opacity-20 group-hover:opacity-80`}
         style={{
           x: springX,
           y: springY,
@@ -95,12 +96,12 @@ const PricingCard = ({ plan, planIdx }: any) => {
           <span className="text-white/30 text-xs">{plan.period}</span>
         </div>
 
-        <p className="text-white/50 text-xs mb-4 italic min-h-[48px]">
+        <p className="text-white/50 text-sm mb-4 italic min-h-[48px]">
           {plan.description}
         </p>
 
         {plan.bestFor && (
-          <div className="mb-6 text-xs">
+          <div className="mb-6 text-sm">
             <span className="font-bold text-orange-500">Best For: </span>
             <span className="text-white/60">{plan.bestFor}</span>
           </div>
@@ -108,7 +109,7 @@ const PricingCard = ({ plan, planIdx }: any) => {
 
         <ul className="space-y-3 mb-8 flex-grow">
           {plan.features.map((feature: string, idx: number) => (
-            <li key={idx} className="flex items-start gap-3 text-xs">
+            <li key={idx} className="flex items-start gap-3 text-sm">
               <Check className="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5" />
               <span className="text-white/60 leading-tight">{feature}</span>
             </li>
@@ -133,7 +134,7 @@ const HomePricingSection = () => {
       tier: "Starter Package",
       price: "1,350",
       period: "Starting At",
-      description: "Perfect for startups and small businesses that need branding and a professional website to get started. Our Starter Package provides everything a new venture requires to establish credibility from day one. You'll receive a custom-tailored visual identity that captures your unique value proposition, along with a high-performance Next.js website optimized for speed and conversion. We ensure your core service pages are meticulously designed and fully responsive across all devices, while integrating basic on-page SEO best practices to start building organic search visibility. This foundational package is engineered to launch your digital presence confidently and affordably.",
+      description: "Perfect for startups and small businesses that need branding and a professional website. You'll receive a custom visual identity, a high-performance Next.js website, and basic on-page SEO to launch your digital presence confidently.",
       bestFor: "Startups, personal brands, small local businesses",
       features: [
         "Full Brand Design & Guidelines",
@@ -149,7 +150,7 @@ const HomePricingSection = () => {
       price: "1,850",
       period: "Starting At",
       popular: true,
-      description: "Designed for businesses that want a stronger digital presence with advanced SEO and ongoing content creation. The Growth Package is the ideal choice for companies ready to capture more market share and generate consistent inbound leads. Beyond a stunning custom website, we implement a robust content strategy that includes premium blog articles designed to target high-intent keywords and attract qualified traffic. Our deep-dive local SEO and speed optimization ensures you outrank competitors in search results, while custom landing pages maximize your conversion rates. This tier actively transforms your website into a powerful, lead-generating asset.",
+      description: "Designed for businesses ready to capture more market share and generate consistent inbound leads. We implement a robust content strategy, advanced local SEO, speed optimization, and custom landing pages to maximize conversion rates.",
       bestFor: "Growing businesses, service providers, local brands",
       features: [
         "Everything in Starter, plus:",
@@ -164,7 +165,7 @@ const HomePricingSection = () => {
       tier: "Scale Package",
       price: "2,500",
       period: "Starting At",
-      description: "A complete digital growth package combining premium branding, enterprise-grade design, comprehensive SEO, and aggressive content strategy for scaling businesses. The Scale Package is our most intensive offering, built for industry leaders and fast-growing agencies who require total market dominance. We execute a full-scale technical SEO roadmap, conduct rigorous competitor analysis, and launch aggressive link-building campaigns to secure top search rankings. Your digital platform will feature premium UI/UX design, up to 20 custom pages, and high-frequency content publishing to establish unparalleled authority. This is a complete, done-for-you digital growth engine designed to maximize revenue.",
+      description: "A complete, done-for-you digital growth engine for scaling businesses. We execute a full-scale technical SEO roadmap, aggressive link-building campaigns, premium UI/UX design, and high-frequency content publishing to establish unparalleled market authority.",
       bestFor: "Established businesses, agencies, e-commerce brands",
       features: [
         "Everything in Growth, plus:",
@@ -179,37 +180,6 @@ const HomePricingSection = () => {
 
   return (
     <section id="pricing" className="pt-24 pb-32 px-6 bg-black">
-      <style>{`
-        .blob-card {
-          position: relative;
-          border-radius: 20px;
-          z-index: 10;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .blob-bg {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          z-index: 2;
-          backdrop-filter: blur(16px);
-        }
-
-        .blob-element {
-          position: absolute;
-          z-index: 1;
-          width: 300px; height: 300px;
-          border-radius: 50%;
-          background-color: var(--color-orange-600);
-          opacity: 0.5;
-          filter: blur(50px);
-          pointer-events: none;
-        }
-      `}</style>
-
       <div className="max-w-[1400px] mx-auto pt-15">
         {/* Main Header */}
         <div className="text-center mb-20">

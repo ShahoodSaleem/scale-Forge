@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { sendEmail } from '../app/actions/sendEmail';
 
 const InstagramIcon = () => (
@@ -21,9 +21,27 @@ const LinkedinIcon = () => (
   </svg>
 );
 
+const YoutubeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+  </svg>
+);
+
+const FacebookIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+
 const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [email, setEmail] = useState('Contact Email');
+
+  useEffect(() => {
+    setEmail(atob('c2NhbGVmb3JnZS5zYWxlc0BnbWFpbC5jb20='));
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -88,8 +106,15 @@ const ContactSection = () => {
               <div>
                 <h3 className="text-white/30 text-[11px] font-bold uppercase tracking-[0.3em] mb-6">Our Contacts</h3>
                 <div className="text-white/50 text-base leading-relaxed space-y-2">
-                  <span onClick={() => window.location.href = `mailto:${'scaleforge.sales'}@${'gmail.com'}`} className="block hover:text-white transition-colors cursor-pointer">
-                    {'scaleforge.sales'}@{'gmail.com'}
+                  <span 
+                    onClick={() => {
+                      if (email !== 'Contact Email') {
+                        window.location.href = `mailto:${email}`;
+                      }
+                    }} 
+                    className="block hover:text-white transition-colors cursor-pointer"
+                  >
+                    {email}
                   </span>
                   <a href="tel:+923363791538" className="block hover:text-white transition-colors">+92 336 3791 538</a>
                 </div>
@@ -181,6 +206,14 @@ const ContactSection = () => {
         <div className="mt-24 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-6">
             <a
+              href="https://www.facebook.com/people/Scale-Forge/61556858162817/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+            >
+              <FacebookIcon />
+            </a>
+            <a
               href="https://www.instagram.com/scale_forge.pk?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
               target="_blank"
               rel="noopener noreferrer"
@@ -195,6 +228,14 @@ const ContactSection = () => {
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
             >
               <LinkedinIcon />
+            </a>
+            <a
+              href="https://www.youtube.com/@ScaleForge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+            >
+              <YoutubeIcon />
             </a>
           </div>
 

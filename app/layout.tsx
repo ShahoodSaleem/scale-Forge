@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import InitialLoader from "../components/InitialLoader";
+import ClientInitialLoader from "../components/ClientInitialLoader";
 import Navbar from "../components/Navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -133,9 +133,10 @@ export default async function RootLayout({
   // Placeholder Analytics IDs - to be replaced by actual IDs in production
   const GA_TRACKING_ID = 'G-XXXXXXXXXX';
   const CLARITY_PROJECT_ID = 'xxxxxxxxx';
+  const FB_PIXEL_ID = 'YOUR_PIXEL_ID';
 
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="canonical" href={canonicalUrl} />
@@ -143,43 +144,63 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
-        
-        {/* Microsoft Clarity Tracking */}
-        <Script id="ms-clarity" strategy="afterInteractive">
-          {`
-            (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
-          `}
-        </Script>
-
-        {/* Google Analytics Tracking */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}');
-          `}
-        </Script>
       </head>
       <body
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <ServiceWorkerRegister />
-          {!hideUI && <InitialLoader />}
+          {!hideUI && <ClientInitialLoader />}
           {!hideUI && <Navbar />}
           {children}
           <SanityLive />
           <SpeedInsights />
           <Analytics />
+
+          {/* Third-Party Analytics Scripts */}
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`
+              try {
+                (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
+              } catch(e) { console.error("Clarity error", e); }
+            `}
+          </Script>
+
+          <Script id="fb-pixel" strategy="afterInteractive">
+            {`
+              try {
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${FB_PIXEL_ID}');
+                fbq('track', 'PageView');
+              } catch(e) { console.error("FB Pixel error", e); }
+            `}
+          </Script>
+
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              try {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_TRACKING_ID}');
+              } catch(e) { console.error("GA error", e); }
+            `}
+          </Script>
         </ThemeProvider>
       </body>
     </html>

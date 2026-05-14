@@ -1,0 +1,32 @@
+.blobCard {
+  position: relative;
+  border-radius: 20px;
+  z-index: 10;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blobBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  backdrop-filter: blur(16px);
+}
+
+.blobElement {
+  position: absolute;
+  z-index: 1;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: var(--color-orange-600);
+  opacity: 0.5;
+  filter: blur(50px);
+  pointer-events: none;
+}

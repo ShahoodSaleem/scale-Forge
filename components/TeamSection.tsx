@@ -53,6 +53,7 @@ export default function TeamSection() {
                   fill
                   className="object-cover object-center grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={index === 0}
                 />
               </div>
 
