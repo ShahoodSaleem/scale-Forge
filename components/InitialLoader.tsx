@@ -12,6 +12,8 @@ const InitialLoader = () => {
     const timeoutDuration = process.env.NODE_ENV === 'development' ? 500 : 3000;
     const timeout = setTimeout(() => {
       setLoading(false);
+      (window as any).hasLoaderFinished = true;
+      window.dispatchEvent(new Event('loaderFinished'));
     }, timeoutDuration);
 
     return () => clearTimeout(timeout);
