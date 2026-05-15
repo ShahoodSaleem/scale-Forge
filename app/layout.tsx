@@ -141,9 +141,6 @@ export default async function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="preload" href="/Assets/assets/hero1.avif" as="image" type="image/avif" />
-        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://aj16x5pr.api.sanity.io" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://aj16x5pr.api.sanity.io" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -157,7 +154,9 @@ export default async function RootLayout({
 
           {!hideUI && <Navbar />}
           {children}
-          <SanityLive />
+          <React.Suspense fallback={null}>
+            <SanityLive />
+          </React.Suspense>
           <SpeedInsights />
           <Analytics />
 
