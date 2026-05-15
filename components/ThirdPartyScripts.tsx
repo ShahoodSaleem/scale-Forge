@@ -32,27 +32,29 @@ export default function ThirdPartyScripts({ gaId }: { gaId?: string }) {
 
       // MS Clarity
       try {
-        (function(c,l,a,r,i,t,y){
+        (function(c: any, l: Document, a: string, r: string, i: string, t?: any, y?: any){
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
           t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", CLARITY_PROJECT_ID);
+        })(window as any, document, "clarity", "script", CLARITY_PROJECT_ID);
       } catch(e) { console.error("Clarity error", e); }
 
       // FB Pixel
       try {
-        !function(f,b,e,v,n,t,s)
+        (function(f: any, b: Document, e: string, v: string, n?: any, t?: any, s?: any)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
         n.queue=[];t=b.createElement(e);t.async=!0;
         t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        s.parentNode.insertBefore(t,s)})(window as any, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
+        
         // @ts-ignore
-        fbq('init', FB_PIXEL_ID);
-        // @ts-ignore
-        fbq('track', 'PageView');
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('init', FB_PIXEL_ID);
+          (window as any).fbq('track', 'PageView');
+        }
       } catch(e) { console.error("FB Pixel error", e); }
       
       // Clean up listeners

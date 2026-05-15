@@ -71,7 +71,7 @@ const Hero = () => {
       {/* Content */}
       <motion.div
         variants={containerVariants}
-        initial="visible"
+        initial="hidden"
         animate="visible"
         className="relative z-10 flex flex-col items-center text-center max-w-4xl"
       >
@@ -85,7 +85,7 @@ const Hero = () => {
       {/* Headline */}
         <motion.h1
           variants={itemVariants}
-          initial="visible"
+          initial="hidden"
           animate="visible"
           className="text-7xl md:text-[90px] font-medium tracking-tight text-white mb-8 leading-[1.05]"
         >

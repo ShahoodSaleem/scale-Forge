@@ -8,6 +8,23 @@ import Image from "next/image";
 import ResultsCard from "@/components/ResultsCard";
 import ContactSection from "../../../components/ContactSection";
 import type { Metadata } from "next";
+import { SanityDocument } from "next-sanity";
+
+interface Post extends SanityDocument {
+  title: string;
+  description?: string;
+  category?: string;
+  publishedAt?: string;
+  readTime?: number;
+  coverImage?: {
+    asset?: {
+      _id: string;
+      url: string;
+    };
+    alt?: string;
+  };
+  body?: any[];
+}
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +34,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const resolvedParams = await params;
-  const { data: post } = await sanityFetch({
+  const { data: post } = (await sanityFetch({
     query: POST_QUERY,
     params: { slug: resolvedParams.slug },
-  });
+  })) as { data: Post | null };
 
   if (!post) {
     return { title: "Post Not Found" };
@@ -41,10 +58,10 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
-  const { data: post } = await sanityFetch({
+  const { data: post } = (await sanityFetch({
     query: POST_QUERY,
     params: { slug: resolvedParams.slug },
-  });
+  })) as { data: Post | null };
 
   if (!post) {
     notFound();

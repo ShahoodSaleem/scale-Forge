@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Layout, Palette, FileText, Zap, BarChart3, Target, ArrowRight
@@ -39,11 +39,21 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
     indigo: 'text-[#ffffff]',
     cyan: 'text-[#ffffff]',
   };
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth > 768);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
   return (
     <motion.div
-      layout={typeof window !== 'undefined' && window.innerWidth > 768}
+      layout={isDesktop}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => typeof window !== 'undefined' && window.innerWidth > 768 ? onHover(id) : undefined}
+      onMouseEnter={() => isDesktop ? onHover(id) : undefined}
       onClick={() => onHover(id)}
       className={`relative cursor-pointer overflow-hidden rounded-none border border-[#ffffff]/10 ${
         isExpanded 
@@ -65,7 +75,7 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
 
       {/* Glow Effect - Disabled on mobile for performance */}
       <AnimatePresence>
-        {isExpanded && typeof window !== 'undefined' && window.innerWidth > 768 && (
+        {isExpanded && isDesktop && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

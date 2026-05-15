@@ -41,5 +41,11 @@ export const POST_QUERY = defineQuery(`
 
 // All slugs for static generation
 export const POST_SLUGS_QUERY = defineQuery(`
-  *[_type == "post"] { "slug": slug.current }
+  *[_type == "post"] { 
+    "slug": slug.current,
+    publishedAt,
+    coverImage {
+      asset->{ url }
+    }
+  }
 `)

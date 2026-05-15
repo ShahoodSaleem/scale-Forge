@@ -67,7 +67,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogPages: MetadataRoute.Sitemap = []
 
   try {
-    const posts = await client.fetch<{ slug: string; publishedAt?: string }[]>(
+    const posts = await client.fetch<{ 
+      slug: string; 
+      publishedAt?: string;
+      coverImage?: { asset?: { url: string } };
+    }[]>(
       POST_SLUGS_QUERY
     )
 
@@ -78,7 +82,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: post.publishedAt ? new Date(post.publishedAt) : new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.7,
-        images: post.coverImage?.asset?.url ? [post.coverImage.asset.url] : [],
       }))
   } catch (error) {
     // Silently fail — sitemap will still include static pages
