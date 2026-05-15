@@ -20,15 +20,7 @@ const Hero = () => {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== 'undefined') {
-      if ((window as any).hasLoaderFinished) {
-        setCanAnimate(true);
-      } else {
-        const handleLoader = () => setCanAnimate(true);
-        window.addEventListener('loaderFinished', handleLoader);
-        return () => window.removeEventListener('loaderFinished', handleLoader);
-      }
-    }
+    setCanAnimate(true);
   }, []);
 
   const videoSrc = mounted && theme === 'light' ? '/Assets/WhiteWaves.mp4' : '/Assets/Hero_Dark_compressed.mp4';

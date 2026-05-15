@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import ClientInitialLoader from "../components/ClientInitialLoader";
+
 import Navbar from "../components/Navbar";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -150,7 +150,7 @@ export default async function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <ServiceWorkerRegister />
-          {!hideUI && <ClientInitialLoader />}
+
           {!hideUI && <Navbar />}
           {children}
           <SanityLive />
