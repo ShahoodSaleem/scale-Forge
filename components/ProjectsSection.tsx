@@ -45,9 +45,9 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       <Image
         src={project.image}
         alt={project.title}
-        width={800}
-        height={600}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+        width={600}
+        height={800}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 25vw, 400px"
         priority={index === 0}
         loading={index === 0 ? undefined : "lazy"}
         className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
