@@ -1,39 +1,60 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+
+interface Step {
+  title: string;
+  items?: string[];
+  highlight?: string;
+  isStart?: boolean;
+  isEnd?: boolean;
+}
+
+const steps: Step[] = [
+  {
+    title: "Project Kickoff",
+    isStart: true,
+  },
+  {
+    title: "Discovery",
+    items: ["Initial Consultation", "Requirements Gathering", "Scope Definition"],
+    highlight: "Requirements Gathering"
+  },
+  {
+    title: "Strategy",
+    items: ["Goal Setting", "Tech Stack Selection", "Timeline Creation", "Resource Allocation"],
+  },
+  {
+    title: "Design",
+    items: ["Wireframing", "Visual Design", "User Testing", "Prototyping"],
+    highlight: "Prototyping"
+  },
+  {
+    title: "Development",
+    items: ["React / Next.js Setup", "API Design", "Database Schema", "Security & Auth", "Integrations"],
+    highlight: "Security & Auth"
+  },
+  {
+    title: "QA & Launch",
+    items: ["Automated Testing", "Performance Review", "Production Deployment"],
+    highlight: "Production Deployment"
+  },
+  {
+    title: "Project Completion",
+    isEnd: true,
+  }
+];
 
 export default function HowWeWorkSection() {
-  const [scale, setScale] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
-  const diagramRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current && diagramRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const diagramWidth = 1400; // Target width of the diagram
-
-        if (containerWidth < diagramWidth) {
-          const newScale = containerWidth / diagramWidth;
-          setScale(newScale);
-        } else {
-          setScale(1);
-        }
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <section className="bg-black py-24 px-6 md:px-12 w-full overflow-hidden relative">
-      <div className="max-w-[1450px] w-full mx-auto flex flex-col gap-16">
+      <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-20">
 
         {/* Top Content Area */}
-        <div className="w-full flex md:flex-row flex-col justify-between items-end gap-6 z-10">
+        <div className="w-full flex md:flex-row flex-col justify-between items-end gap-8 z-10">
           <div className="flex flex-col max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -61,289 +82,100 @@ export default function HowWeWorkSection() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-white/60 text-base md:text-lg leading-relaxed max-w-md pb-2"
           >
-            We compiled our development lifecycle into a mind map. This high-level diagram outlines the critical phases, technical milestones, and our parallel workflows from concept to deployment.
+            We've refined our development lifecycle into a streamlined vertical roadmap. This sequence ensures every project moves from vision to reality with precision and speed.
           </motion.p>
         </div>
 
-        {/* Bottom Content Area: Mind Map Diagram */}
-        <div
-          ref={containerRef}
-          className="w-full relative overflow-visible flex justify-center items-center py-8"
-          style={{ height: scale < 1 ? `calc(650px * ${scale})` : 'auto' }}
-        >
-          {/* Scaling Wrapper */}
-          <div
-            ref={diagramRef}
-            className="origin-center transition-transform duration-300 ease-out flex items-center justify-center"
-            style={{
-              transform: `scale(${scale})`,
-              width: '1400px', // Maintain fixed internal width for consistent layout
-              flexShrink: 0
-            }}
-          >
-            {/* Main Diagram Container */}
-            <div className="flex items-center justify-center relative select-none">
+        {/* Vertical Timeline Area */}
+        <div className="relative mt-10 md:mt-20">
+          {/* The Timeline Spine */}
+          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-orange-500 via-orange-500/50 to-transparent transform md:-translate-x-1/2" />
 
-              {/* Level 1: Project Kickoff */}
+          <div className="flex flex-col gap-12 md:gap-20 relative">
+            {steps.map((step, index) => (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="px-6 py-3 rounded-xl bg-orange-500 text-black font-bold whitespace-nowrap shadow-lg shadow-orange-500/50 z-10"
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`relative flex flex-col md:flex-row items-start md:items-center w-full ${
+                  index % 2 === 0 ? "md:flex-row-reverse" : ""
+                }`}
               >
-                Project Kickoff
+                {/* Step Marker (Circle on the line) */}
+                <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-orange-500 border-4 border-black z-20 shadow-[0_0_15px_rgba(255,165,0,0.8)]" />
+
+                {/* Content Card */}
+                <div className={`w-full md:w-[45%] pl-12 md:pl-0 ${index % 2 === 0 ? "md:pr-16 md:text-right" : "md:pl-16 md:text-left"}`}>
+                  {step.isStart || step.isEnd ? (
+                    <div className={`inline-block px-8 py-4 rounded-2xl bg-orange-500 text-black font-black text-xl md:text-2xl shadow-[0_0_40px_rgba(255,165,0,0.3)] uppercase tracking-wider`}>
+                      {step.title}
+                    </div>
+                  ) : (
+                    <div className="group">
+                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-orange-500 transition-colors">
+                        {step.title}
+                      </h3>
+                      <div className={`flex flex-wrap gap-2 ${index % 2 === 0 ? "md:justify-end" : "md:justify-start"}`}>
+                        {step.items?.map((item, i) => (
+                          <span
+                            key={i}
+                            className={`text-[12px] md:text-sm px-4 py-2 rounded-xl transition-all border ${
+                              item === step.highlight
+                                ? "bg-orange-500 text-black border-orange-500 font-bold shadow-[0_5px_15px_rgba(255,165,0,0.2)]"
+                                : "bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:border-white/20"
+                            }`}
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Spacer for MD screens to keep alignment */}
+                <div className="hidden md:block w-[45%]" />
               </motion.div>
-
-              <Connector width="w-8" />
-
-              {/* Level 2: Discovery */}
-              <NodeGroup
-                title="Discovery"
-                delay={0.1}
-                items={[
-                  { label: "Initial Consultation" },
-                  { label: "Requirements Gathering", highlight: true },
-                  { label: "Scope Definition" },
-                ]}
-              />
-
-              <Connector width="w-8" />
-
-              {/* Level 3: Strategy & Planning */}
-              <NodeGroup
-                title="Strategy"
-                delay={0.2}
-                items={[
-                  { label: "Goal Setting" },
-                  { label: "Tech Stack Selection" },
-                  { label: "Timeline Creation" },
-                  { label: "Resource Allocation" },
-                ]}
-              />
-
-              {/* SVG Mindmap Curvy Branches (Diverging) */}
-              <div className="relative w-12 h-full flex-shrink-0 flex items-stretch">
-                <svg
-                  className="absolute inset-y-0 w-full text-white/10"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  style={{ height: '100%' }}
-                >
-                  {/* From Center (0, 50) to the 3 branches */}
-                  {/* Top row (~15%) */}
-                  <path d="M 0 50 C 40 50, 60 15, 100 15" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                  {/* Middle row (50%) */}
-                  <path d="M 0 50 L 100 50" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                  {/* Bottom row (~85%) */}
-                  <path d="M 0 50 C 40 50, 60 85, 100 85" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                </svg>
-              </div>
-
-              {/* Level 4: 3 Parallel Branches */}
-              <div className="flex flex-col gap-6 py-4 relative">
-
-                {/* Branch 1: UI/UX -> Prototyping */}
-                <div className="flex items-center relative z-10 min-h-[160px]">
-                  <div className="flex items-center">
-                    <NodeGroup
-                      title="UI / UX Design"
-                      delay={0.3}
-                      items={[
-                        { label: "Wireframing" },
-                        { label: "Visual Design" },
-                        { label: "User Testing" },
-                      ]}
-                    />
-                    <Connector width="w-8" />
-                    <NodeGroup
-                      title="Prototyping"
-                      delay={0.4}
-                      fullHighlight={true}
-                      items={[
-                        { label: "Mockups" },
-                        { label: "Client Feedback" },
-                        { label: "Hand-off" },
-                      ]}
-                    />
-                  </div>
-                </div>
-
-                {/* Branch 2: Frontend */}
-                <div className="flex items-center relative z-10 min-h-[160px]">
-                  <div className="flex items-center">
-                    <NodeGroup
-                      title="Frontend Dev"
-                      delay={0.4}
-                      items={[
-                        { label: "React / Next.js Setup" },
-                        { label: "State Management", highlight: true },
-                        { label: "Responsive Layouts" },
-                      ]}
-                    />
-                    {/* Invisible spacer to match the width of Prototyping column so convergences align */}
-                    <div className="w-[180px] h-[2px] bg-white/10 flex-shrink-0" />
-                  </div>
-                </div>
-
-                {/* Branch 3: Backend -> Integrations */}
-                <div className="flex items-center relative z-10 min-h-[160px]">
-                  <div className="flex items-center">
-                    <NodeGroup
-                      title="Backend Dev"
-                      delay={0.5}
-                      items={[
-                        { label: "API Design" },
-                        { label: "Database Schema" },
-                        { label: "Security & Auth" },
-                      ]}
-                    />
-                    <Connector width="w-8" />
-                    <NodeGroup
-                      title="Integrations"
-                      delay={0.6}
-                      items={[
-                        { label: "Third-party APIs" },
-                        { label: "Payment Gateways", highlight: true },
-                        { label: "Analytics" },
-                      ]}
-                    />
-                  </div>
-                </div>
-
-              </div>
-
-              {/* SVG Mindmap Curvy Branches (Converging) */}
-              <div className="relative w-12 h-full flex-shrink-0 flex items-stretch">
-                <svg
-                  className="absolute inset-y-0 w-full text-white/10"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  style={{ height: '100%' }}
-                >
-                  {/* From the 3 branches back to the Center (100, 50) */}
-                  {/* Top row (~15%) */}
-                  <path d="M 0 15 C 40 15, 60 50, 100 50" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                  {/* Middle row (50%) */}
-                  <path d="M 0 50 L 100 50" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                  {/* Bottom row (~85%) */}
-                  <path d="M 0 85 C 40 85, 60 50, 100 50" stroke="currentColor" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-                </svg>
-              </div>
-
-              {/* Level 5: QA & Launch -> Project Completion */}
-              <div className="flex flex-col justify-center h-full">
-                <div className="flex items-center relative z-10">
-                  <NodeGroup
-                    title="QA & Launch"
-                    delay={0.7}
-                    fullHighlight={false}
-                    items={[
-                      { label: "Automated Testing" },
-                      { label: "Performance Review", highlight: false },
-                      { label: "Production Deployment", highlight: true },
-                    ]}
-                  />
-
-                  <Connector width="w-8" />
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.8 }}
-                    className="px-6 py-3 rounded-xl bg-orange-500 text-black font-bold whitespace-nowrap shadow-lg shadow-orange-500/50 z-10"
-                  >
-                    Project Completion
-                  </motion.div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-        {/* Step Descriptions (SEO Word Count) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-20 mt-16 max-w-7xl mx-auto z-10 relative">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="p-10 rounded-[30px] bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_var(--color-orange-500)] transition-all border border-white/5">
-            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4 tracking-tight">
-              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm flex-shrink-0 font-bold">1</span>
+
+        {/* SEO / Detailed Info Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 max-w-7xl mx-auto z-10 relative">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="p-10 rounded-[30px] bg-white/[0.03] backdrop-blur-sm border border-white/5 hover:border-orange-500/30 transition-all group">
+            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4">
+              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm font-bold">1</span>
               Discovery & Strategy
             </h3>
-            <p className="text-white/80 text-base leading-relaxed font-light">
-              We begin every project by deeply understanding your business goals, target audience, and market positioning. Our discovery phase involves comprehensive research and strategy sessions where we map out the technical requirements, design direction, and SEO objectives. This ensures we lay a solid foundation tailored to maximize your online growth and conversion rates.
+            <p className="text-white/60 text-base leading-relaxed">
+              We begin every project by deeply understanding your business goals, target audience, and market positioning. Our discovery phase involves comprehensive research and strategy sessions where we map out the technical requirements, design direction, and SEO objectives.
             </p>
           </motion.div>
           
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="p-10 rounded-[30px] bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_var(--color-orange-500)] transition-all border border-white/5">
-            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4 tracking-tight">
-              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm flex-shrink-0 font-bold">2</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="p-10 rounded-[30px] bg-white/[0.03] backdrop-blur-sm border border-white/5 hover:border-orange-500/30 transition-all group">
+            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4">
+              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm font-bold">2</span>
               Design & Development
             </h3>
-            <p className="text-white/80 text-base leading-relaxed font-light">
-              Once the strategy is set, our expert team moves into parallel workflows. We craft stunning, user-centric interfaces while simultaneously architecting robust, scalable backend systems. Using cutting-edge technologies like Next.js and Tailwind CSS, we build lightning-fast web experiences that not only look incredible but are engineered for performance, security, and seamless user interaction.
+            <p className="text-white/60 text-base leading-relaxed">
+              Once the strategy is set, our expert team moves into parallel workflows. We craft stunning, user-centric interfaces while simultaneously architecting robust, scalable backend systems. Using cutting-edge technologies like Next.js and Tailwind CSS.
             </p>
           </motion.div>
           
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="p-10 rounded-[30px] bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_var(--color-orange-500)] transition-all border border-white/5">
-            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4 tracking-tight">
-              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm flex-shrink-0 font-bold">3</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="p-10 rounded-[30px] bg-white/[0.03] backdrop-blur-sm border border-white/5 hover:border-orange-500/30 transition-all group">
+            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center gap-4">
+              <span className="w-8 h-8 rounded-full bg-orange-500 text-black flex items-center justify-center text-sm font-bold">3</span>
               QA, Launch & Growth
             </h3>
-            <p className="text-white/80 text-base leading-relaxed font-light">
-              Before any project goes live, it undergoes rigorous quality assurance testing to guarantee flawless functionality across all devices and browsers. After deployment, we don't just walk away; we monitor performance, analyze user behavior, and continuously optimize for SEO and speed. Our post-launch support ensures your digital presence consistently drives traffic and generates leads.
+            <p className="text-white/60 text-base leading-relaxed">
+              Before any project goes live, it undergoes rigorous quality assurance testing to guarantee flawless functionality across all devices and browsers. After deployment, we monitor performance, analyze user behavior, and continuously optimize for SEO and speed.
             </p>
           </motion.div>
         </div>
 
       </div>
-
     </section>
   );
 }
-
-// Subcomponents
-
-const Connector = ({ width = "w-5" }: { width?: string }) => (
-  <div className={`${width} h-[2px] bg-white/10 flex-shrink-0 relative z-0`} />
-);
-
-interface NodeItem {
-  label: string;
-  highlight?: boolean;
-}
-
-interface NodeGroupProps {
-  title: string;
-  items: NodeItem[];
-  delay: number;
-  fullHighlight?: boolean;
-}
-
-const NodeGroup = ({ title, items, delay, fullHighlight = false }: NodeGroupProps) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.4, delay }}
-      className="flex flex-col gap-2 flex-shrink-0 relative z-10 w-[160px]"
-    >
-      <div
-        className={`text-[11px] px-3 py-1.5 rounded-lg w-fit transition-colors shadow-lg font-medium
-          ${fullHighlight ? 'bg-orange-500 text-black shadow-orange-500/50' : 'bg-white/5 text-white/80'}`}
-      >
-        {title}
-      </div>
-      <div className="bg-white/10 p-2 rounded-xl flex flex-col gap-1.5 border border-white/5 shadow-xl">
-        {items.map((item, idx) => (
-          <div
-            key={idx}
-            className={`text-[11px] px-2.5 py-1.5 rounded-lg w-full transition-colors leading-tight
-              ${item.highlight ? 'bg-orange-500 text-black font-semibold' : 'bg-white/5 text-white/70 hover:bg-white/10'}`}
-          >
-            {item.label}
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-};
-

@@ -68,9 +68,16 @@ const PricingCard = ({ plan, planIdx }: any) => {
           <span className="text-white/30 text-xs">{plan.period}</span>
         </div>
 
-        <p className="text-white/50 text-xs mb-8 italic min-h-[32px]">
+        <p className="text-white/50 text-xs mb-4 italic min-h-[32px]">
           {plan.description}
         </p>
+
+        {plan.bestFor && (
+          <div className="mb-6 text-[11px]">
+            <span className="font-bold text-orange-500">Best For: </span>
+            <span className="text-white/60">{plan.bestFor}</span>
+          </div>
+        )}
 
         <ul className="space-y-3 mb-8 flex-grow">
           {plan.features.map((feature: string, idx: number) => (
@@ -95,6 +102,58 @@ const PricingCard = ({ plan, planIdx }: any) => {
 
 const PricingSection = () => {
   const serviceGroups = [
+    {
+      title: "All-in-One Growth Packages",
+      description: "Complete, done-for-you digital growth engines combining branding, web, SEO, and content creation into one seamless monthly retainer.",
+      plans: [
+        {
+          tier: "Starter Package",
+          price: "1,350",
+          period: "Starting At",
+          description: "Perfect for startups and small businesses that need branding and a professional website.",
+          bestFor: "Startups, personal brands, small local businesses",
+          features: [
+            "Full Brand Design & Guidelines",
+            "Up to 5 Custom Pages",
+            "Mobile Responsive Design",
+            "Basic On-Page SEO & GSC Setup",
+            "Website Copy (5 pages)",
+            "2 Premium Blog Articles / Month"
+          ]
+        },
+        {
+          tier: "Growth Package",
+          price: "1,850",
+          period: "Starting At",
+          popular: true,
+          description: "Designed for businesses ready to capture more market share and generate consistent inbound leads.",
+          bestFor: "Growing businesses, service providers, local brands",
+          features: [
+            "Everything in Starter, plus:",
+            "Up to 10 Pages & Conversion Layouts",
+            "Speed Optimization & Lead Capture",
+            "Advanced Keyword & Local SEO",
+            "4 Premium Blog Articles / Month",
+            "Social Media & Landing Page Design"
+          ]
+        },
+        {
+          tier: "Scale Package",
+          price: "2,500",
+          period: "Starting At",
+          description: "A complete, done-for-you digital growth engine for scaling businesses.",
+          bestFor: "Established businesses, agencies, e-commerce brands",
+          features: [
+            "Everything in Growth, plus:",
+            "Up to 20 Pages & Premium UI/UX",
+            "Full Technical SEO Strategy",
+            "Competitor Analysis & Backlinks",
+            "8 Blogs/mo & Conversion Copywriting",
+            "Full Brand Identity & Messaging"
+          ]
+        }
+      ]
+    },
     {
       title: "Web Design & Development",
       description: "From stunning landing pages to complex e-commerce ecosystems.",
