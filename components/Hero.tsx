@@ -21,7 +21,7 @@ const Hero = () => {
     setMounted(true);
   }, []);
 
-  const videoSrc = mounted && theme === 'light' ? '/Assets/WhiteWaves.mp4' : '/Assets/Hero_Dark.mp4';
+  const videoSrc = mounted && theme === 'light' ? '/Assets/WhiteWaves.mp4' : '/Assets/Hero_Dark_compressed.mp4';
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -56,6 +56,8 @@ const Hero = () => {
             muted
             loop
             playsInline
+            preload="none"
+            poster="/Assets/assets/hero1.png"
             onCanPlay={() => setIsVideoLoaded(true)}
             className="absolute inset-0 w-full h-full object-cover"
           />

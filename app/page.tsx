@@ -8,6 +8,8 @@ import FAQSection from "../components/FAQSection";
 import ContactSection from "../components/ContactSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white/30">

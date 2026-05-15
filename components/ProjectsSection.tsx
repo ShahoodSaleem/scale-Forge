@@ -45,9 +45,12 @@ const ProjectCard = ({ project, index }: { project: any, index: number }) => {
       <Image
         src={project.image}
         alt={project.title}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-        className="absolute inset-0 object-cover object-center transition-transform duration-700 group-hover:scale-110"
+        width={800}
+        height={600}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+        priority={index === 0}
+        loading={index === 0 ? undefined : "lazy"}
+        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
       />
 
       {/* Dynamic Overlay - Color Burn/Multiply Effect */}
