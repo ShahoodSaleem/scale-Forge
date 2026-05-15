@@ -6,26 +6,26 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        // Allow all bots on public pages
         userAgent: '*',
         allow: '/',
         disallow: [
-          '/portal/',
-          '/portal/admin/',
-          '/portal/employee/',
-          '/studio/',
-          '/api/',
-          '/_next/',
-          '/static/',
+          '/portal',
+          '/portal/*',
+          '/studio',
+          '/studio/*',
+          '/api',
+          '/api/*',
+          '/_next',
+          '/_next/*',
         ],
       },
       {
-        // Block GPTBot (OpenAI scraper) from all content
+        // Block GPTBot (OpenAI)
         userAgent: 'GPTBot',
         disallow: '/',
       },
       {
-        // Block CCBot (Common Crawl used for AI training)
+        // Block CCBot (Common Crawl)
         userAgent: 'CCBot',
         disallow: '/',
       },
