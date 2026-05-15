@@ -210,6 +210,7 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+              aria-label="Facebook"
             >
               <FacebookIcon />
             </a>
@@ -218,6 +219,7 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+              aria-label="Instagram"
             >
               <InstagramIcon />
             </a>
@@ -226,6 +228,7 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+              aria-label="LinkedIn"
             >
               <LinkedinIcon />
             </a>
@@ -234,6 +237,7 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white transition-all bg-white/5"
+              aria-label="YouTube"
             >
               <YoutubeIcon />
             </a>

@@ -1,12 +1,14 @@
+import dynamic from "next/dynamic";
 import Hero from "../components/Hero";
-import AboutSection from "../components/AboutSection";
-import ProjectsSection from "../components/ProjectsSection";
-import FeaturesAccordion from "../components/FeaturesAccordion";
-import ComparisonSection from "../components/ComparisonSection";
-import HomePricingSection from "../components/HomePricingSection";
-import FAQSection from "../components/FAQSection";
-import ContactSection from "../components/ContactSection";
-import TestimonialsSection from "../components/TestimonialsSection";
+
+const AboutSection = dynamic(() => import("../components/AboutSection"), { ssr: true });
+const ProjectsSection = dynamic(() => import("../components/ProjectsSection"), { ssr: true });
+const FeaturesAccordion = dynamic(() => import("../components/FeaturesAccordion"), { ssr: true });
+const ComparisonSection = dynamic(() => import("../components/ComparisonSection"), { ssr: true });
+const HomePricingSection = dynamic(() => import("../components/HomePricingSection"), { ssr: true });
+const FAQSection = dynamic(() => import("../components/FAQSection"), { ssr: true });
+const ContactSection = dynamic(() => import("../components/ContactSection"), { ssr: true });
+const TestimonialsSection = dynamic(() => import("../components/TestimonialsSection"), { ssr: true });
 
 export const revalidate = 3600;
 

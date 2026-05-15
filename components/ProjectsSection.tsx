@@ -9,25 +9,25 @@ const projects = [
     id: 1,
     title: 'Car Rental Website',
     description: 'Car Rental Website For Malaysian Client.',
-    image: '/Assets/car.jpg',
+    image: '/Assets/car.avif',
   },
   {
     id: 2,
     title: 'Dental Clinic Website',
     description: 'Dental Website For Australian Client.',
-    image: '/Assets/teeth.jpg',
+    image: '/Assets/teeth.avif',
   },
   {
     id: 3,
     title: 'Jewellery Store Website',
     description: 'Premium Jewellery E-commerce Store.',
-    image: '/Assets/Jewellery.jpg',
+    image: '/Assets/Jewellery.avif',
   },
   {
     id: 4,
     title: 'E-Commerce Website',
     description: 'E commerce Website Mockup For Future Client Inspiration.',
-    image: '/Assets/Ecommerce.jpg',
+    image: '/Assets/Ecommerce.avif',
   },
 ];
 

@@ -15,12 +15,10 @@ const Badge = ({ icon: Icon, text }: { icon: any, text: string }) => (
 
 const Hero = () => {
   const [mounted, setMounted] = useState(false);
-  const [canAnimate, setCanAnimate] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
-    setCanAnimate(true);
   }, []);
 
   const videoSrc = mounted && theme === 'light' ? '/Assets/WhiteWaves.mp4' : '/Assets/Hero_Dark_compressed.mp4';
@@ -30,7 +28,8 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
+        delayChildren: 0.1
       },
     },
   };
@@ -45,7 +44,7 @@ const Hero = () => {
       {/* Background Video - Properly layered and delayed */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: canAnimate ? 1 : 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
         className="absolute inset-0 z-0 pointer-events-none bg-black"
       >
@@ -58,7 +57,7 @@ const Hero = () => {
             loop
             playsInline
             preload="none"
-            poster="/Assets/assets/hero1.png"
+            poster="/Assets/assets/hero1.avif"
             onCanPlay={() => setIsVideoLoaded(true)}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -72,8 +71,8 @@ const Hero = () => {
       {/* Content */}
       <motion.div
         variants={containerVariants}
-        initial="hidden"
-        animate={canAnimate ? "visible" : "hidden"}
+        initial={false}
+        animate="visible"
         className="relative z-10 flex flex-col items-center text-center max-w-4xl"
       >
         {/* Badges */}

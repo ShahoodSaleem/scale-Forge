@@ -9,7 +9,7 @@ const PerfectShot = () => {
             <div
                 className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage: "url('/Assets/F1.jpg')",
+                    backgroundImage: "url('/Assets/F1.avif')",
                 }}
             >
                 {/* Dark overlay to make text readable */}

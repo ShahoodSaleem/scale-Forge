@@ -13,7 +13,7 @@ const features = [
         description: 'We boost your search rankings with data-driven keyword strategies and thorough technical audits to ensure your brand reaches the right audience. Our approach focuses on both on-page excellence and high-quality backlink profiles to dominate search results.',
         details: ['Keyword Strategy', 'Technical Audits', 'Backlink Profile'],
         metric: '1.2M+ Reach',
-        image: '/Assets/ExplainingFeatures/SEO.jpg'
+        image: '/Assets/ExplainingFeatures/SEO.avif'
     },
     {
         title: 'Web Design',
@@ -21,7 +21,7 @@ const features = [
         description: 'High-conversion, premium interfaces designed to wow your customers and drive growth. We focus on interaction design and custom UI/UX that tells your brand story while ensuring a seamless journey for every visitor.',
         details: ['Custom UI/UX', 'Component Library', 'Interaction Design'],
         metric: '+65% Engagement',
-        image: '/Assets/ExplainingFeatures/Code.jpg'
+        image: '/Assets/ExplainingFeatures/Code.avif'
     },
     {
         title: 'Branding',
@@ -29,7 +29,7 @@ const features = [
         description: 'Define your identity with unique visual systems and compelling brand storytelling. We create cohesive brand voices and asset guidelines that ensure your identity remains consistent and recognizable across all platforms.',
         details: ['Visual Identity', 'Brand Voice', 'Asset Guidelines'],
         metric: '100% Unique',
-        image: '/Assets/ExplainingFeatures/Brand.jpg'
+        image: '/Assets/ExplainingFeatures/Brand.avif'
     },
     {
         title: 'Content Strategy',
@@ -37,7 +37,7 @@ const features = [
         description: 'Engaging, high-quality content that resonates with your audience and builds authority. Our growth roadmaps and media planning ensure that every piece of content serves a purpose in your overall marketing strategy.',
         details: ['Copywriting', 'Growth Roadmap', 'Media Planning'],
         metric: 'High Authority',
-        image: '/Assets/ExplainingFeatures/Content.jpg'
+        image: '/Assets/ExplainingFeatures/Content.avif'
     },
     {
         title: 'Performance',
@@ -45,7 +45,7 @@ const features = [
         description: 'Lightning-fast page speeds and core web vitals optimization for better UX. We optimize Largest Contentful Paint (LCP) and focus on sub-second load times to reduce bounce rates and improve user retention.',
         details: ['Core Web Vitals', '0.4s Fast Load', 'LCP Optimization'],
         metric: '99+ Score',
-        image: '/Assets/ExplainingFeatures/Speed.jpg'
+        image: '/Assets/ExplainingFeatures/Speed.avif'
     },
     {
         title: 'Analytics',
@@ -53,7 +53,7 @@ const features = [
         description: 'Deep-dive tracking and behavior analysis to optimize your conversion funnel. We provide ROI reporting and behavior analysis to turn data into actionable insights that fuel your business growth.',
         details: ['Funnel Tracking', 'Behavior Analysis', 'ROI Reporting'],
         metric: 'Data-Driven',
-        image: '/Assets/ExplainingFeatures/Analytics.jpg'
+        image: '/Assets/ExplainingFeatures/Analytics.avif'
     },
     {
         title: 'Digital Strategy',
@@ -61,7 +61,7 @@ const features = [
         description: 'Comprehensive roadmaps designed to scale your business in the modern digital landscape. From market analysis to scalability audits, we build the foundation for long-term digital success and expansion.',
         details: ['Market Analysis', 'Scalability Audits', 'Growth Maps'],
         metric: 'Scaled Growth',
-        image: '/Assets/ExplainingFeatures/DS.jpg'
+        image: '/Assets/ExplainingFeatures/DS.avif'
     },
 ];
 

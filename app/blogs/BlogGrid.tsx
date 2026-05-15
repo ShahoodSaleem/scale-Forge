@@ -21,6 +21,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(-1000);
   const mouseY = useMotionValue(-1000);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const springX = useSpring(mouseX, { stiffness: 150, damping: 40 });
   const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
@@ -33,13 +34,32 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!cardRef.current || window.innerWidth <= 768) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      mouseX.set(e.clientX - rect.left);
-      mouseY.set(e.clientY - rect.top);
+      if (!rectRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+      const x = e.clientX - rectRef.current.left;
+      const y = e.clientY - rectRef.current.top;
+      mouseX.set(x);
+      mouseY.set(y);
     };
 
+    const handleMouseEnter = () => {
+      if (cardRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+    };
+
+    const node = cardRef.current;
+    if (node) {
+      node.addEventListener("mouseenter", handleMouseEnter);
+    }
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (node) {
+        node.removeEventListener("mouseenter", handleMouseEnter);
+      }
+    };
   }, [mouseX, mouseY]);
 
   return (

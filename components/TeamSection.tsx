@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import ShahoodImg from "../assets/Shahood.png";
-import RuhanImg from "../assets/Ruhan_2.png";
+import ShahoodImg from "../assets/Shahood.avif";
+import RuhanImg from "../assets/Ruhan_2.avif";
 
 const teamMembers = [
   {

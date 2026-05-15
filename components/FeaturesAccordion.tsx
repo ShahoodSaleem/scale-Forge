@@ -151,43 +151,43 @@ const FeaturesAccordion = () => {
 
   const features = [
     {
-      id: '1', title: 'SEO Optimization', icon: Search, color: 'blue', bgImage: '/Assets/Cards/1.jpg',
+      id: '1', title: 'SEO Optimization', icon: Search, color: 'blue', bgImage: '/Assets/Cards/1.avif',
       description: 'Boost your search rankings with data-driven keyword strategies and technical audits.',
       details: ['Keyword Strategy', 'Technical Audits', 'Backlink Profile'],
       metric: '1.2M+ Reach'
     },
     {
-      id: '2', title: 'Web Design', icon: Layout, color: 'purple', bgImage: '/Assets/Cards/2.jpg',
+      id: '2', title: 'Web Design', icon: Layout, color: 'purple', bgImage: '/Assets/Cards/2.avif',
       description: 'High-conversion, premium interfaces designed to wow your customers and drive growth.',
       details: ['Custom UI/UX', 'Component Library', 'Interaction Design'],
       metric: '+65% Engagement'
     },
     {
-      id: '3', title: 'Branding', icon: Palette, color: 'emerald', bgImage: '/Assets/Cards/3.jpg',
+      id: '3', title: 'Branding', icon: Palette, color: 'emerald', bgImage: '/Assets/Cards/3.avif',
       description: 'Define your identity with unique visual systems and compelling brand storytelling.',
       details: ['Visual Identity', 'Brand Voice', 'Asset Guidelines'],
       metric: '100% Unique'
     },
     {
-      id: '4', title: 'Content Strategy', icon: FileText, color: 'amber', bgImage: '/Assets/Cards/4.jpg',
+      id: '4', title: 'Content Strategy', icon: FileText, color: 'amber', bgImage: '/Assets/Cards/4.avif',
       description: 'Engaging, high-quality content that resonates with your audience and builds authority.',
       details: ['Copywriting', 'Growth Roadmap', 'Media Planning'],
       metric: 'High Authority'
     },
     {
-      id: '5', title: 'Performance', icon: Zap, color: 'rose', bgImage: '/Assets/Cards/5.jpg',
+      id: '5', title: 'Performance', icon: Zap, color: 'rose', bgImage: '/Assets/Cards/5.avif',
       description: 'Lightning-fast page speeds and core web vitals optimization for better UX.',
       details: ['Core Web Vitals', '0.4s Fast Load', 'LCP Optimization'],
       metric: '99+ Score'
     },
     {
-      id: '6', title: 'Analytics', icon: BarChart3, color: 'indigo', bgImage: '/Assets/Cards/6.jpg',
+      id: '6', title: 'Analytics', icon: BarChart3, color: 'indigo', bgImage: '/Assets/Cards/6.avif',
       description: 'Deep-dive tracking and behavior analysis to optimize your conversion funnel.',
       details: ['Funnel Tracking', 'Behavior Analysis', 'ROI Reporting'],
       metric: 'Data-Driven'
     },
     {
-      id: '7', title: 'Digital Strategy', icon: Target, color: 'cyan', bgImage: '/Assets/Cards/7.jpg',
+      id: '7', title: 'Digital Strategy', icon: Target, color: 'cyan', bgImage: '/Assets/Cards/7.avif',
       description: 'Comprehensive roadmaps designed to scale your business in the modern digital landscape.',
       details: ['Market Analysis', 'Scalability Audits', 'Growth Maps'],
       metric: 'Scaled Growth'

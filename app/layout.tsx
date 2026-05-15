@@ -140,6 +140,10 @@ export default async function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="canonical" href={canonicalUrl} />
+        <link rel="preload" href="/Assets/assets/hero1.avif" as="image" type="image/avif" />
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://aj16x5pr.api.sanity.io" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://aj16x5pr.api.sanity.io" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -158,7 +162,7 @@ export default async function RootLayout({
           <Analytics />
 
           {/* Third-Party Analytics Scripts */}
-          <Script id="ms-clarity" strategy="afterInteractive">
+          <Script id="ms-clarity" strategy="lazyOnload">
             {`
               try {
                 (function(c,l,a,r,i,t,y){
@@ -170,7 +174,7 @@ export default async function RootLayout({
             `}
           </Script>
 
-          <Script id="fb-pixel" strategy="afterInteractive">
+          <Script id="fb-pixel" strategy="lazyOnload">
             {`
               try {
                 !function(f,b,e,v,n,t,s)
@@ -189,9 +193,9 @@ export default async function RootLayout({
 
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
-          <Script id="google-analytics" strategy="afterInteractive">
+          <Script id="google-analytics" strategy="lazyOnload">
             {`
               try {
                 window.dataLayer = window.dataLayer || [];

@@ -10,6 +10,7 @@ const PricingCard = ({ plan, planIdx }: any) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(-1000);
   const mouseY = useMotionValue(-1000);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
@@ -22,15 +23,32 @@ const PricingCard = ({ plan, planIdx }: any) => {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!cardRef.current || window.innerWidth <= 768) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      if (!rectRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+      const x = e.clientX - rectRef.current.left;
+      const y = e.clientY - rectRef.current.top;
       mouseX.set(x);
       mouseY.set(y);
     };
 
+    const handleMouseEnter = () => {
+      if (cardRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+    };
+
+    const node = cardRef.current;
+    if (node) {
+      node.addEventListener("mouseenter", handleMouseEnter);
+    }
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (node) {
+        node.removeEventListener("mouseenter", handleMouseEnter);
+      }
+    };
   }, [mouseX, mouseY]);
 
   return (
@@ -200,7 +218,7 @@ const HomePricingSection = () => {
           >
             Choose Your <span className="text-orange-500">Growth Path.</span>
           </motion.h2>
-          <p className="text-white/40 text-xl max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-white/70 text-xl max-w-2xl mx-auto font-light leading-relaxed">
             Flexible, high-impact service models designed to scale with your business at every stage.
           </p>
         </div>

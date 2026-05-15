@@ -1,8 +1,11 @@
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
-import AboutSection from "../../components/AboutSection";
-import TeamSection from "../../components/TeamSection";
-import HowWeWorkSection from "../../components/HowWeWorkSection";
-import PerfectShot from "../../components/PerfectShot";
+import Script from "next/script";
+
+const AboutSection = dynamic(() => import("../../components/AboutSection"), { ssr: true });
+const TeamSection = dynamic(() => import("../../components/TeamSection"), { ssr: true });
+const HowWeWorkSection = dynamic(() => import("../../components/HowWeWorkSection"), { ssr: true });
+const PerfectShot = dynamic(() => import("../../components/PerfectShot"), { ssr: true });
 
 export const metadata: Metadata = {
   title: "About Us | Scale Forge Web Agency",
@@ -34,7 +37,8 @@ const aboutSchema = {
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white/30">
-      <script
+      <Script
+        id="about-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
       />
