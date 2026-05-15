@@ -112,7 +112,7 @@ export const metadata: Metadata = {
   },
 };
 
-import SanityLiveWrapper from '../components/SanityLiveWrapper';
+import { SanityLive } from "@/sanity/lib/live";
 import schemaData from "../public/schema.json";
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
 import ThirdPartyScripts from '../components/ThirdPartyScripts';
@@ -156,7 +156,11 @@ export default async function RootLayout({
 
           {!hideUI && <Navbar />}
           {children}
-          <SanityLiveWrapper />
+          {(pathname.startsWith('/blogs') || pathname.startsWith('/studio')) && (
+            <React.Suspense fallback={null}>
+              <SanityLive />
+            </React.Suspense>
+          )}
           <SpeedInsights />
           <Analytics />
           <ThirdPartyScripts gaId={GA_TRACKING_ID} />
