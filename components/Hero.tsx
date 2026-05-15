@@ -29,7 +29,6 @@ const Hero = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 5.2, // Clearly after Navbar and Video
       },
     },
   };
@@ -45,7 +44,7 @@ const Hero = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 3.8 }}
+        transition={{ duration: 1.5 }}
         className="absolute inset-0 z-0 pointer-events-none bg-black"
       >
         <div className={`relative w-full h-full transition-opacity duration-[3000ms] ease-in-out ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}>
