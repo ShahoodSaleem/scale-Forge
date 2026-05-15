@@ -156,11 +156,9 @@ export default async function RootLayout({
 
           {!hideUI && <Navbar />}
           {children}
-          {(pathname.startsWith('/blogs') || pathname.startsWith('/studio')) && (
-            <React.Suspense fallback={null}>
-              <SanityLive />
-            </React.Suspense>
-          )}
+          <React.Suspense fallback={null}>
+            <SanityLive />
+          </React.Suspense>
           <SpeedInsights />
           <Analytics />
           <ThirdPartyScripts gaId={GA_TRACKING_ID} />
