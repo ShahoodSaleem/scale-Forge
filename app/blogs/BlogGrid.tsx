@@ -27,13 +27,11 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
   const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
 
   useEffect(() => {
-    if (window.innerWidth <= 768) {
-      mouseX.set(200);
-      mouseY.set(200);
-    }
+    // Only run mouse tracking on desktop
+    if (window.innerWidth <= 768) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current || window.innerWidth <= 768) return;
+      if (!cardRef.current) return;
       if (!rectRef.current) {
         rectRef.current = cardRef.current.getBoundingClientRect();
       }
@@ -65,7 +63,8 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
   return (
     <motion.div
       ref={cardRef}
-      layout
+      // Disable layout animations on mobile to reduce TBT
+      layout={typeof window !== 'undefined' && window.innerWidth > 768}
       initial={{ opacity: 1, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 1, scale: 0.9 }}
@@ -187,7 +186,10 @@ export default function BlogGrid({ blogs }: { blogs: Blog[] }) {
               <p className="text-sm">Check back soon — or add posts in the Sanity Studio at <span className="text-orange-500">/studio</span></p>
             </div>
           ) : (
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div 
+              layout={typeof window !== 'undefined' && window.innerWidth > 768} 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
               <AnimatePresence mode="popLayout">
                 {filteredBlogs.map((blog) => (
                   <BlogCard key={blog.id} blog={blog} />

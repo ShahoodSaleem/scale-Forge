@@ -37,9 +37,13 @@ const Navbar = () => {
   return (
     <>
       <motion.nav
-        initial={{ y: -100, opacity: 0, x: "-50%" }}
+        initial={{ y: -50, opacity: 0, x: "-50%" }}
         animate={{ y: 0, opacity: 1, x: "-50%" }}
-        transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ 
+          duration: typeof window !== 'undefined' && window.innerWidth > 768 ? 1 : 0.5, 
+          delay: typeof window !== 'undefined' && window.innerWidth > 768 ? 0.8 : 0.2, 
+          ease: [0.22, 1, 0.36, 1] 
+        }}
         className="fixed top-6 left-1/2 z-50 flex items-center justify-between md:justify-start h-14 px-8 rounded-full border border-white/10 bg-black/80 backdrop-blur-md w-[90%] max-w-[500px] md:w-auto md:max-w-none"
       >
         <div className="flex items-center gap-1 w-full md:w-auto justify-between md:justify-start">

@@ -41,9 +41,9 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
   };
   return (
     <motion.div
-      layout
+      layout={typeof window !== 'undefined' && window.innerWidth > 768}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => window.innerWidth > 768 ? onHover(id) : undefined}
+      onMouseEnter={() => typeof window !== 'undefined' && window.innerWidth > 768 ? onHover(id) : undefined}
       onClick={() => onHover(id)}
       className={`relative cursor-pointer overflow-hidden rounded-none border border-[#ffffff]/10 ${
         isExpanded 
@@ -63,9 +63,9 @@ const FeatureCard = ({ id, title, description, icon: Icon, color, bgImage, isExp
       {/* Background Overlay (Top-to-Bottom) */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#ffffff]/5 via-transparent to-[#000000]/80 z-[3]" />
 
-      {/* Glow Effect when expanded */}
+      {/* Glow Effect - Disabled on mobile for performance */}
       <AnimatePresence>
-        {isExpanded && (
+        {isExpanded && typeof window !== 'undefined' && window.innerWidth > 768 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

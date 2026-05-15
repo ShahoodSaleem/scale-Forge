@@ -39,10 +39,14 @@ export default function TeamSection() {
           {teamMembers.map((member, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 80 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: index * 0.3, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: typeof window !== 'undefined' && window.innerWidth > 768 ? "-100px" : "-50px" }}
+        transition={{ 
+          duration: typeof window !== 'undefined' && window.innerWidth > 768 ? 0.8 : 0.5, 
+          delay: typeof window !== 'undefined' && window.innerWidth > 768 ? index * 0.3 : index * 0.1, 
+          ease: [0.22, 1, 0.36, 1] 
+        }}
               className="flex flex-col group cursor-pointer"
             >
               {/* Image Container */}
@@ -62,7 +66,10 @@ export default function TeamSection() {
                 <motion.h4
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 + (index * 0.3) }}
+                  transition={{ 
+                    duration: typeof window !== 'undefined' && window.innerWidth > 768 ? 0.5 : 0.3, 
+                    delay: typeof window !== 'undefined' && window.innerWidth > 768 ? 0.4 + (index * 0.3) : 0.2 + (index * 0.1) 
+                  }}
                   className="text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase text-red-500 mb-4 transition-colors duration-300 group-hover:text-red-400"
                 >
                   {member.role}

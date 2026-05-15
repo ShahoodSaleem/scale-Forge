@@ -29,16 +29,38 @@ const ResultsCard = ({
   const springX = useSpring(mouseX, { stiffness: 150, damping: 40 });
   const springY = useSpring(mouseY, { stiffness: 150, damping: 40 });
 
+  const rectRef = useRef<DOMRect | null>(null);
+
   useEffect(() => {
+    // Only run mouse tracking on desktop
+    if (window.innerWidth <= 768) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      mouseX.set(e.clientX - rect.left);
-      mouseY.set(e.clientY - rect.top);
+      if (!rectRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+      mouseX.set(e.clientX - rectRef.current.left);
+      mouseY.set(e.clientY - rectRef.current.top);
     };
 
+    const handleMouseEnter = () => {
+      if (cardRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+    };
+
+    const node = cardRef.current;
+    if (node) {
+      node.addEventListener("mouseenter", handleMouseEnter);
+    }
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (node) {
+        node.removeEventListener("mouseenter", handleMouseEnter);
+      }
+    };
   }, [mouseX, mouseY]);
 
   // Bright Blue for light mode, Bright Orange for dark mode

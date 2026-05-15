@@ -13,23 +13,40 @@ const PricingCard = ({ plan, planIdx }: any) => {
   const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
 
+  const rectRef = useRef<DOMRect | null>(null);
+
   useEffect(() => {
-    if (window.innerWidth <= 768) {
-      mouseX.set(200);
-      mouseY.set(200);
-    }
+    // Only run mouse tracking on desktop
+    if (window.innerWidth <= 768) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current || window.innerWidth <= 768) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      if (!cardRef.current) return;
+      if (!rectRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+      const x = e.clientX - rectRef.current.left;
+      const y = e.clientY - rectRef.current.top;
       mouseX.set(x);
       mouseY.set(y);
     };
 
+    const handleMouseEnter = () => {
+      if (cardRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+    };
+
+    const node = cardRef.current;
+    if (node) {
+      node.addEventListener("mouseenter", handleMouseEnter);
+    }
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (node) {
+        node.removeEventListener("mouseenter", handleMouseEnter);
+      }
+    };
   }, [mouseX, mouseY]);
 
   return (

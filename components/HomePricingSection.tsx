@@ -16,13 +16,11 @@ const PricingCard = ({ plan, planIdx }: any) => {
   const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
 
   useEffect(() => {
-    if (window.innerWidth <= 768) {
-      mouseX.set(200);
-      mouseY.set(200);
-    }
+    // Only run mouse tracking on desktop
+    if (window.innerWidth <= 768) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current || window.innerWidth <= 768) return;
+      if (!cardRef.current) return;
       if (!rectRef.current) {
         rectRef.current = cardRef.current.getBoundingClientRect();
       }
