@@ -112,8 +112,7 @@ export const metadata: Metadata = {
   },
 };
 
-import dynamic from 'next/dynamic';
-const SanityLiveWrapper = dynamic(() => import('../components/SanityLiveWrapper'), { ssr: false });
+import SanityLiveWrapper from '../components/SanityLiveWrapper';
 import schemaData from "../public/schema.json";
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
 import ThirdPartyScripts from '../components/ThirdPartyScripts';
