@@ -71,7 +71,7 @@ const Hero = () => {
       {/* Content */}
       <motion.div
         variants={containerVariants}
-        initial={false}
+        initial="visible"
         animate="visible"
         className="relative z-10 flex flex-col items-center text-center max-w-4xl"
       >
@@ -82,9 +82,11 @@ const Hero = () => {
           <Badge icon={Globe} text="Global Reach" />
         </motion.div>
 
-        {/* Headline */}
+      {/* Headline */}
         <motion.h1
           variants={itemVariants}
+          initial="visible"
+          animate="visible"
           className="text-7xl md:text-[90px] font-medium tracking-tight text-white mb-8 leading-[1.05]"
         >
           Building Businesses Around The Globe

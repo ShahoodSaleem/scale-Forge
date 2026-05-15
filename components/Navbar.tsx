@@ -41,7 +41,7 @@ const Navbar = () => {
         animate={{ y: 0, opacity: 1, x: "-50%" }}
         transition={{ 
           duration: typeof window !== 'undefined' && window.innerWidth > 768 ? 1 : 0.5, 
-          delay: typeof window !== 'undefined' && window.innerWidth > 768 ? 0.8 : 0.2, 
+          delay: 0.1, 
           ease: [0.22, 1, 0.36, 1] 
         }}
         className="fixed top-6 left-1/2 z-50 flex items-center justify-between md:justify-start h-14 px-8 rounded-full border border-white/10 bg-black/80 backdrop-blur-md w-[90%] max-w-[500px] md:w-auto md:max-w-none"

@@ -5,10 +5,31 @@ import { useEffect } from 'react';
 const CLARITY_PROJECT_ID = 'xxxxxxxxx';
 const FB_PIXEL_ID = 'YOUR_PIXEL_ID';
 
-export default function ThirdPartyScripts() {
+export default function ThirdPartyScripts({ gaId }: { gaId?: string }) {
   useEffect(() => {
-    // Delay initialization of non-critical tracking to free up the main thread
-    const timer = setTimeout(() => {
+    let hasLoaded = false;
+    
+    const loadScripts = () => {
+      if (hasLoaded) return;
+      hasLoaded = true;
+
+      // Google Analytics (Global Site Tag)
+      if (gaId) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+        document.head.appendChild(script);
+
+        // @ts-ignore
+        window.dataLayer = window.dataLayer || [];
+        // @ts-ignore
+        function gtag(){window.dataLayer.push(arguments);}
+        // @ts-ignore
+        gtag('js', new Date());
+        // @ts-ignore
+        gtag('config', gaId);
+      }
+
       // MS Clarity
       try {
         (function(c,l,a,r,i,t,y){
@@ -33,10 +54,28 @@ export default function ThirdPartyScripts() {
         // @ts-ignore
         fbq('track', 'PageView');
       } catch(e) { console.error("FB Pixel error", e); }
-    }, 3000); // 3 second delay
+      
+      // Clean up listeners
+      window.removeEventListener('scroll', loadScripts);
+      window.removeEventListener('mousemove', loadScripts);
+      window.removeEventListener('touchstart', loadScripts);
+    };
 
-    return () => clearTimeout(timer);
-  }, []);
+    // Listen for interaction
+    window.addEventListener('scroll', loadScripts, { passive: true });
+    window.addEventListener('mousemove', loadScripts, { passive: true });
+    window.addEventListener('touchstart', loadScripts, { passive: true });
+
+    // Fallback timer (longer to ensure it doesn't block initial load)
+    const timer = setTimeout(loadScripts, 8000);
+
+    return () => {
+      window.removeEventListener('scroll', loadScripts);
+      window.removeEventListener('mousemove', loadScripts);
+      window.removeEventListener('touchstart', loadScripts);
+      clearTimeout(timer);
+    };
+  }, [gaId]);
 
   return null;
 }

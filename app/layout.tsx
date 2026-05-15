@@ -11,11 +11,13 @@ import { headers } from "next/headers";
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const montserrat = Montserrat({
   variable: "--font-heading",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const BASE_URL = 'https://scaleforgewebdev.vercel.app';
@@ -110,11 +112,11 @@ export const metadata: Metadata = {
   },
 };
 
-import { SanityLive } from "@/sanity/lib/live";
+import dynamic from 'next/dynamic';
+const SanityLiveWrapper = dynamic(() => import('../components/SanityLiveWrapper'), { ssr: false });
 import schemaData from "../public/schema.json";
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
 import ThirdPartyScripts from '../components/ThirdPartyScripts';
-import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default async function RootLayout({
   children,
@@ -155,13 +157,10 @@ export default async function RootLayout({
 
           {!hideUI && <Navbar />}
           {children}
-          <React.Suspense fallback={null}>
-            <SanityLive />
-          </React.Suspense>
+          <SanityLiveWrapper />
           <SpeedInsights />
           <Analytics />
-          <ThirdPartyScripts />
-          <GoogleAnalytics gaId={GA_TRACKING_ID} />
+          <ThirdPartyScripts gaId={GA_TRACKING_ID} />
         </ThemeProvider>
       </body>
     </html>
