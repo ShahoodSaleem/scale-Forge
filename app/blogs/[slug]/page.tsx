@@ -9,6 +9,8 @@ import ResultsCard from "@/components/ResultsCard";
 import ContactSection from "../../../components/ContactSection";
 import type { Metadata } from "next";
 import { SanityDocument } from "next-sanity";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface Post extends SanityDocument {
   title: string;
@@ -67,81 +69,88 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const formattedDate = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    })
-    : "";
+  const year = post.publishedAt ? new Date(post.publishedAt).getFullYear() : "2024";
 
   const imageUrl = post.coverImage?.asset?.url
-    ? urlFor(post.coverImage).width(1600).height(800).fit("crop").url()
+    ? urlFor(post.coverImage).width(1920).height(1080).fit("crop").url()
     : "https://images.unsplash.com/photo-1674027326254-88c960d8e561?q=80&w=1632&auto=format&fit=crop";
 
   return (
-    <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-blue-500/20 dark:selection:bg-orange-500/30 relative overflow-hidden">
-      {/* 1. TITLE SECTION */}
-      <section className="relative pt-32 pb-16 md:pt-36 md:pb-20 overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/5 text-orange-500 text-[10px] font-bold uppercase tracking-widest mb-8">
-            {post.category}
-          </div>
+    <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-blue-500/20 dark:selection:bg-orange-500/30 relative">
+      {/* 1. HERO SECTION (Mobile Optimized) */}
+      <section className="relative w-full h-[100vh] min-h-[600px] overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src={imageUrl}
+          alt={post.coverImage?.alt || post.title}
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority={true}
+          loading="eager"
+        />
+        
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-black/2 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
 
-          <h1 className="text-4xl md:text-7xl font-medium tracking-tight mb-8 leading-tight text-black dark:text-white">
-            {post.title}
-          </h1>
+        {/* Content Overlay */}
+        <div className="absolute inset-0 z-20 flex flex-col justify-end pb-12 md:pb-32">
+          <div className="max-w-[1920px] mx-auto w-full px-6 md:px-16 lg:px-24">
+            
+            {/* Back Link - Shifted down on mobile to clear fixed navbar */}
+            <Link 
+              href="/blogs" 
+              className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-[10px] font-medium uppercase tracking-[0.2em] mb-8 md:mb-12 group mt-20 md:mt-0"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              All Work
+            </Link>
 
-          <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-wider text-black/40 dark:text-white/40 mb-6">
-            <span>{formattedDate}</span>
-            <div className="w-1 h-1 rounded-full bg-orange-500" />
-            <span>{post.readTime ?? 5} Min Read</span>
-          </div>
-        </div>
-      </section>
+            {/* Metadata (Label) */}
+            <div className="flex items-center gap-3 text-orange-600 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.1em] mb-4">
+              <span>{post.category}</span>
+              <span className="text-white/20">—</span>
+              <span className="text-white/40">{year}</span>
+            </div>
 
-      {/* 2. PICTURE SECTION */}
-      <section className="w-full max-w-6xl mx-auto px-6 relative z-20 mb-20">
-        <div className="w-full h-[400px] md:h-[600px] rounded-xl overflow-hidden border border-white/10 shadow-2xl relative">
-          <div className="absolute inset-0 bg-black/20 z-10 pointer-events-none" />
-          <Image
-            src={imageUrl}
-            alt={post.coverImage?.alt || post.title}
-            fill
-            sizes="(max-width: 1200px) 100vw, 1152px"
-            className="object-cover"
-            priority={true}
-            loading="eager"
-          />
-        </div>
-      </section>
+            {/* Main Heading (Responsive Font Size) */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] max-w-5xl mb-6 md:mb-10">
+              {post.title}
+            </h1>
 
-      {/* 3. CONTENT SECTION */}
-      <section className="py-12 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="max-w-5xl mx-auto leading-relaxed font-light relative z-20">
-            {/* Summary Block */}
+            {/* Subtext (Responsive Font Size) */}
             {post.description && (
-              <div className="border-b border-black/10 dark:border-white/10 pb-16 mb-16">
-                <h3 className="text-black dark:text-white font-medium text-2xl mb-6 flex items-center gap-4">
-                  Executive Summary
-                  <div className="flex-1 h-[1px] bg-black/10 dark:bg-white/10" />
-                </h3>
-                <p className="text-xl leading-relaxed italic border-l-2 pl-6 py-2 text-blue-600 dark:text-orange-500 border-blue-400 dark:border-orange-500/50">
-                  {post.description}
-                </p>
-              </div>
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/60 max-w-3xl leading-relaxed font-light">
+                {post.description}
+              </p>
             )}
+          </div>
+        </div>
+      </section>
 
+      {/* 2. CONTENT SECTION (Mobile Optimized Width) */}
+      <section className="py-16 md:py-32 relative z-20">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-16 lg:px-24">
+          <div className="w-full">
             {/* Portable Text Body */}
             {post.body && (
-              <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div className="prose prose-sm sm:prose-base md:prose-lg lg:prose-xl dark:prose-invert max-w-none 
+                prose-headings:text-cyan-600 dark:prose-headings:text-orange-500
+                prose-p:text-black/80 dark:prose-p:text-white/70 prose-p:font-light prose-p:leading-relaxed
+                prose-strong:text-black dark:prose-strong:text-white
+                prose-a:text-orange-500 hover:prose-a:text-orange-400
+                prose-img:rounded-2xl md:prose-img:rounded-3xl prose-img:border prose-img:border-black/5 dark:prose-img:border-white/10"
+              >
                 <PortableText value={post.body} components={portableTextComponents} />
               </div>
             )}
 
-            {/* Manual fallback for ResultsCard if not in Sanity yet */}
+            {/* ResultsCard Integration */}
             {resolvedParams.slug === 'seo-optimization' && !post.body?.some((block: any) => block._type === 'resultsCard') && (
-              <ResultsCard />
+              <div className="mt-16 md:mt-24">
+                <ResultsCard />
+              </div>
             )}
           </div>
         </div>

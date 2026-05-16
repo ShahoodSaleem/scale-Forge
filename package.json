@@ -21,6 +21,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
     "framer-motion": "^12.38.0",
     "hls.js": "^1.6.15",
     "lucide-react": "^0.479.0",

@@ -8,6 +8,7 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'clsx', 'tailwind-merge', '@radix-ui/react-slot'],
+    optimizeCss: true,
   },
   typescript: {
     ignoreBuildErrors: true,

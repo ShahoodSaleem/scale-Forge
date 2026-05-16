@@ -8,6 +8,11 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "../components/ThemeProvider";
 import { headers } from "next/headers";
+import { SanityLive } from "@/sanity/lib/live";
+import SanityLiveDeferred from "../components/SanityLiveDeferred";
+import schemaData from "../public/schema.json";
+import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
+import ThirdPartyScripts from '../components/ThirdPartyScripts';
 
 const inter = Inter({
   variable: "--font-sans",
@@ -113,11 +118,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { SanityLive } from "@/sanity/lib/live";
-import schemaData from "../public/schema.json";
-import ServiceWorkerRegister from '../components/ServiceWorkerRegister';
-import ThirdPartyScripts from '../components/ThirdPartyScripts';
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -151,15 +151,16 @@ export default async function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${montserrat.variable} font-sans antialiased bg-black text-white selection:bg-white/30`}
+        suppressHydrationWarning
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <ServiceWorkerRegister />
 
           {!hideUI && <Navbar />}
           {children}
-          <React.Suspense fallback={null}>
+          <SanityLiveDeferred>
             <SanityLive />
-          </React.Suspense>
+          </SanityLiveDeferred>
           <SpeedInsights />
           <Analytics />
           <ThirdPartyScripts gaId={GA_TRACKING_ID} />
