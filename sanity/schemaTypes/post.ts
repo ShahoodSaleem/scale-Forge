@@ -55,6 +55,13 @@ export const post = defineType({
       validation: (Rule) => Rule.required().max(300),
     }),
     defineField({
+      name: 'executiveSummary',
+      title: 'Executive Summary',
+      type: 'text',
+      rows: 4,
+      description: 'A high-level summary that appears between the hero and content.',
+    }),
+    defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',

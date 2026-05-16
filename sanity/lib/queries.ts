@@ -35,6 +35,7 @@ export const POST_QUERY = defineQuery(`
       hotspot,
       crop
     },
+    executiveSummary,
     body
   }
 `)

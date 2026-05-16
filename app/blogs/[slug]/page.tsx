@@ -10,11 +10,12 @@ import ContactSection from "../../../components/ContactSection";
 import type { Metadata } from "next";
 import { SanityDocument } from "next-sanity";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Zap } from "lucide-react";
 
 interface Post extends SanityDocument {
   title: string;
   description?: string;
+  executiveSummary?: string;
   category?: string;
   publishedAt?: string;
   readTime?: number;
@@ -77,7 +78,7 @@ export default async function BlogPostPage({
 
   return (
     <main className="min-h-screen bg-white dark:bg-black text-black dark:text-white selection:bg-blue-500/20 dark:selection:bg-orange-500/30 relative">
-      {/* 1. HERO SECTION (Mobile Optimized) */}
+      {/* 1. HERO SECTION */}
       <section className="relative w-full h-[100vh] min-h-[600px] overflow-hidden">
         {/* Background Image */}
         <Image
@@ -89,7 +90,7 @@ export default async function BlogPostPage({
           priority={true}
           loading="eager"
         />
-        
+
         {/* Cinematic Overlays */}
         <div className="absolute inset-0 bg-black/2 z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
@@ -97,10 +98,10 @@ export default async function BlogPostPage({
         {/* Content Overlay */}
         <div className="absolute inset-0 z-20 flex flex-col justify-end pb-12 md:pb-32">
           <div className="max-w-[1920px] mx-auto w-full px-6 md:px-16 lg:px-24">
-            
-            {/* Back Link - Shifted down on mobile to clear fixed navbar */}
-            <Link 
-              href="/blogs" 
+
+            {/* Back Link */}
+            <Link
+              href="/blogs"
               className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-[10px] font-medium uppercase tracking-[0.2em] mb-8 md:mb-12 group mt-20 md:mt-0"
             >
               <ArrowLeft className="w-3 h-3" />
@@ -114,12 +115,12 @@ export default async function BlogPostPage({
               <span className="text-white/40">{year}</span>
             </div>
 
-            {/* Main Heading (Responsive Font Size) */}
+            {/* Main Heading */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] max-w-5xl mb-6 md:mb-10">
               {post.title}
             </h1>
 
-            {/* Subtext (Responsive Font Size) */}
+            {/* Subtext */}
             {post.description && (
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/60 max-w-3xl leading-relaxed font-light">
                 {post.description}
@@ -129,7 +130,24 @@ export default async function BlogPostPage({
         </div>
       </section>
 
-      {/* 2. CONTENT SECTION (Mobile Optimized Width) */}
+      {/* 2. EXECUTIVE SUMMARY (Full Width) */}
+      {post.executiveSummary && (
+        <section className="bg-black/5 dark:bg-white/[0.02] border-y border-black/5 dark:border-white/5">
+          <div className="max-w-[1920px] mx-auto px-6 md:px-16 lg:px-24 py-12 md:py-20">
+            <div className="w-full">
+              <div className="flex items-center gap-2 text-cyan-600 dark:text-orange-500 font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs mb-6">
+                <Zap className="w-4 h-4" />
+                Executive Summary
+              </div>
+              <p className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-light leading-snug text-black dark:text-white/90">
+                {post.executiveSummary}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 3. CONTENT SECTION */}
       <section className="py-16 md:py-32 relative z-20">
         <div className="max-w-[1920px] mx-auto px-6 md:px-16 lg:px-24">
           <div className="w-full">
